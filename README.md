@@ -11,11 +11,12 @@ npm install @pagopa/io-react-native-jwt
 ## Usage
 
 ```js
-import { multiply } from '@pagopa/io-react-native-jwt';
+import { decode } from '@pagopa/io-react-native-jwt';
 
 // ...
-
-const result = await multiply(3, 7);
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3......";
+const result = await decode(jwt);
+console.log(result);
 ```
 
 ## Contributing
