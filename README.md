@@ -19,14 +19,40 @@ npm install @pagopa/io-react-native-jwt
 
 ## Usage
 
+### Decode a JWT
 ```js
 import { decode } from '@pagopa/io-react-native-jwt';
 
 // ...
-const jwt = "eyJ0eXAiOiJlbnRpdHktc3......";
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
 const result = await decode(jwt);
 console.log(result);
 ```
+
+### Verify a JWT signature
+
+```js
+import { verifySignature } from '@pagopa/io-react-native-jwt';
+
+// ...
+const pubJwk = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'qrJrj.....',
+    y: '1H0cW.....',
+  };
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+
+const isValid = await verifySignature(jwt, pubJwk);
+
+if isValid {
+    console.log("Signature of JWT is valid!");
+} else {
+    console.log("Signature of JWT is NOT valid!");
+}
+```
+
+
 
 ## Example
 

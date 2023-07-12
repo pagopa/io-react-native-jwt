@@ -10,11 +10,13 @@ import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import com.facebook.react.bridge.ReadableMap
 import org.json.JSONObject
 import com.nimbusds.jose.crypto.RSASSAVerifier
+import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.facebook.react.bridge.WritableNativeMap
 import com.nimbusds.jose.crypto.impl.RSA_OAEP
 import com.pagopa.ioreactnativejwt.Utils.convertJsonToMap
@@ -26,11 +28,8 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
     return NAME
   }
 
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  fun multiply(a: Double, b: Double, promise: Promise) {
-    promise.resolve(a * b)
+  fun isECKey(jwk: JSONObject):Boolean {
+    return jwk.get("kty") == "EC";
   }
 
   @ReactMethod
@@ -48,6 +47,32 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
             promise.reject(ex)
         }
   }
+
+  @ReactMethod
+  fun verify(token: String, jwk: ReadableMap, promise: Promise) {
+    try {
+      val signedJWT = SignedJWT.parse(token)
+      val jwkJson = JSONObject(jwk.toHashMap())
+      var isValid = false
+
+      if (isECKey(jwkJson)) {
+        val internalJwk = ECKey.parse(jwkJson.toString())
+        val verifier = ECDSAVerifier(internalJwk)
+        verifier.jcaContext.provider = BouncyCastleProviderSingleton.getInstance()
+        isValid = signedJWT.verify(verifier)
+      } else {
+        val internalJwk = RSAKey.parse(jwkJson.toString())
+        val verifier = RSASSAVerifier(internalJwk)
+        verifier.jcaContext.provider = BouncyCastleProviderSingleton.getInstance()
+        isValid = signedJWT.verify(verifier)
+      }
+      promise.resolve(isValid)
+
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
 
   companion object {
     const val NAME = "IoReactNativeJwt"

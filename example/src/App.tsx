@@ -8,31 +8,67 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import { decode } from '@pagopa/io-react-native-jwt';
-import type { JWTDecodeResult } from 'src/types';
+import { decode, verifySignature } from '@pagopa/io-react-native-jwt';
+import type { JWK } from 'src/types';
 
 export default function App() {
-  const [result, setResult] = React.useState<JWTDecodeResult | undefined>();
+  const [result, setResult] = React.useState<string | undefined>();
+
   const demoJwt =
     'eyJ0eXAiOiJlbnRpdHktc3RhdGVtZW50K2p3dCIsImtpZCI6IkVDIzEiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0LyIsInN1YiI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvIiwibWV0YWRhdGEiOnsiZXVkaV93YWxsZXRfcHJvdmlkZXIiOnsiandrcyI6W3siY3J2IjoiUC0yNTYiLCJrdHkiOiJFQyIsIngiOiJxckpyajNBZl9CNTdzYk9JUnJjQk03YnI3d09jOHluajdsSEZQVGVmZlVrIiwieSI6IjFIMGNXRHlHZ3ZVOHcta1BLVV94eWNPQ1VOVDJvMGJ3c2xJUXRuUFU2aU0iLCJraWQiOiJFQyMxIn1dLCJ0b2tlbl9lbmRwb2ludCI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvdG9rZW4iLCJhc2NfdmFsdWVzX3N1cHBvcnRlZCI6WyJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0L0xvQS9iYXNpYyIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL21lZGl1bSIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL2hpZ2h0Il0sImdyYW50X3R5cGVzX3N1cHBvcnRlZCI6WyJ1cm46aWV0ZjpwYXJhbXM6b2F1dGg6Y2xpZW50LWFzc2VydGlvbi10eXBlOmp3dC1rZXktYXR0ZXN0YXRpb24iXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9tZXRob2RzX3N1cHBvcnRlZCI6WyJwcml2YXRlX2tleV9qd3QiXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIiwiRVMzODQiLCJFUzUxMiIsIlJTMjU2IiwiUlMzODQiLCJSUzUxMiIsIlBTMjU2IiwiUFMzODQiLCJQUzUxMiJdfSwiZmVkZXJhdGlvbl9lbnRpdHkiOnsib3JnYW5pemF0aW9uX25hbWUiOiJQYWdvUGEgUy5wLkEuIiwiaG9tZXBhZ2VfdXJpIjoiaHR0cHM6Ly9pby5pdGFsaWEuaXQvIiwicG9saWN5X3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L3ByaXZhY3ktcG9saWN5LyIsInRvc191cmkiOiJodHRwczovL2lvLml0YWxpYS5pdC9wcml2YWN5LXBvbGljeS8iLCJsb2dvX3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L2Fzc2V0cy9pbWcvaW8taXQtbG9nby13aGl0ZS5zdmcifX0sImlhdCI6MTY4OTE0NjE1MCwiZXhwIjoxNjg5MTQ5NzUwfQ.0mfzDKbb1lB6wbhlbtLsmbsJ5Ywc-yrwV4sD9fYoie-ojBBYtXG6qPkcFWj8WQtrguxq5ZGhj7JallDuvYZD8w';
+
+  const validJwk: JWK = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'qrJrj3Af_B57sbOIRrcBM7br7wOc8ynj7lHFPTeffUk',
+    y: '1H0cWDyGgvU8w-kPKU_xycOCUNT2o0bwslIQtnPU6iM',
+  };
+
+  const invalidJwk: JWK = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'ndtDobIzSChVn2P7P7uXGm3cGdNlNDSapm4e0t_mDvg',
+    y: '99_z6-vO97nwY-5mXL_d9qcryitmVRYezySt-0_LEqU',
+  };
+
+  const verifyJwt = (jwt: string, publicKey: JWK) =>
+    verifySignature(jwt, publicKey)
+      .then((isValid) => {
+        isValid
+          ? setResult('✅ Signature is valid')
+          : setResult('🛑 Invalid signature!');
+      })
+      .catch(showError);
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <Button
           title="Decode JWT"
-          onPress={() => decode(demoJwt).then(setResult).catch(showError)}
+          onPress={() =>
+            decode(demoJwt)
+              .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
+              .catch(showError)
+          }
+        />
+        <Button
+          title="Verify JWT with valid JWK"
+          onPress={() => verifyJwt(demoJwt, validJwk)}
+        />
+        <Button
+          title="Verify JWT with invalid JWK"
+          onPress={() => verifyJwt(demoJwt, invalidJwk)}
         />
       </View>
       <View>
-        <Text style={styles.title}>{JSON.stringify(result)}</Text>
+        <Text style={styles.title}>{result}</Text>
       </View>
     </SafeAreaView>
   );
 }
 
 const showError = (e: any) => {
-  Alert.alert('Alert!', JSON.stringify(e), [{ text: 'OK' }]);
+  Alert.alert('Error!', JSON.stringify(e), [{ text: 'OK' }]);
 };
 const styles = StyleSheet.create({
   container: {
