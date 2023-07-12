@@ -25,8 +25,10 @@ export interface JWK {
   'key_ops'?: string[];
   /** JWK "kid" (Key ID) Parameter. */
   'kid'?: string;
-  /** JWK "kty" (Key Type) Parameter. */
-  'kty'?: string;
+  /** JWK "kty" (Key Type) Parameter.
+   * This attribute is required to discriminate the
+   * type of EC/RSA algorithm */
+  'kty': string;
   'n'?: string;
   'oth'?: Array<{
     d?: string;
