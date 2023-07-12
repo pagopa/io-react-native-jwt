@@ -1,6 +1,15 @@
-# @pagopa/io-react-native-jwt
+# ⚡️ @pagopa/io-react-native-jwt
 
-Native support for JWT
+A fast implementation of `jwt` module.
+Provides much greater performance for decoding, signing and verifying JWTs!
+
+🚀 Use only native functions via the following libraries:
+- 🤖 [nimbus-jose-jwt
+](https://connect2id.com/products/nimbus-jose-jwt) on Android
+- 📱 [JOSESwift](https://github.com/airsidemobile/JOSESwift/) on iOS
+
+
+
 
 ## Installation
 
@@ -11,21 +20,27 @@ npm install @pagopa/io-react-native-jwt
 ## Usage
 
 ```js
-import { multiply } from '@pagopa/io-react-native-jwt';
+import { decode } from '@pagopa/io-react-native-jwt';
 
 // ...
-
-const result = await multiply(3, 7);
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3......";
+const result = await decode(jwt);
+console.log(result);
 ```
 
-## Contributing
+## Example
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+You can use the [sample app](example) to test and understand how to use the library.
 
-## License
+```sh
+cd example
 
-MIT
+yarn install
 
----
+# To use iOS
+yarn ios
 
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+# To use Android
+yarn android
+
+```
