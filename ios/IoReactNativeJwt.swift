@@ -2,7 +2,13 @@ import JOSESwift
 
 @objc(IoReactNativeJwt)
 class IoReactNativeJwt: NSObject {
+    
 
+    func isECKey(jwk:NSDictionary) -> Bool{
+        let kty = jwk["kty"] as! String
+        return kty == "EC"
+    }
+    
     @objc
     func decode(_ token: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
       do {
@@ -21,10 +27,9 @@ class IoReactNativeJwt: NSObject {
         do {
             let jws = try JWS(compactSerialization: token)
             let publicKeyJson = try JSONSerialization.data(withJSONObject: jwk, options:[] )
-            let kty = jwk["kty"] as! String
             var verifier: Verifier?
 
-            if kty == "EC" {
+            if isECKey(jwk:jwk) {
                 let ecJwk = try ECPublicKey(data: publicKeyJson)
                 let publicKey = try ecJwk.converted(to: SecKey.self)
                 verifier = Verifier(verifyingAlgorithm: jws.header.algorithm!, key: publicKey)!

@@ -22,6 +22,6 @@ export function decode(token: string): Promise<JWTDecodeResult> {
   return IoReactNativeJwt.decode(token);
 }
 
-export function verify(token: string, jwk: JWK): Promise<boolean> {
+export function verifySignature(token: string, jwk: JWK): Promise<boolean> {
   return IoReactNativeJwt.verify(token, jwk);
 }

@@ -32,7 +32,7 @@ console.log(result);
 ### Verify a JWT signature
 
 ```js
-import { verify } from '@pagopa/io-react-native-jwt';
+import { verifySignature } from '@pagopa/io-react-native-jwt';
 
 // ...
 const pubJwk = {
@@ -43,9 +43,9 @@ const pubJwk = {
   };
 const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
 
-const isVerified = await verify(jwt, pubJwk);
+const isValid = await verifySignature(jwt, pubJwk);
 
-if isVerified {
+if isValid {
     console.log("Signature of JWT is valid!");
 } else {
     console.log("Signature of JWT is NOT valid!");
