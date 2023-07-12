@@ -18,10 +18,6 @@ const IoReactNativeJwt = NativeModules.IoReactNativeJwt
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return IoReactNativeJwt.multiply(a, b);
-}
-
 export function decode(token: string): Promise<JWTVerifyResult> {
   return IoReactNativeJwt.decode(token);
 }

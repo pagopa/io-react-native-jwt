@@ -3,12 +3,6 @@ import JOSESwift
 @objc(IoReactNativeJwt)
 class IoReactNativeJwt: NSObject {
 
-    @objc(multiply:withB:withResolver:withRejecter:)
-    func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-        resolve(a*b)
-    }
-
-
     @objc
     func decode(_ token: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
       do {
@@ -29,23 +23,23 @@ class IoReactNativeJwt: NSObject {
             let publicKeyJson = try JSONSerialization.data(withJSONObject: jwk, options:[] )
             let kty = jwk["kty"] as! String
             var verifier: Verifier?
-            
+
             if kty == "EC" {
-                let ecJwk = try! ECPublicKey(data: publicKeyJson)
-                let publicKey = try! ecJwk.converted(to: SecKey.self)
+                let ecJwk = try ECPublicKey(data: publicKeyJson)
+                let publicKey = try ecJwk.converted(to: SecKey.self)
                 verifier = Verifier(verifyingAlgorithm: jws.header.algorithm!, key: publicKey)!
             } else {
-                let rsaJwk = try! RSAPublicKey(data: publicKeyJson)
-                let publicKey = try! rsaJwk.converted(to: SecKey.self)
+                let rsaJwk = try RSAPublicKey(data: publicKeyJson)
+                let publicKey = try rsaJwk.converted(to: SecKey.self)
                 verifier = Verifier(verifyingAlgorithm: jws.header.algorithm!, key: publicKey)!
             }
             _ = try jws.validate(using: verifier!)
             resolve(true)
-          
+
         } catch JOSESwiftError.verifyingFailed {
             resolve(false)
         }
-        
+
         catch {
             reject("Error", "\(error)", error);
         }
