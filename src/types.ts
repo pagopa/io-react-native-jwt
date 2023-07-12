@@ -1,4 +1,4 @@
-export interface JWTVerifyResult {
+export interface JWTDecodeResult {
   /** JWT Claims Set. */
   payload: JWTPayload;
 

@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import type { JWK, JWTVerifyResult } from './types';
+import type { JWK, JWTDecodeResult } from './types';
 
 const LINKING_ERROR =
   `The package '@pagopa/io-react-native-jwt' doesn't seem to be linked. Make sure: \n\n` +
@@ -18,7 +18,7 @@ const IoReactNativeJwt = NativeModules.IoReactNativeJwt
       }
     );
 
-export function decode(token: string): Promise<JWTVerifyResult> {
+export function decode(token: string): Promise<JWTDecodeResult> {
   return IoReactNativeJwt.decode(token);
 }
 
