@@ -18,6 +18,8 @@ npm install @pagopa/io-react-native-jwt
 
 ## Usage
 
+For detailed documentation go [here](/docs/modules/index.md)
+
 ### Decode a JWT
 
 ```js
