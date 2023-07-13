@@ -25,9 +25,6 @@ const { payload, protectedHeader } = await verify(jwt, jwk, {
   typ: 'entity-statement+jwt',
   requiredClaims: ['iss', 'sub', 'metadata'],
 })
-
-console.log(protectedHeader)
-console.log(payload)
 ```
 
 #### Parameters

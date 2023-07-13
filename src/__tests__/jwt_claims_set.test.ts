@@ -26,7 +26,7 @@ describe('Basic JWT Claims Set verification', function () {
   });
 
   it('must fail the check because the JWT has expired', async () => {
-   expect(() => verifyJwtClaimSet(jwtHeader, jwtPayload)).toThrowError(
+    expect(() => verifyJwtClaimSet(jwtHeader, jwtPayload)).toThrowError(
       JWTExpired
     );
   });

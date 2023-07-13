@@ -16,8 +16,6 @@ const jwt =
 
 const { payload, protectedHeader } = await decode(jwt)
 
-console.log(protectedHeader)
-console.log(payload)
 ```
 
 #### Parameters
