@@ -17,7 +17,7 @@ const jwtPayload: JWTPayload = {
 
 describe('Basic JWT Claims Set verification', function () {
   it('must check the parameters correctly', async () => {
-    let verified = verifyJwtClaimSet(jwtHeader, jwtPayload, {
+    const verified = verifyJwtClaimSet(jwtHeader, jwtPayload, {
       currentDate: new Date(2023, 6, 13, 10, 30, 0, 0),
       typ: 'jwt',
       requiredClaims: ['iss', 'sub'],
@@ -26,20 +26,16 @@ describe('Basic JWT Claims Set verification', function () {
   });
 
   it('must fail the check because the JWT has expired', async () => {
-    try {
-      verifyJwtClaimSet(jwtHeader, jwtPayload);
-    } catch (err) {
-      expect(err).toBeInstanceOf(JWTExpired);
-    }
+   expect(() => verifyJwtClaimSet(jwtHeader, jwtPayload)).toThrowError(
+      JWTExpired
+    );
   });
 
   it('must fail the check because the typ is wrong', async () => {
-    try {
+    expect(() =>
       verifyJwtClaimSet(jwtHeader, jwtPayload, {
         typ: 'invalid',
-      });
-    } catch (err) {
-      expect(err).toBeInstanceOf(JWTClaimValidationFailed);
-    }
+      })
+    ).toThrowError(JWTClaimValidationFailed);
   });
 });

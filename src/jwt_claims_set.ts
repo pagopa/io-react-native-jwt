@@ -23,7 +23,7 @@ const checkAudiencePresence = (audPayload: unknown, audOption: unknown[]) => {
   if (Array.isArray(audPayload)) {
     /*
      * Each principal intended to process the JWT MUST
-     *identify itself with a value in the audience claim
+     * identify itself with a value in the audience claim
      */
     return audOption.some(Set.prototype.has.bind(new Set(audPayload)));
   }
