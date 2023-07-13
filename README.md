@@ -48,12 +48,12 @@ const options = {
     typ: 'jwt',
     requiredClaims: ['iss', 'sub'],
 }
-const payload = await verify(jwt, pubJwk, options);
-console.log(payload)
+const {protectedHeader, payload} = await verify(jwt, pubJwk, options);
+console.log(protectedHeader, payload)
 ```
 
 
-### Verify a JWT signature
+### Verify a JWT signature (JWS)
 
 ```js
 import { isSignatureValid } from '@pagopa/io-react-native-jwt';
