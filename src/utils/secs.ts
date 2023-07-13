@@ -4,6 +4,11 @@ const day = hour * 24;
 const week = day * 7;
 const year = day * 365.25;
 
+/*
+ * It allows to extract the value and the unit of measurement for the time.
+ * For example, indicating a string like "1s" or "1 second" or "3 hour"
+ * the regex extracts a group made up of [1, "s"], [1, "second"] or [3, "hour"]
+ */
 const REGEX =
   /^(\d+|\d+\.\d+) ?(seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)$/i;
 
