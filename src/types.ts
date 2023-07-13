@@ -162,3 +162,47 @@ export interface JWTPayload {
   /** Any other JWT Claim Set member. */
   [propName: string]: unknown;
 }
+
+/** JWT Claims Set verification options. */
+export interface JWTClaimVerificationOptions {
+  /** Expected JWT "aud" (Audience) Claim value(s). */
+  audience?: string | string[];
+
+  /**
+   * Expected clock tolerance
+   *
+   * - In seconds when number (e.g. 5)
+   * - Parsed as seconds when a string (e.g. "5 seconds", "10 minutes", "2 hours").
+   */
+  clockTolerance?: string | number;
+
+  /** Expected JWT "iss" (Issuer) Claim value(s). */
+  issuer?: string | string[];
+
+  /**
+   * Maximum time elapsed (in seconds) from the JWT "iat" (Issued At) Claim value.
+   *
+   * - In seconds when number (e.g. 5)
+   * - Parsed as seconds when a string (e.g. "5 seconds", "10 minutes", "2 hours").
+   */
+  maxTokenAge?: string | number;
+
+  /** Expected JWT "sub" (Subject) Claim value. */
+  subject?: string;
+
+  /** Expected JWT "typ" (Type) Header Parameter value. */
+  typ?: string;
+
+  /** Date to use when comparing NumericDate claims, defaults to `new Date()`. */
+  currentDate?: Date;
+
+  /**
+   * Array of required Claim Names that must be present in the JWT Claims Set. Default is that: if
+   * the {@link JWTClaimVerificationOptions.issuer issuer option} is set, then "iss" must be present;
+   * if the {@link JWTClaimVerificationOptions.audience audience option} is set, then "aud" must be
+   * present; if the {@link JWTClaimVerificationOptions.subject subject option} is set, then "sub"
+   * must be present; if the {@link JWTClaimVerificationOptions.maxTokenAge maxTokenAge option} is
+   * set, then "iat" must be present.
+   */
+  requiredClaims?: string[];
+}

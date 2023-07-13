@@ -18,7 +18,10 @@ npm install @pagopa/io-react-native-jwt
 
 ## Usage
 
+For detailed documentation go [here](/docs/modules/index.md)
+
 ### Decode a JWT
+
 ```js
 import { decode } from '@pagopa/io-react-native-jwt';
 
@@ -28,10 +31,32 @@ const result = await decode(jwt);
 console.log(result);
 ```
 
-### Verify a JWT signature
+### Verify JWT
 
 ```js
-import { verifySignature } from '@pagopa/io-react-native-jwt';
+import { verify } from '@pagopa/io-react-native-jwt';
+
+// ...
+const pubJwk = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'qrJrj.....',
+    y: '1H0cW.....',
+  };
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+const options = {
+    typ: 'jwt',
+    requiredClaims: ['iss', 'sub'],
+}
+const {protectedHeader, payload} = await verify(jwt, pubJwk, options);
+console.log(protectedHeader, payload)
+```
+
+
+### Verify a JWT signature (JWS)
+
+```js
+import { isSignatureValid } from '@pagopa/io-react-native-jwt';
 
 // ...
 const pubJwk = {
@@ -42,7 +67,7 @@ const pubJwk = {
   };
 const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
 
-const isValid = await verifySignature(jwt, pubJwk);
+const isValid = await isSignatureValid(jwt, pubJwk);
 
 if isValid {
     console.log("Signature of JWT is valid!");
