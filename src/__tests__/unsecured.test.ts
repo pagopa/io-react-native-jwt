@@ -31,4 +31,10 @@ describe('Unsecured JWT', function () {
   it('must fail the decode', async () => {
     expect(() => UnsecuredJWT.decode('')).toThrowError(JWTInvalid);
   });
+  it('must return content to sign', async () => {
+    let toSign = new UnsecuredJWT(jwtPayload).toSign();
+    expect(toSign).toBe(
+      'eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ=='
+    );
+  });
 });

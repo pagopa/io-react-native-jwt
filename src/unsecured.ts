@@ -21,7 +21,7 @@ export interface UnsecuredResult {
  * @example Encoding
  *
  * ```js
- * const unsecuredJwt = new jose.UnsecuredJWT({ 'urn:example:claim': true })
+ * const unsecuredJwt = new UnsecuredJWT({ 'urn:example:claim': true })
  *   .setIssuedAt()
  *   .setIssuer('urn:example:issuer')
  *   .setAudience('urn:example:audience')
@@ -34,12 +34,24 @@ export interface UnsecuredResult {
  * @example Decoding
  *
  * ```js
- * const payload = jose.UnsecuredJWT.decode(jwt, {
+ * const payload = UnsecuredJWT.decode(jwt, {
  *   issuer: 'urn:example:issuer',
  *   audience: 'urn:example:audience',
  * })
  *
  * console.log(payload)
+ * ```
+ *  * @example JWT content ToSign
+ *
+ * ```js
+ * const jwtToSign = new UnsecuredJWT({ 'urn:example:claim': true })
+ *   .setIssuedAt()
+ *   .setIssuer('urn:example:issuer')
+ *   .setAudience('urn:example:audience')
+ *   .setExpirationTime('2h')
+ *   .toSign()
+ *
+ * console.log(jwtToSign)
  * ```
  */
 export class UnsecuredJWT extends ProduceJWT {
@@ -49,6 +61,14 @@ export class UnsecuredJWT extends ProduceJWT {
     const payload = btoa(JSON.stringify(this._payload));
 
     return `${header}.${payload}.`;
+  }
+
+  /**
+   * Return content to sign.
+   *
+   */
+  toSign(): string {
+    return btoa(JSON.stringify(this._payload));
   }
 
   /**
