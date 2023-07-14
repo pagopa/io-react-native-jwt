@@ -19,15 +19,15 @@ const signature =
   '6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q';
 
 describe('Sign JWT', function () {
-  it('must be signed correctly', async () => {
-    let signedJwt = new SignJWT(jwtPayload)
+  it('it should be signed correctly', async () => {
+    const signedJwt = new SignJWT(jwtPayload)
       .setProtectedHeader(jwtHeader)
       .sign(signature);
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJraWQiOiJFQyMxIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
     );
   });
-  it('signature must fail', async () => {
+  it('it should fails with empty string', async () => {
     expect(() =>
       new SignJWT(jwtPayload).setProtectedHeader(jwtHeader).sign('')
     ).toThrowError(JOSEError);
