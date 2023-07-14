@@ -173,7 +173,6 @@ export class JWSInvalid extends JOSEError {
   static get code(): 'ERR_JWS_INVALID' {
     return 'ERR_JWS_INVALID';
   }
-
   code = 'ERR_JWS_INVALID';
 }
 

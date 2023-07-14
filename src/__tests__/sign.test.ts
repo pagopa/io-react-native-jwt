@@ -1,5 +1,6 @@
 import type { JWSHeaderParameters, JWTPayload } from '../types';
 import { SignJWT } from '../sign';
+import { JOSEError } from '../utils/errors';
 
 const jwtPayload: JWTPayload = {
   iss: 'demo',
@@ -25,5 +26,10 @@ describe('Sign JWT', function () {
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJraWQiOiJFQyMxIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
     );
+  });
+  it('signature must fail', async () => {
+    expect(() =>
+      new SignJWT(jwtPayload).setProtectedHeader(jwtHeader).sign('')
+    ).toThrowError(JOSEError);
   });
 });

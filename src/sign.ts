@@ -1,4 +1,4 @@
-import { JWTInvalid } from './utils/errors';
+import { JWSInvalid, JWTInvalid } from './utils/errors';
 import type { JWSHeaderParameters } from './types';
 import { ProduceJWT } from './produce';
 import { encodeBase64 } from './utils/base64';
@@ -48,6 +48,8 @@ export class SignJWT extends ProduceJWT {
     ) {
       throw new JWTInvalid('JWTs MUST NOT use unencoded payload');
     }
+
+    if (signature === '') throw new JWSInvalid('Invalid signature');
 
     const header = encodeBase64(JSON.stringify(this._protectedHeader));
     const payload = encodeBase64(JSON.stringify(this._payload));
