@@ -10,7 +10,7 @@ const jwtPayload: JWTPayload = {
 };
 
 const encodedUnsecureJwt =
-  'eyJhbGciOiJub25lIn0=.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ==.';
+  'eyJhbGciOiJub25lIn0.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.';
 
 describe('Unsecured JWT', function () {
   it('must be encoded correctly', async () => {
@@ -34,7 +34,7 @@ describe('Unsecured JWT', function () {
   it('must return content to sign', async () => {
     let toSign = new UnsecuredJWT(jwtPayload).toSign();
     expect(toSign).toBe(
-      'eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ=='
+      'eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ'
     );
   });
 });

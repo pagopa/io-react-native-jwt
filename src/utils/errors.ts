@@ -167,6 +167,17 @@ export class JWTInvalid extends JOSEError {
 }
 
 /**
+ * An error subclass thrown when a JWT signature (JWS) is invalid.
+ */
+export class JWSInvalid extends JOSEError {
+  static get code(): 'ERR_JWS_INVALID' {
+    return 'ERR_JWS_INVALID';
+  }
+
+  code = 'ERR_JWS_INVALID';
+}
+
+/**
  * An error subclass thrown when JWS signature verification fails.
  *
  * @example Checking thrown error is this one using a stable error code

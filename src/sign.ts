@@ -1,7 +1,7 @@
-import { JWTInvalid } from './utils/errors.js';
-import type { JWTHeaderParameters } from './types';
-
-import { ProduceJWT } from './produce.js';
+import { JWTInvalid } from './utils/errors';
+import type { JWSHeaderParameters } from './types';
+import { ProduceJWT } from './produce';
+import { encodeBase64 } from './utils/base64';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
@@ -24,14 +24,14 @@ import { ProduceJWT } from './produce.js';
  * ```
  */
 export class SignJWT extends ProduceJWT {
-  private _protectedHeader!: JWTHeaderParameters;
+  private _protectedHeader!: JWSHeaderParameters;
 
   /**
    * Sets the JWS Protected Header on the SignJWT object.
    *
    * @param protectedHeader JWS Protected Header. Must contain an "alg" (JWS Algorithm) property.
    */
-  setProtectedHeader(protectedHeader: JWTHeaderParameters) {
+  setProtectedHeader(protectedHeader: JWSHeaderParameters) {
     this._protectedHeader = protectedHeader;
     return this;
   }
@@ -44,11 +44,14 @@ export class SignJWT extends ProduceJWT {
     if (
       Array.isArray(this._protectedHeader?.crit) &&
       this._protectedHeader.crit.includes('b64') &&
-      // @ts-expect-error
       this._protectedHeader.b64 === false
     ) {
       throw new JWTInvalid('JWTs MUST NOT use unencoded payload');
     }
-    return `${this._protectedHeader}.${this._payload}.${signature}`;
+
+    const header = encodeBase64(JSON.stringify(this._protectedHeader));
+    const payload = encodeBase64(JSON.stringify(this._payload));
+
+    return `${header}.${payload}.${signature}`;
   }
 }

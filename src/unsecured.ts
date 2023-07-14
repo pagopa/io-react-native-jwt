@@ -1,14 +1,13 @@
-const { atob, btoa } = require('abab');
-
 import type {
   JWSHeaderParameters,
   JWTClaimVerificationOptions,
   JWTPayload,
 } from './types';
 
-import { JWTInvalid } from './utils/errors';
+import { JWSInvalid, JWTInvalid } from './utils/errors';
 import jwtPayload from './jwt_claims_set';
 import { ProduceJWT } from './produce';
+import { decodeBase64, encodeBase64 } from './utils/base64';
 
 export interface UnsecuredResult {
   payload: JWTPayload;
@@ -57,8 +56,8 @@ export interface UnsecuredResult {
 export class UnsecuredJWT extends ProduceJWT {
   /** Encodes the Unsecured JWT. */
   encode(): string {
-    const header = btoa(JSON.stringify({ alg: 'none' }));
-    const payload = btoa(JSON.stringify(this._payload));
+    const header = encodeBase64(JSON.stringify({ alg: 'none' }));
+    const payload = encodeBase64(JSON.stringify(this._payload));
 
     return `${header}.${payload}.`;
   }
@@ -68,7 +67,12 @@ export class UnsecuredJWT extends ProduceJWT {
    *
    */
   toSign(): string {
-    return btoa(JSON.stringify(this._payload));
+    let encoded = encodeBase64(JSON.stringify(this._payload));
+    if (encoded) {
+      return encoded;
+    } else {
+      throw new JWSInvalid();
+    }
   }
 
   /**
@@ -97,17 +101,15 @@ export class UnsecuredJWT extends ProduceJWT {
 
     let header: JWSHeaderParameters;
     try {
-      header = JSON.parse(atob(encodedHeader));
+      let decoded = decodeBase64(encodedHeader!);
+      header = JSON.parse(decoded);
       if (header.alg !== 'none') throw new Error();
     } catch {
       throw new JWTInvalid('Invalid Unsecured JWT');
     }
+    let decodedPayload = decodeBase64(encodedPayload!);
 
-    const payload = jwtPayload(
-      header,
-      JSON.parse(atob(encodedPayload)),
-      options
-    );
+    const payload = jwtPayload(header, JSON.parse(decodedPayload), options);
 
     return { payload, header };
   }
