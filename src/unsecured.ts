@@ -15,9 +15,6 @@ export interface UnsecuredResult {
   header: JWSHeaderParameters;
 }
 
-export const encoder = new TextEncoder();
-export const decoder = new TextDecoder();
-
 /**
  * The UnsecuredJWT class is a utility for dealing with `{ "alg": "none" }` Unsecured JWTs.
  *
