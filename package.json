@@ -1,6 +1,6 @@
 {
   "name": "@pagopa/io-react-native-jwt",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Native support for JWT",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -44,15 +44,15 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/pagopa/react-native-jwt",
+  "repository": "https://github.com/pagopa/io-react-native-jwt",
   "author": "PagoPa (https://github.com/pagopa)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pagopa/react-native-jwt/issues"
+    "url": "https://github.com/pagopa/io-react-native-jwt/issues"
   },
-  "homepage": "https://github.com/pagopa/react-native-jwt#readme",
+  "homepage": "https://github.com/pagopa/io-react-native-jwt#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
