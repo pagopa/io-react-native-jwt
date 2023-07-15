@@ -681,7 +681,7 @@ SPEC CHECKSUMS:
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  pagopa-io-react-native-jwt: a4d0dfb310597d29dde27b07100935a259b13cb0
+  pagopa-io-react-native-jwt: 9c9f03fbfb87aa5247c51d01e4e5f314bdefc983
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c52ee8fb2b35c1b54031dd8e92d88ad4dba8f2ce
   RCTTypeSafety: 75fa444becadf0ebfa0a456b8c64560c7c89c7df
