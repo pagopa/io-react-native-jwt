@@ -13,26 +13,26 @@ const encodedUnsecureJwt =
   'eyJhbGciOiJub25lIn0.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.';
 
 describe('Unsecured JWT', function () {
-  it('must be encoded correctly', async () => {
-    let unsecured = new UnsecuredJWT(jwtPayload).encode();
+  it('it should be encoded correctly', async () => {
+    const unsecured = new UnsecuredJWT(jwtPayload).encode();
     expect(unsecured).toBe(encodedUnsecureJwt);
   });
-  it('must fail the encode', async () => {
+  it('it should fail encoding with unknown payload', async () => {
     expect(() =>
       new UnsecuredJWT('' as unknown as JWTPayload).encode()
     ).toThrowError(TypeError);
   });
-  it('must be decoded correctly', async () => {
-    let unsecured = UnsecuredJWT.decode(encodedUnsecureJwt, {
+  it('it should be decoded correctly', async () => {
+    const unsecured = UnsecuredJWT.decode(encodedUnsecureJwt, {
       currentDate: new Date(2023, 7, 14, 0, 0),
     });
     expect(unsecured.payload).toMatchObject(jwtPayload);
   });
-  it('must fail the decode', async () => {
+  it('it should fail the decode with an empty string', async () => {
     expect(() => UnsecuredJWT.decode('')).toThrowError(JWTInvalid);
   });
-  it('must return content to sign', async () => {
-    let toSign = new UnsecuredJWT(jwtPayload).toSign();
+  it('it should return the right content to sign', async () => {
+    const toSign = new UnsecuredJWT(jwtPayload).toSign();
     expect(toSign).toBe(
       'eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ'
     );
