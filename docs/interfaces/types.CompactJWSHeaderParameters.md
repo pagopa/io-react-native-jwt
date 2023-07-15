@@ -10,8 +10,6 @@ Recognized Compact JWS Header Parameters, any other Header Members may also be p
 
   ↳ **`CompactJWSHeaderParameters`**
 
-  ↳↳ [`JWTHeaderParameters`](types.JWTHeaderParameters.md)
-
 ## Table of contents
 
 ### Properties
