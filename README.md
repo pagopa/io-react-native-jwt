@@ -76,7 +76,28 @@ if isValid {
 }
 ```
 
+### Create and sign a JWT with a JWS
 
+```js
+// Create unsecured jwt
+let jwtToSign = new UnsecuredJWT({ metadata: 'demo' })
+  .setAudience('demo')
+  .setExpirationTime('1h')
+  .setIssuedAt()
+  .toSign();
+
+// Create JWS
+let signature = signWithMyCustomFunction(jwtToSign);
+
+// Get payload from unsecured jwt
+let jwtPayload = UnsecuredJWT.decode(jwtToSign).payload;
+
+// Create signed JWT
+let signedJwt = new SignJWT(jwtPayload)
+  .setProtectedHeader({ alg: 'ES256' })
+  .sign(signature);
+
+```
 
 ## Example
 
