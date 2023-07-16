@@ -1,7 +1,7 @@
 import { JWSInvalid, JWTInvalid } from './utils/errors';
 import type { JWSHeaderParameters } from './types';
 import { ProduceJWT } from './produce';
-import { encodeBase64 } from './utils/base64';
+import { encodeBase64, removePadding } from './utils/base64';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
@@ -35,25 +35,35 @@ export class SignJWT extends ProduceJWT {
     this._protectedHeader = protectedHeader;
     return this;
   }
+
   /**
-   * Signs and returns the JWT.
+   * Return content to sign.
    *
-   * @param signature Body signature previously obtained
    */
-  sign(signature: string): string {
-    if (
-      Array.isArray(this._protectedHeader?.crit) &&
-      this._protectedHeader.crit.includes('b64') &&
-      this._protectedHeader.b64 === false
-    ) {
-      throw new JWTInvalid('JWTs MUST NOT use unencoded payload');
+  toSign(): string {
+    let protectedHeader = encodeBase64(JSON.stringify(this._protectedHeader));
+    let payload = encodeBase64(JSON.stringify(this._payload));
+    if (payload && protectedHeader) {
+      return `${protectedHeader}.${payload}`;
+    } else {
+      throw new JWSInvalid();
     }
+  }
 
-    if (signature === '') throw new JWSInvalid('Invalid signature');
+  /**
+   * Append JWS to unsigned JWT.
+   *
+   * @param jwtWithoutSignature
+   * @param jws
+   */
+  static appendJws(jwtWithoutSignature: string, jws: string): string {
+    if (typeof jwtWithoutSignature !== 'string' || typeof jws !== 'string') {
+      throw new JWTInvalid('JWS must be a string');
+    }
+    if (jws === '') throw new JWSInvalid('Invalid signature');
 
-    const header = encodeBase64(JSON.stringify(this._protectedHeader));
-    const payload = encodeBase64(JSON.stringify(this._payload));
+    const encodedJws = removePadding(jws);
 
-    return `${header}.${payload}.${signature}`;
+    return `${jwtWithoutSignature}.${encodedJws}`;
   }
 }

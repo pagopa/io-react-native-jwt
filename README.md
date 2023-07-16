@@ -90,7 +90,7 @@ let jwtToSign = new UnsecuredJWT({ metadata: 'demo' })
 let signature = signWithMyCustomFunction(jwtToSign);
 
 // Get payload from unsecured jwt
-let jwtPayload = UnsecuredJWT.decode(jwtToSign).payload;
+let jwtPayload = UnsecuredJWT.decodePayload(jwtToSign);
 
 // Create signed JWT
 let signedJwt = new SignJWT(jwtPayload)

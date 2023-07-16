@@ -7,6 +7,10 @@ import type {
 import jwtPayload from './jwt_claims_set';
 import { JWSSignatureVerificationFailed } from './utils/errors';
 
+export * from './produce';
+export * from './sign';
+export * from './unsecured';
+
 const LINKING_ERROR =
   `The package '@pagopa/io-react-native-jwt' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -107,3 +111,6 @@ export const verify = async (
     throw new JWSSignatureVerificationFailed();
   }
 };
+
+export const unpack = async (signature: string): Promise<any> =>
+  IoReactNativeJwt.unpackBerEncodedASN1(signature, 32);

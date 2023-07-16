@@ -11,6 +11,11 @@ RCT_EXTERN_METHOD(verify: (NSString)token
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(unpackBerEncodedASN1: (NSString)signature
+                  coordinateOctetLength: (NSInteger *)coordinateOctetLength
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup
 {
   return NO;
