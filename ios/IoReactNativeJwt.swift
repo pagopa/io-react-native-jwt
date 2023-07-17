@@ -11,18 +11,6 @@ class IoReactNativeJwt: NSObject {
     }
 
     @objc
-    func decode(_ token: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-      do {
-          let jws = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: token)
-          let jsonPayload = try JSONSerialization.jsonObject(with: jws.payload.data(), options: [])
-          let headerPayload = try JSONSerialization.jsonObject(with: jws.header.data(), options: [])
-          resolve(["payload": jsonPayload, "protectedHeader": headerPayload])
-      } catch {
-          reject("Error", "\(error)", error);
-      }
-    }
-
-    @objc
     func verify(_ token: String, jwk: NSDictionary, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
         do {
             let jws = try JWS(compactSerialization: token)

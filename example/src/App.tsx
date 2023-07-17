@@ -71,7 +71,7 @@ export default function App() {
 
   const verifyPayload = (jwt: string, publicKey: JWK) =>
     verify(jwt, publicKey, {
-      currentDate: new Date(2023, 6, 13, 10, 30, 0, 0),
+      currentDate: new Date('2023-07-13T10:30:00.000+02:00'),
       typ: 'entity-statement+jwt',
       requiredClaims: ['iss', 'sub', 'metadata'],
     })
@@ -83,11 +83,14 @@ export default function App() {
       <View>
         <Button
           title="Decode JWT"
-          onPress={() =>
-            decode(demoJwt)
-              .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
-              .catch(showError)
-          }
+          onPress={() => {
+            try {
+              let decodedJwt = decode(demoJwt);
+              return setResult(JSON.stringify(decodedJwt));
+            } catch (e) {
+              showError(e);
+            }
+          }}
         />
         <Button
           title="Verify JWT with valid JWK"

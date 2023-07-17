@@ -1,5 +1,9 @@
 import { JOSENotSupported, JWSInvalid, JWTInvalid } from './utils/errors';
-import type { CompactJWSHeaderParameters, JWTPayload } from './types';
+import type {
+  CompactJWSHeaderParameters,
+  JWTDecodeResult,
+  JWTPayload,
+} from './types';
 import { ProduceJWT } from './produce';
 import { decodeBase64, encodeBase64, removePadding } from './utils/base64';
 import { isAlgSupported } from './algorithms';
@@ -129,6 +133,46 @@ export class SignJWT extends ProduceJWT {
     return {
       payload,
       header,
+    };
+  }
+
+  /**
+   * Decodes a JWT without signature
+   *
+   * @param jwtWithoutSignature JWT to sign that needs to be decoded.
+   */
+  static decode(jwt: string): JWTDecodeResult {
+    if (typeof jwt !== 'string') {
+      throw new JWTInvalid('JWT must be a string');
+    }
+    const {
+      0: encodedHeader,
+      1: encodedPayload,
+      2: signature,
+      length,
+    } = jwt.split('.');
+
+    let protectedHeader: CompactJWSHeaderParameters;
+    try {
+      let decoded = decodeBase64(encodedHeader!);
+      protectedHeader = JSON.parse(decoded);
+      if (!protectedHeader.alg || !isAlgSupported(protectedHeader.alg)) {
+        throw new JOSENotSupported('Unsupported "alg" value');
+      }
+    } catch {
+      throw new JWTInvalid('Unable to decode JWT header');
+    }
+
+    if (length !== 3 || encodedPayload === '' || signature === '') {
+      throw new JWTInvalid('Invalid JWT');
+    }
+
+    let decodedPayload = decodeBase64(encodedPayload!);
+    const payload = JSON.parse(decodedPayload);
+
+    return {
+      payload,
+      protectedHeader,
     };
   }
 }

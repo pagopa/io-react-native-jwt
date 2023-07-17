@@ -33,22 +33,6 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun decode(token:String, promise: Promise) {
-    try {
-            val signedJWT = SignedJWT.parse(token)
-            val claimsSet = convertJsonToMap(JSONObject(signedJWT.payload.toJSONObject()))
-            val header = convertJsonToMap(JSONObject(signedJWT.header.toJSONObject()))
-            val result = WritableNativeMap().apply {
-                putMap("payload", claimsSet)
-                putMap("protectedHeader", header)
-            }
-            promise.resolve(result)
-        } catch (ex: Exception) {
-            promise.reject(ex)
-        }
-  }
-
-  @ReactMethod
   fun verify(token: String, jwk: ReadableMap, promise: Promise) {
     try {
       val signedJWT = SignedJWT.parse(token)

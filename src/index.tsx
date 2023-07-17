@@ -6,6 +6,7 @@ import type {
 import jwtPayload from './jwt_claims_set';
 import { JWSSignatureVerificationFailed } from './utils/errors';
 import { IoReactNativeJwt } from './utils/proxy';
+import { SignJWT } from './sign';
 
 export * from './produce';
 export * from './sign';
@@ -26,8 +27,7 @@ export * from './unsecured';
  *
  * @param jwt JSON Web Token value (encoded as JWS).
  */
-export const decode = (token: string): Promise<JWTDecodeResult> =>
-  IoReactNativeJwt.decode(token);
+export const decode = (token: string): JWTDecodeResult => SignJWT.decode(token);
 
 /**
  * Verifies the JWS signature
