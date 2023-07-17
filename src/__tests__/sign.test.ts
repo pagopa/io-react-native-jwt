@@ -1,6 +1,6 @@
-import type { JWSHeaderParameters, JWTPayload } from '../types';
+import type { CompactJWSHeaderParameters, JWTPayload } from '../types';
 import { SignJWT } from '../sign';
-import { JOSEError } from '../utils/errors';
+import { JOSENotSupported, JWSInvalid } from '../utils/errors';
 
 const jwtPayload: JWTPayload = {
   iss: 'demo',
@@ -9,7 +9,7 @@ const jwtPayload: JWTPayload = {
   exp: 1706742000,
 };
 
-const jwtHeader: JWSHeaderParameters = {
+const jwtHeader: CompactJWSHeaderParameters = {
   typ: 'jwt',
   kid: 'EC#1',
   alg: 'ES256',
@@ -22,12 +22,17 @@ let toSign = new SignJWT(jwtPayload).setProtectedHeader(jwtHeader).toSign();
 
 describe('Sign JWT', function () {
   it('it should be signed correctly', async () => {
-    let signedJwt = SignJWT.appendJws(toSign, signature);
+    let signedJwt = await SignJWT.appendAsn1Signature(toSign, signature);
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJraWQiOiJFQyMxIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
     );
   });
-  it('it should fails with empty string', async () => {
-    expect(() => SignJWT.appendJws(toSign, '')).toThrowError(JOSEError);
+  it('it should fails with invalid alg', async () => {
+    expect(() =>
+      new SignJWT(jwtPayload).setProtectedHeader({ alg: 'invalid' })
+    ).toThrowError(JOSENotSupported);
+  });
+  it('it should fails without header', async () => {
+    expect(() => new SignJWT(jwtPayload).toSign()).toThrowError(JWSInvalid);
   });
 });

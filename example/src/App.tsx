@@ -13,7 +13,6 @@ import {
   verify,
   isSignatureValid,
   SignJWT,
-  unpack,
 } from '@pagopa/io-react-native-jwt';
 import type { JWK } from 'src/types';
 import { generate, sign } from '@pagopa/io-react-native-crypto';
@@ -28,25 +27,16 @@ export default function App() {
 
     // Create unsecured jwt
     let jwtToSign = new SignJWT({
-      sub: 'ES256InOTA',
-      name: 'John Doe',
+      sub: 'demoApp',
+      iss: 'PagoPa',
     })
       .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
       .toSign();
 
-    console.log('JWT to sign', jwtToSign);
-
     // Create JWS
-    const signature = await sign(jwtToSign, randomKeyTag);
-
-    console.log('signature', signature);
-    let unpacked = await unpack(signature);
-    console.log('signature unpacked', unpack(signature));
-
-    let signedJwt = SignJWT.appendJws(jwtToSign, unpacked);
-    setResult(JSON.stringify(signedJwt));
-
-    console.log(signedJwt);
+    const asn1Signature = await sign(jwtToSign, randomKeyTag);
+    let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
+    console.log(JSON.stringify(signedJwt));
 
     verifyJwtSignature(signedJwt, pk);
   };

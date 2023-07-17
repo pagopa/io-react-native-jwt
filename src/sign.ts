@@ -1,7 +1,10 @@
-import { JWSInvalid, JWTInvalid } from './utils/errors';
-import type { JWSHeaderParameters } from './types';
+import { JOSENotSupported, JWSInvalid, JWTInvalid } from './utils/errors';
+import type { CompactJWSHeaderParameters, JWTPayload } from './types';
 import { ProduceJWT } from './produce';
-import { encodeBase64, removePadding } from './utils/base64';
+import { decodeBase64, encodeBase64, removePadding } from './utils/base64';
+import { isAlgSupported } from './algorithms';
+
+import { derToJose } from './utils/asn1';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
@@ -24,23 +27,31 @@ import { encodeBase64, removePadding } from './utils/base64';
  * ```
  */
 export class SignJWT extends ProduceJWT {
-  private _protectedHeader!: JWSHeaderParameters;
+  private _protectedHeader!: CompactJWSHeaderParameters;
 
   /**
    * Sets the JWS Protected Header on the SignJWT object.
    *
    * @param protectedHeader JWS Protected Header. Must contain an "alg" (JWS Algorithm) property.
    */
-  setProtectedHeader(protectedHeader: JWSHeaderParameters) {
-    this._protectedHeader = protectedHeader;
-    return this;
+  setProtectedHeader(protectedHeader: CompactJWSHeaderParameters) {
+    if (protectedHeader.alg && isAlgSupported(protectedHeader.alg)) {
+      this._protectedHeader = protectedHeader;
+      return this;
+    }
+    throw new JOSENotSupported('Unsupported "alg" value');
   }
 
   /**
-   * Return content to sign.
+   * Return a JWT without signature (`header.payload`) to sign.
    *
    */
   toSign(): string {
+    if (!this._protectedHeader || !this._protectedHeader.alg) {
+      throw new JWSInvalid(
+        'Missing signature algorithm. Specify the `alg` field'
+      );
+    }
     let protectedHeader = encodeBase64(JSON.stringify(this._protectedHeader));
     let payload = encodeBase64(JSON.stringify(this._payload));
     if (payload && protectedHeader) {
@@ -56,14 +67,68 @@ export class SignJWT extends ProduceJWT {
    * @param jwtWithoutSignature
    * @param jws
    */
-  static appendJws(jwtWithoutSignature: string, jws: string): string {
-    if (typeof jwtWithoutSignature !== 'string' || typeof jws !== 'string') {
+  static async appendAsn1Signature(
+    jwtWithoutSignature: string,
+    asn1Signature: string
+  ): Promise<string> {
+    if (
+      typeof jwtWithoutSignature !== 'string' ||
+      typeof asn1Signature !== 'string'
+    ) {
       throw new JWTInvalid('JWS must be a string');
     }
-    if (jws === '') throw new JWSInvalid('Invalid signature');
+    if (asn1Signature === '') throw new JWSInvalid('Invalid signature');
 
-    const encodedJws = removePadding(jws);
+    let jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
+    let alg = jwtDecoded.header.alg;
+    try {
+      const encodedJws = await derToJose(asn1Signature, alg);
+      return `${jwtWithoutSignature}.${encodedJws}`;
+    } catch {
+      const encodedJws = removePadding(asn1Signature);
+      return `${jwtWithoutSignature}.${encodedJws}`;
+    }
+  }
 
-    return `${jwtWithoutSignature}.${encodedJws}`;
+  /**
+   * Decodes a JWT without signature
+   *
+   * @param jwtWithoutSignature JWT to sign that needs to be decoded.
+   */
+  static decodeJwtWithoutSignature(jwtWithoutSignature: string): {
+    payload: JWTPayload;
+    header: CompactJWSHeaderParameters;
+  } {
+    if (typeof jwtWithoutSignature !== 'string') {
+      throw new JWTInvalid('JWT must be a string');
+    }
+    const {
+      0: encodedHeader,
+      1: encodedPayload,
+      length,
+    } = jwtWithoutSignature.split('.');
+
+    let header: CompactJWSHeaderParameters;
+    try {
+      let decoded = decodeBase64(encodedHeader!);
+      header = JSON.parse(decoded);
+      if (!header.alg || !isAlgSupported(header.alg)) {
+        throw new JOSENotSupported('Unsupported "alg" value');
+      }
+    } catch {
+      throw new JWTInvalid('Unable to decode JWT header');
+    }
+
+    if (length !== 2 || encodedPayload === '') {
+      throw new JWTInvalid('Invalid JWT to sign');
+    }
+
+    let decodedPayload = decodeBase64(encodedPayload!);
+    const payload = JSON.parse(decodedPayload);
+
+    return {
+      payload,
+      header,
+    };
   }
 }

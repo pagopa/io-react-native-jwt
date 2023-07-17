@@ -1,4 +1,3 @@
-import { NativeModules, Platform } from 'react-native';
 import type {
   JWK,
   JWTClaimVerificationOptions,
@@ -6,27 +5,11 @@ import type {
 } from './types';
 import jwtPayload from './jwt_claims_set';
 import { JWSSignatureVerificationFailed } from './utils/errors';
+import { IoReactNativeJwt } from './utils/proxy';
 
 export * from './produce';
 export * from './sign';
 export * from './unsecured';
-
-const LINKING_ERROR =
-  `The package '@pagopa/io-react-native-jwt' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-const IoReactNativeJwt = NativeModules.IoReactNativeJwt
-  ? NativeModules.IoReactNativeJwt
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
 
 /**
  * Decode the JWT without validation.
@@ -111,6 +94,3 @@ export const verify = async (
     throw new JWSSignatureVerificationFailed();
   }
 };
-
-export const unpack = async (signature: string): Promise<any> =>
-  IoReactNativeJwt.unpackBerEncodedASN1(signature, 32);
