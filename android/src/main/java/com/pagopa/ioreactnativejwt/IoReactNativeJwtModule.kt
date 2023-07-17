@@ -57,6 +57,15 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
     }
   }
 
+  @ReactMethod
+  fun unpackBerEncodedASN1(asn1Signature: String, alg: Double, promise: Promise) {
+    try {
+      promise.resolve(asn1Signature)
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
 
   companion object {
     const val NAME = "IoReactNativeJwt"
