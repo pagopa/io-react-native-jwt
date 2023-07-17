@@ -112,7 +112,6 @@ const thumbprint = await thumbprint(pubJwk);
 console.log(thumbprint)
 ```
 
-
 ## Example
 
 You can use the [sample app](example) to test and understand how to use the library.
