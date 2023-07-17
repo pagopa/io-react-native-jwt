@@ -83,7 +83,8 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
     try {
       val decodedBytes = Base64.decode(asn1Signature, DEFAULT)
       val transcoded = transcodeSignatureToConcat(decodedBytes, coordinateOctetLength)
-      promise.resolve(asn1Signature)
+      val signature = Base64.encodeToString(transcoded, DEFAULT)
+      promise.resolve(signature)
     } catch (ex: Exception) {
       promise.reject(ex)
     }
