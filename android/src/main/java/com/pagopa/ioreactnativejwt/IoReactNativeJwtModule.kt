@@ -71,7 +71,11 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
         val internalJwk = RSAKey.parse(jwkJson.toString())
         thumbprint = internalJwk.computeThumbprint().toString();
       }
-      promise.resolve(thumbprint)
+      if (thumbprint != "") {
+        promise.resolve(thumbprint)
+      } else {
+        promise.reject(Exception("Unable to create thumbprint"))
+      }
 
     } catch (ex: Exception) {
       promise.reject(ex)
