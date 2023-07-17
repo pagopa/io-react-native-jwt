@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 
 import android.util.Base64
+import android.util.Base64.DEFAULT
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
@@ -20,6 +21,7 @@ import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.facebook.react.bridge.WritableNativeMap
 import com.nimbusds.jose.crypto.impl.RSA_OAEP
 import com.pagopa.ioreactnativejwt.Utils.convertJsonToMap
+import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 
 class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -77,8 +79,10 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun unpackBerEncodedASN1(asn1Signature: String, alg: Double, promise: Promise) {
+  fun unpackBerEncodedASN1(asn1Signature: String, coordinateOctetLength: Int, promise: Promise) {
     try {
+      val decodedBytes = Base64.decode(asn1Signature, DEFAULT)
+      val transcoded = transcodeSignatureToConcat(decodedBytes, coordinateOctetLength)
       promise.resolve(asn1Signature)
     } catch (ex: Exception) {
       promise.reject(ex)
