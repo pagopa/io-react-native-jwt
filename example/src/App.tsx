@@ -25,7 +25,7 @@ export default function App() {
     const pk = await generate(randomKeyTag);
     console.log(JSON.stringify(pk));
 
-    // Create unsecured jwt
+    // Create jwt
     let jwtToSign = new SignJWT({
       sub: 'demoApp',
       iss: 'PagoPa',
@@ -33,8 +33,10 @@ export default function App() {
       .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
       .toSign();
 
-    // Create JWS
+    // Sign with TEE
     const asn1Signature = await sign(jwtToSign, randomKeyTag);
+
+    // Append signature to JWT
     let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
     console.log(JSON.stringify(signedJwt));
 
