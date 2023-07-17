@@ -13,6 +13,7 @@ import {
   verify,
   isSignatureValid,
   SignJWT,
+  thumbprint,
 } from '@pagopa/io-react-native-jwt';
 import type { JWK } from 'src/types';
 import { generate, sign } from '@pagopa/io-react-native-crypto';
@@ -23,7 +24,7 @@ export default function App() {
   const generateAndSign = async () => {
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
     const pk = await generate(randomKeyTag);
-    console.log(JSON.stringify(pk));
+    console.log(pk);
 
     var alg = 'ES256';
     if (pk.kty === 'RSA') {
@@ -40,11 +41,11 @@ export default function App() {
 
     // Sign with TEE
     const asn1Signature = await sign(jwtToSign, randomKeyTag);
-    console.log(JSON.stringify(asn1Signature));
+    console.log(asn1Signature);
 
     // Append signature to JWT
     let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
-    console.log(JSON.stringify(signedJwt));
+    console.log(signedJwt);
 
     verifyJwtSignature(signedJwt, pk);
   };
@@ -109,6 +110,10 @@ export default function App() {
         <Button
           title="Verify JWT payload"
           onPress={() => verifyPayload(demoJwt, validJwk)}
+        />
+        <Button
+          title="JWK thumbprint"
+          onPress={() => thumbprint(validJwk).then(setResult).catch(showError)}
         />
         <Button
           title="Generate and sign JWT"

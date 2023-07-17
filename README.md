@@ -96,6 +96,23 @@ let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
 console.log(signedJwt)
 ```
 
+### JWK thumbprint
+
+```js
+import { thumbprint } from '@pagopa/io-react-native-jwt';
+
+// ...
+const pubJwk = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'qrJrj.....',
+    y: '1H0cW.....',
+  };
+const thumbprint = await thumbprint(pubJwk);
+console.log(thumbprint)
+```
+
+
 ## Example
 
 You can use the [sample app](example) to test and understand how to use the library.

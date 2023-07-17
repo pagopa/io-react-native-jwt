@@ -58,6 +58,25 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun thumbprint(jwk: ReadableMap, promise: Promise) {
+    try {
+      val jwkJson = JSONObject(jwk.toHashMap())
+      var thumbprint = ""
+      if (isECKey(jwkJson)) {
+        val internalJwk = ECKey.parse(jwkJson.toString())
+        thumbprint = internalJwk.computeThumbprint().toString();
+      } else {
+        val internalJwk = RSAKey.parse(jwkJson.toString())
+        thumbprint = internalJwk.computeThumbprint().toString();
+      }
+      promise.resolve(thumbprint)
+
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
+  @ReactMethod
   fun unpackBerEncodedASN1(asn1Signature: String, alg: Double, promise: Promise) {
     try {
       promise.resolve(asn1Signature)
