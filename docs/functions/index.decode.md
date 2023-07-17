@@ -2,7 +2,7 @@
 
 [index](../modules/index.md).decode
 
-▸ **decode**(`token`): [`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<[`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)\>
+▸ **decode**(`token`): [`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)
 
 Decode the JWT without validation.
 
@@ -26,4 +26,4 @@ const { payload, protectedHeader } = await decode(jwt)
 
 #### Returns
 
-[`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<[`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)\>
+[`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)

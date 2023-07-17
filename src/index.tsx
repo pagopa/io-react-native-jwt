@@ -11,6 +11,7 @@ import { SignJWT } from './sign';
 export * from './produce';
 export * from './sign';
 export * from './unsecured';
+export { derToJose } from './utils/asn1';
 
 /**
  * Decode the JWT without validation.

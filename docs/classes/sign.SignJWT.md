@@ -38,6 +38,7 @@ console.log(jwt)
 ### Methods
 
 - [appendAsn1Signature](sign.SignJWT.md#appendasn1signature)
+- [decode](sign.SignJWT.md#decode)
 - [decodeJwtWithoutSignature](sign.SignJWT.md#decodejwtwithoutsignature)
 - [setAudience](sign.SignJWT.md#setaudience)
 - [setExpirationTime](sign.SignJWT.md#setexpirationtime)
@@ -83,6 +84,24 @@ Append JWS to unsigned JWT.
 #### Returns
 
 [`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<`string`\>
+
+___
+
+### decode
+
+▸ `Static` **decode**(`jwt`): [`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)
+
+Decodes a JWT without signature
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwt` | `string` |
+
+#### Returns
+
+[`JWTDecodeResult`](../interfaces/types.JWTDecodeResult.md)
 
 ___
 

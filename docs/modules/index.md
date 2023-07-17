@@ -18,7 +18,9 @@
 ### Functions
 
 - [decode](../functions/index.decode.md)
+- [derToJose](../functions/index.derToJose.md)
 - [isSignatureValid](../functions/index.isSignatureValid.md)
+- [thumbprint](../functions/index.thumbprint.md)
 - [verify](../functions/index.verify.md)
 
 ## References
