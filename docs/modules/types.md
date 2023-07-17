@@ -9,6 +9,5 @@
 - [JWSHeaderParameters](../interfaces/types.JWSHeaderParameters.md)
 - [JWTClaimVerificationOptions](../interfaces/types.JWTClaimVerificationOptions.md)
 - [JWTDecodeResult](../interfaces/types.JWTDecodeResult.md)
-- [JWTHeaderParameters](../interfaces/types.JWTHeaderParameters.md)
 - [JWTPayload](../interfaces/types.JWTPayload.md)
 - [JoseHeaderParameters](../interfaces/types.JoseHeaderParameters.md)

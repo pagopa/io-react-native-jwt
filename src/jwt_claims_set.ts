@@ -8,9 +8,7 @@ import type {
 } from './types';
 import { JWTClaimValidationFailed, JWTExpired } from './utils/errors';
 
-import secs from './utils/secs';
-
-const epoch = (date: Date) => Math.floor(date.getTime() / 1000);
+import secs, { epoch } from './utils/secs';
 
 const normalizeTyp = (value: string) =>
   value.toLowerCase().replace(/^application\//, '');

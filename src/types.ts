@@ -3,7 +3,7 @@ export interface JWTDecodeResult {
   payload: JWTPayload;
 
   /** JWS Protected Header. */
-  protectedHeader: JWTHeaderParameters;
+  protectedHeader: JWSHeaderParameters;
 }
 
 /**
@@ -101,11 +101,6 @@ export interface JWSHeaderParameters extends JoseHeaderParameters {
 /** Recognized Compact JWS Header Parameters, any other Header Members may also be present. */
 export interface CompactJWSHeaderParameters extends JWSHeaderParameters {
   alg: string;
-}
-
-/** Recognized Signed JWT Header Parameters, any other Header Members may also be present. */
-export interface JWTHeaderParameters extends CompactJWSHeaderParameters {
-  b64?: true;
 }
 
 /** Recognized JWT Claims Set members, any other members may also be present. */

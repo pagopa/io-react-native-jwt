@@ -6,7 +6,10 @@
   "entryPoints": [
     "src/index.tsx",
     "src/types.ts",
-    "src/util/errors.ts",
+    "src/produce.ts",
+    "src/sign.ts",
+    "src/utils/errors.ts",
+    "src/utils/base64.ts",
   ],
   "excludeExternals": true,
   "excludePrivate": true,

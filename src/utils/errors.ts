@@ -4,7 +4,7 @@
  * @example Checking thrown error is a JOSE one
  *
  * ```js
- * if (err instanceof jose.errors.JOSEError) {
+ * if (err instanceof errors.JOSEError) {
  *   // ...
  * }
  * ```
@@ -59,7 +59,7 @@ export class JWTClaimValidationFailed extends JOSEError {
  * @example Checking thrown error is this one using `instanceof`
  *
  * ```js
- * if (err instanceof jose.errors.JWTExpired) {
+ * if (err instanceof errors.JWTExpired) {
  *   // ...
  * }
  * ```
@@ -98,7 +98,7 @@ export class JWTExpired extends JOSEError implements JWTClaimValidationFailed {
  * @example Checking thrown error is this one using `instanceof`
  *
  * ```js
- * if (err instanceof jose.errors.JOSEAlgNotAllowed) {
+ * if (err instanceof errors.JOSEAlgNotAllowed) {
  *   // ...
  * }
  * ```
@@ -126,7 +126,7 @@ export class JOSEAlgNotAllowed extends JOSEError {
  * @example Checking thrown error is this one using `instanceof`
  *
  * ```js
- * if (err instanceof jose.errors.JOSENotSupported) {
+ * if (err instanceof errors.JOSENotSupported) {
  *   // ...
  * }
  * ```
@@ -153,7 +153,7 @@ export class JOSENotSupported extends JOSEError {
  * @example Checking thrown error is this one using `instanceof`
  *
  * ```js
- * if (err instanceof jose.errors.JWTInvalid) {
+ * if (err instanceof errors.JWTInvalid) {
  *   // ...
  * }
  * ```
@@ -164,6 +164,16 @@ export class JWTInvalid extends JOSEError {
   }
 
   code = 'ERR_JWT_INVALID';
+}
+
+/**
+ * An error subclass thrown when a JWT signature (JWS) is invalid.
+ */
+export class JWSInvalid extends JOSEError {
+  static get code(): 'ERR_JWS_INVALID' {
+    return 'ERR_JWS_INVALID';
+  }
+  code = 'ERR_JWS_INVALID';
 }
 
 /**
@@ -180,7 +190,7 @@ export class JWTInvalid extends JOSEError {
  * @example Checking thrown error is this one using `instanceof`
  *
  * ```js
- * if (err instanceof jose.errors.JWSSignatureVerificationFailed) {
+ * if (err instanceof errors.JWSSignatureVerificationFailed) {
  *   // ...
  * }
  * ```

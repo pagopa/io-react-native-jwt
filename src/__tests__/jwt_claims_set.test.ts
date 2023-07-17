@@ -1,4 +1,4 @@
-import type { JWSHeaderParameters, JWTPayload } from 'src/types';
+import type { JWSHeaderParameters, JWTPayload } from './../types';
 import verifyJwtClaimSet from './../jwt_claims_set';
 import { JWTClaimValidationFailed, JWTExpired } from './../utils/errors';
 

@@ -54,3 +54,5 @@ export default (str: string): number => {
       return Math.round(value * year);
   }
 };
+
+export const epoch = (date: Date) => Math.floor(date.getTime() / 1000);

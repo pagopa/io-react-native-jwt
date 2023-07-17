@@ -21,6 +21,6 @@ ___
 
 ### protectedHeader
 
-• **protectedHeader**: [`JWTHeaderParameters`](types.JWTHeaderParameters.md)
+• **protectedHeader**: [`JWSHeaderParameters`](types.JWSHeaderParameters.md)
 
 JWS Protected Header.
