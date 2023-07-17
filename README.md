@@ -80,23 +80,20 @@ if isValid {
 
 ```js
 // Create unsecured jwt
-let jwtToSign = new UnsecuredJWT({ metadata: 'demo' })
+let jwtToSign = new SignJWT({ metadata: 'demo' })
+  .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
   .setAudience('demo')
   .setExpirationTime('1h')
   .setIssuedAt()
   .toSign();
 
 // Create JWS
-let signature = signWithMyCustomFunction(jwtToSign);
-
-// Get payload from unsecured jwt
-let jwtPayload = UnsecuredJWT.decodePayload(jwtToSign);
+let asn1Signature = signWithMyCustomFunction(jwtToSign);
 
 // Create signed JWT
-let signedJwt = new SignJWT(jwtPayload)
-  .setProtectedHeader({ alg: 'ES256' })
-  .sign(signature);
+let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
 
+console.log(signedJwt)
 ```
 
 ## Example

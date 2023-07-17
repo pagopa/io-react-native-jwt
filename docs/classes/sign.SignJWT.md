@@ -37,6 +37,8 @@ console.log(jwt)
 
 ### Methods
 
+- [appendAsn1Signature](sign.SignJWT.md#appendasn1signature)
+- [decodeJwtWithoutSignature](sign.SignJWT.md#decodejwtwithoutsignature)
 - [setAudience](sign.SignJWT.md#setaudience)
 - [setExpirationTime](sign.SignJWT.md#setexpirationtime)
 - [setIssuedAt](sign.SignJWT.md#setissuedat)
@@ -45,7 +47,7 @@ console.log(jwt)
 - [setNotBefore](sign.SignJWT.md#setnotbefore)
 - [setProtectedHeader](sign.SignJWT.md#setprotectedheader)
 - [setSubject](sign.SignJWT.md#setsubject)
-- [sign](sign.SignJWT.md#sign)
+- [toSign](sign.SignJWT.md#tosign)
 
 ## Constructors
 
@@ -64,6 +66,48 @@ console.log(jwt)
 [ProduceJWT](produce.ProduceJWT.md).[constructor](produce.ProduceJWT.md#constructor)
 
 ## Methods
+
+### appendAsn1Signature
+
+▸ `Static` **appendAsn1Signature**(`jwtWithoutSignature`, `asn1Signature`): [`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<`string`\>
+
+Append JWS to unsigned JWT.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtWithoutSignature` | `string` |
+| `asn1Signature` | `string` |
+
+#### Returns
+
+[`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<`string`\>
+
+___
+
+### decodeJwtWithoutSignature
+
+▸ `Static` **decodeJwtWithoutSignature**(`jwtWithoutSignature`): `Object`
+
+Decodes a JWT without signature
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `jwtWithoutSignature` | `string` | JWT to sign that needs to be decoded. |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `header` | [`CompactJWSHeaderParameters`](../interfaces/types.CompactJWSHeaderParameters.md) |
+| `payload` | [`JWTPayload`](../interfaces/types.JWTPayload.md) |
+
+___
 
 ### setAudience
 
@@ -207,7 +251,7 @@ Sets the JWS Protected Header on the SignJWT object.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `protectedHeader` | [`JWSHeaderParameters`](../interfaces/types.JWSHeaderParameters.md) | JWS Protected Header. Must contain an "alg" (JWS Algorithm) property. |
+| `protectedHeader` | [`CompactJWSHeaderParameters`](../interfaces/types.CompactJWSHeaderParameters.md) | JWS Protected Header. Must contain an "alg" (JWS Algorithm) property. |
 
 #### Returns
 
@@ -237,17 +281,11 @@ Set "sub" (Subject) Claim.
 
 ___
 
-### sign
+### toSign
 
-▸ **sign**(`signature`): `string`
+▸ **toSign**(): `string`
 
-Signs and returns the JWT.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `signature` | `string` | Body signature previously obtained |
+Return a JWT without signature (`header.payload`) to sign.
 
 #### Returns
 
