@@ -87,11 +87,11 @@ let jwtToSign = new SignJWT({ metadata: 'demo' })
   .setIssuedAt()
   .toSign();
 
-// Create JWS
-let asn1Signature = signWithMyCustomFunction(jwtToSign);
+// Create signature
+let signature = signWithMyCustomFunction(jwtToSign);
 
 // Create signed JWT
-let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
+let signedJwt = await SignJWT.appendSignature(jwtToSign, signature);
 
 console.log(signedJwt)
 ```
@@ -111,6 +111,21 @@ const pubJwk = {
 const thumbprint = await thumbprint(pubJwk);
 console.log(thumbprint)
 ```
+
+##  Signature format
+
+For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
+The same format supported by Secure Enclave (TEE).
+Transcoding is done automatically via the following function:
+
+```js
+derToJose = async (
+  asn1Signature: string,
+  alg: string
+): Promise<string>
+```
+
+Refs: [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-A.3.1)
 
 ## Example
 

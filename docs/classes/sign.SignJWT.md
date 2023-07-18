@@ -37,7 +37,7 @@ console.log(jwt)
 
 ### Methods
 
-- [appendAsn1Signature](sign.SignJWT.md#appendasn1signature)
+- [appendSignature](sign.SignJWT.md#appendsignature)
 - [decode](sign.SignJWT.md#decode)
 - [decodeJwtWithoutSignature](sign.SignJWT.md#decodejwtwithoutsignature)
 - [setAudience](sign.SignJWT.md#setaudience)
@@ -68,18 +68,20 @@ console.log(jwt)
 
 ## Methods
 
-### appendAsn1Signature
+### appendSignature
 
-▸ `Static` **appendAsn1Signature**(`jwtWithoutSignature`, `asn1Signature`): [`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<`string`\>
+▸ `Static` **appendSignature**(`jwtWithoutSignature`, `signature`): [`Promise`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise )<`string`\>
 
-Append JWS to unsigned JWT.
+Append signature to unsigned JWT.
+For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
+The same format used by the TEE. Conversion to JWS is handled automatically.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `jwtWithoutSignature` | `string` |
-| `asn1Signature` | `string` |
+| `signature` | `string` |
 
 #### Returns
 

@@ -67,6 +67,8 @@ export class SignJWT extends ProduceJWT {
 
   /**
    * Append signature to unsigned JWT.
+   * For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
+   * The same format used by the TEE. Conversion to JWS is handled automatically.
    *
    * @param jwtWithoutSignature
    * @param signature

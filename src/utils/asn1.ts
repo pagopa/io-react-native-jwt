@@ -4,10 +4,10 @@ import { removePadding } from './base64';
 import { JOSENotSupported } from './errors';
 
 /*
- * Convert the ASN.1/DER encoded signature to a JOSE-style concatenated signature.
+ * Transcodes the JCA ASN.1/DER-encoded signature into the concatenated R + S format expected by ECDSA JWS.
  * Returns a base64 url encoded String.
  *
- * @example Usage with an ASN.1 PAR encoded
+ * @example Usage with an ASN.1/DER-encoded
  *
  * ```js
  * const asn1Signature = 'Yw1xTT....'
@@ -15,7 +15,7 @@ import { JOSENotSupported } from './errors';
  *
  * ```
  *
- * @param asn1Signature ASN.1 PAR encoded signature
+ * @param asn1Signature ASN.1/DER-encoded signature
  * @param alg Algorithm used to sign
  */
 export const derToJose = async (
