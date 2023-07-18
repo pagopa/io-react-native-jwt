@@ -66,30 +66,30 @@ export class SignJWT extends ProduceJWT {
   }
 
   /**
-   * Append JWS to unsigned JWT.
+   * Append signature to unsigned JWT.
    *
    * @param jwtWithoutSignature
-   * @param jws
+   * @param signature
    */
-  static async appendAsn1Signature(
+  static async appendSignature(
     jwtWithoutSignature: string,
-    asn1Signature: string
+    signature: string
   ): Promise<string> {
     if (
       typeof jwtWithoutSignature !== 'string' ||
-      typeof asn1Signature !== 'string'
+      typeof signature !== 'string'
     ) {
       throw new JWTInvalid('JWS must be a string');
     }
-    if (asn1Signature === '') throw new JWSInvalid('Invalid signature');
+    if (signature === '') throw new JWSInvalid('Invalid signature');
 
     let jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
     let alg = jwtDecoded.header.alg;
     try {
-      const encodedJws = await derToJose(asn1Signature, alg);
+      const encodedJws = await derToJose(signature, alg);
       return `${jwtWithoutSignature}.${encodedJws}`;
     } catch {
-      const encodedJws = removePadding(asn1Signature);
+      const encodedJws = removePadding(signature);
       return `${jwtWithoutSignature}.${encodedJws}`;
     }
   }

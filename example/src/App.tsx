@@ -40,11 +40,11 @@ export default function App() {
       .toSign();
 
     // Sign with TEE
-    const asn1Signature = await sign(jwtToSign, randomKeyTag);
-    console.log(asn1Signature);
+    const signature = await sign(jwtToSign, randomKeyTag);
+    console.log(signature);
 
     // Append signature to JWT
-    let signedJwt = await SignJWT.appendAsn1Signature(jwtToSign, asn1Signature);
+    let signedJwt = await SignJWT.appendSignature(jwtToSign, signature);
     console.log(signedJwt);
 
     verifyJwtSignature(signedJwt, pk);
