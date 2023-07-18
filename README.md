@@ -80,24 +80,52 @@ if isValid {
 
 ```js
 // Create unsecured jwt
-let jwtToSign = new UnsecuredJWT({ metadata: 'demo' })
+let jwtToSign = new SignJWT({ metadata: 'demo' })
+  .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
   .setAudience('demo')
   .setExpirationTime('1h')
   .setIssuedAt()
   .toSign();
 
-// Create JWS
+// Create signature
 let signature = signWithMyCustomFunction(jwtToSign);
 
-// Get payload from unsecured jwt
-let jwtPayload = UnsecuredJWT.decode(jwtToSign).payload;
-
 // Create signed JWT
-let signedJwt = new SignJWT(jwtPayload)
-  .setProtectedHeader({ alg: 'ES256' })
-  .sign(signature);
+let signedJwt = await SignJWT.appendSignature(jwtToSign, signature);
 
+console.log(signedJwt)
 ```
+
+### JWK thumbprint
+
+```js
+import { thumbprint } from '@pagopa/io-react-native-jwt';
+
+// ...
+const pubJwk = {
+    crv: 'P-256',
+    kty: 'EC',
+    x: 'qrJrj.....',
+    y: '1H0cW.....',
+  };
+const thumbprint = await thumbprint(pubJwk);
+console.log(thumbprint)
+```
+
+##  Signature format
+
+For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
+The same format supported by Secure Enclave (TEE).
+Transcoding is done automatically via the following function:
+
+```js
+derToJose = async (
+  asn1Signature: string,
+  alg: string
+): Promise<string>
+```
+
+Refs: [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-A.3.1)
 
 ## Example
 

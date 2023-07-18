@@ -8,11 +8,47 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import { decode, verify, isSignatureValid } from '@pagopa/io-react-native-jwt';
+import {
+  decode,
+  verify,
+  isSignatureValid,
+  SignJWT,
+  thumbprint,
+} from '@pagopa/io-react-native-jwt';
 import type { JWK } from 'src/types';
+import { generate, sign } from '@pagopa/io-react-native-crypto';
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
+
+  const generateAndSign = async () => {
+    const randomKeyTag = Math.random().toString(36).substr(2, 5);
+    const pk = await generate(randomKeyTag);
+    console.log(pk);
+
+    var alg = 'ES256';
+    if (pk.kty === 'RSA') {
+      alg = 'PS256';
+    }
+
+    // Create jwt
+    let jwtToSign = new SignJWT({
+      sub: 'demoApp',
+      iss: 'PagoPa',
+    })
+      .setProtectedHeader({ alg, typ: 'JWT' })
+      .toSign();
+
+    // Sign with TEE
+    const signature = await sign(jwtToSign, randomKeyTag);
+    console.log(signature);
+
+    // Append signature to JWT
+    let signedJwt = await SignJWT.appendSignature(jwtToSign, signature);
+    console.log(signedJwt);
+
+    verifyJwtSignature(signedJwt, pk);
+  };
 
   const demoJwt =
     'eyJ0eXAiOiJlbnRpdHktc3RhdGVtZW50K2p3dCIsImtpZCI6IkVDIzEiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0LyIsInN1YiI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvIiwibWV0YWRhdGEiOnsiZXVkaV93YWxsZXRfcHJvdmlkZXIiOnsiandrcyI6W3siY3J2IjoiUC0yNTYiLCJrdHkiOiJFQyIsIngiOiJxckpyajNBZl9CNTdzYk9JUnJjQk03YnI3d09jOHluajdsSEZQVGVmZlVrIiwieSI6IjFIMGNXRHlHZ3ZVOHcta1BLVV94eWNPQ1VOVDJvMGJ3c2xJUXRuUFU2aU0iLCJraWQiOiJFQyMxIn1dLCJ0b2tlbl9lbmRwb2ludCI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvdG9rZW4iLCJhc2NfdmFsdWVzX3N1cHBvcnRlZCI6WyJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0L0xvQS9iYXNpYyIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL21lZGl1bSIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL2hpZ2h0Il0sImdyYW50X3R5cGVzX3N1cHBvcnRlZCI6WyJ1cm46aWV0ZjpwYXJhbXM6b2F1dGg6Y2xpZW50LWFzc2VydGlvbi10eXBlOmp3dC1rZXktYXR0ZXN0YXRpb24iXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9tZXRob2RzX3N1cHBvcnRlZCI6WyJwcml2YXRlX2tleV9qd3QiXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIiwiRVMzODQiLCJFUzUxMiIsIlJTMjU2IiwiUlMzODQiLCJSUzUxMiIsIlBTMjU2IiwiUFMzODQiLCJQUzUxMiJdfSwiZmVkZXJhdGlvbl9lbnRpdHkiOnsib3JnYW5pemF0aW9uX25hbWUiOiJQYWdvUGEgUy5wLkEuIiwiaG9tZXBhZ2VfdXJpIjoiaHR0cHM6Ly9pby5pdGFsaWEuaXQvIiwicG9saWN5X3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L3ByaXZhY3ktcG9saWN5LyIsInRvc191cmkiOiJodHRwczovL2lvLml0YWxpYS5pdC9wcml2YWN5LXBvbGljeS8iLCJsb2dvX3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L2Fzc2V0cy9pbWcvaW8taXQtbG9nby13aGl0ZS5zdmcifX0sImlhdCI6MTY4OTIzNjYzNSwiZXhwIjoxNjg5MjQwMjM1fQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q';
@@ -42,7 +78,7 @@ export default function App() {
 
   const verifyPayload = (jwt: string, publicKey: JWK) =>
     verify(jwt, publicKey, {
-      currentDate: new Date(2023, 6, 13, 10, 30, 0, 0),
+      currentDate: new Date('2023-07-13T10:30:00.000+02:00'),
       typ: 'entity-statement+jwt',
       requiredClaims: ['iss', 'sub', 'metadata'],
     })
@@ -54,11 +90,14 @@ export default function App() {
       <View>
         <Button
           title="Decode JWT"
-          onPress={() =>
-            decode(demoJwt)
-              .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
-              .catch(showError)
-          }
+          onPress={() => {
+            try {
+              let decodedJwt = decode(demoJwt);
+              return setResult(JSON.stringify(decodedJwt));
+            } catch (e) {
+              showError(e);
+            }
+          }}
         />
         <Button
           title="Verify JWT with valid JWK"
@@ -71,6 +110,14 @@ export default function App() {
         <Button
           title="Verify JWT payload"
           onPress={() => verifyPayload(demoJwt, validJwk)}
+        />
+        <Button
+          title="JWK thumbprint"
+          onPress={() => thumbprint(validJwk).then(setResult).catch(showError)}
+        />
+        <Button
+          title="Generate and sign JWT"
+          onPress={() => generateAndSign().catch(showError)}
         />
       </View>
       <View>

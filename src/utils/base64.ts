@@ -16,8 +16,7 @@ import { JOSEError } from './errors';
 export function encodeBase64(value: string): string {
   let encoded = btoa(value);
   if (encoded) {
-    // eslint-disable-next-line no-div-regex
-    return encoded.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    return removePadding(encoded);
   } else {
     throw new JOSEError('Unable to encode string to base64');
   }
@@ -30,4 +29,9 @@ export function decodeBase64(value: string): string {
   } else {
     throw new JOSEError('Unable to decode base64 string');
   }
+}
+
+export function removePadding(encoded: string): string {
+  // eslint-disable-next-line no-div-regex
+  return encoded.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }

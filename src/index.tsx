@@ -1,4 +1,3 @@
-import { NativeModules, Platform } from 'react-native';
 import type {
   JWK,
   JWTClaimVerificationOptions,
@@ -6,23 +5,13 @@ import type {
 } from './types';
 import jwtPayload from './jwt_claims_set';
 import { JWSSignatureVerificationFailed } from './utils/errors';
+import { IoReactNativeJwt } from './utils/proxy';
+import { SignJWT } from './sign';
 
-const LINKING_ERROR =
-  `The package '@pagopa/io-react-native-jwt' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-const IoReactNativeJwt = NativeModules.IoReactNativeJwt
-  ? NativeModules.IoReactNativeJwt
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+export * from './produce';
+export * from './sign';
+export * from './unsecured';
+export { derToJose } from './utils/asn1';
 
 /**
  * Decode the JWT without validation.
@@ -39,8 +28,7 @@ const IoReactNativeJwt = NativeModules.IoReactNativeJwt
  *
  * @param jwt JSON Web Token value (encoded as JWS).
  */
-export const decode = (token: string): Promise<JWTDecodeResult> =>
-  IoReactNativeJwt.decode(token);
+export const decode = (token: string): JWTDecodeResult => SignJWT.decode(token);
 
 /**
  * Verifies the JWS signature
@@ -107,3 +95,25 @@ export const verify = async (
     throw new JWSSignatureVerificationFailed();
   }
 };
+
+/**
+ * Calculate JWK thumbprint
+ *
+ * @example Get JWK thumbprint
+ *
+ * ```js
+ * const jwk: JWK = {
+ *   crv: 'P-256',
+ *   kty: 'EC',
+ *   x: 'qrJrj3Af_B57sbOIRrcBM7br7wOc8ynj7lHFPTeffUk',
+ *   y: '1H0cWDyGgvU8w-kPKU_xycOCUNT2o0bwslIQtnPU6iM',
+ * };
+
+ * const thumbprint = await thumbprint(jwk)
+ *
+ * ```
+ *
+ * @param jwk JSON Web Key
+ */
+export const thumbprint = (jwk: JWK): Promise<string> =>
+  IoReactNativeJwt.thumbprint(jwk);

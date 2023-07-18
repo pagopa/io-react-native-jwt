@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 
 import android.util.Base64
+import android.util.Base64.DEFAULT
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
@@ -20,6 +21,7 @@ import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.facebook.react.bridge.WritableNativeMap
 import com.nimbusds.jose.crypto.impl.RSA_OAEP
 import com.pagopa.ioreactnativejwt.Utils.convertJsonToMap
+import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 
 class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -30,22 +32,6 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
 
   fun isECKey(jwk: JSONObject):Boolean {
     return jwk.get("kty") == "EC";
-  }
-
-  @ReactMethod
-  fun decode(token:String, promise: Promise) {
-    try {
-            val signedJWT = SignedJWT.parse(token)
-            val claimsSet = convertJsonToMap(JSONObject(signedJWT.payload.toJSONObject()))
-            val header = convertJsonToMap(JSONObject(signedJWT.header.toJSONObject()))
-            val result = WritableNativeMap().apply {
-                putMap("payload", claimsSet)
-                putMap("protectedHeader", header)
-            }
-            promise.resolve(result)
-        } catch (ex: Exception) {
-            promise.reject(ex)
-        }
   }
 
   @ReactMethod
@@ -68,6 +54,41 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
       }
       promise.resolve(isValid)
 
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
+  @ReactMethod
+  fun thumbprint(jwk: ReadableMap, promise: Promise) {
+    try {
+      val jwkJson = JSONObject(jwk.toHashMap())
+      var thumbprint = ""
+      if (isECKey(jwkJson)) {
+        val internalJwk = ECKey.parse(jwkJson.toString())
+        thumbprint = internalJwk.computeThumbprint().toString();
+      } else {
+        val internalJwk = RSAKey.parse(jwkJson.toString())
+        thumbprint = internalJwk.computeThumbprint().toString();
+      }
+      if (thumbprint != "") {
+        promise.resolve(thumbprint)
+      } else {
+        promise.reject(Exception("Unable to create thumbprint"))
+      }
+
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
+  @ReactMethod
+  fun unpackBerEncodedASN1(asn1Signature: String, coordinateOctetLength: Int, promise: Promise) {
+    try {
+      val decodedBytes = Base64.decode(asn1Signature, DEFAULT)
+      val transcoded = transcodeSignatureToConcat(decodedBytes, coordinateOctetLength)
+      val signature = Base64.encodeToString(transcoded, DEFAULT)
+      promise.resolve(signature)
     } catch (ex: Exception) {
       promise.reject(ex)
     }

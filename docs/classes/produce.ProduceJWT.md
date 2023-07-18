@@ -10,6 +10,8 @@ Generic class for JWT producing.
 
   ↳ [`SignJWT`](sign.SignJWT.md)
 
+  ↳ [`UnsecuredJWT`](index.UnsecuredJWT.md)
+
 ## Table of contents
 
 ### Constructors
