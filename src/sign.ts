@@ -56,8 +56,8 @@ export class SignJWT extends ProduceJWT {
         'Missing signature algorithm. Specify the `alg` field'
       );
     }
-    let protectedHeader = encodeBase64(JSON.stringify(this._protectedHeader));
-    let payload = encodeBase64(JSON.stringify(this._payload));
+    const protectedHeader = encodeBase64(JSON.stringify(this._protectedHeader));
+    const payload = encodeBase64(JSON.stringify(this._payload));
     if (payload && protectedHeader) {
       return `${protectedHeader}.${payload}`;
     } else {
@@ -83,7 +83,7 @@ export class SignJWT extends ProduceJWT {
     }
     if (asn1Signature === '') throw new JWSInvalid('Invalid signature');
 
-    let jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
+    const jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
     let alg = jwtDecoded.header.alg;
     try {
       const encodedJws = await derToJose(asn1Signature, alg);

@@ -5,7 +5,7 @@ import { JOSENotSupported } from './errors';
 
 /*
  * Convert the ASN.1/DER encoded signature to a JOSE-style concatenated signature.
- * Returna a base64 url encoded String.
+ * Returns a base64 url encoded String.
  *
  * @example Usage with an ASN.1 PAR encoded
  *
@@ -22,12 +22,11 @@ export const derToJose = async (
   asn1Signature: string,
   alg: string
 ): Promise<string> => {
-  let kty = getKtyFromAlg(alg);
+  const kty = getKtyFromAlg(alg);
   if (kty === 'EC') {
-    let len = getCoordinateOctetLength(alg);
-    let unpackedJws = await IoReactNativeJwt.unpackBerEncodedASN1(
+    const unpackedJws = await IoReactNativeJwt.unpackBerEncodedASN1(
       asn1Signature,
-      len
+      getCoordinateOctetLength(alg)
     );
     const encodedJws = removePadding(unpackedJws);
     return encodedJws;
