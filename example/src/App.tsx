@@ -14,6 +14,7 @@ import {
   isSignatureValid,
   SignJWT,
   thumbprint,
+  sha256ToBase64,
 } from '@pagopa/io-react-native-jwt';
 import type { JWK } from 'src/types';
 import { generate, sign } from '@pagopa/io-react-native-crypto';
@@ -118,6 +119,16 @@ export default function App() {
         <Button
           title="Generate and sign JWT"
           onPress={() => generateAndSign().catch(showError)}
+        />
+        <Button
+          title="SHA256"
+          onPress={() =>
+            sha256ToBase64(
+              'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
+            )
+              .then(setResult)
+              .catch(showError)
+          }
         />
       </View>
       <View>
