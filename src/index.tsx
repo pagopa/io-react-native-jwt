@@ -12,6 +12,7 @@ export * from './produce';
 export * from './sign';
 export * from './unsecured';
 export { derToJose } from './utils/asn1';
+export { encodeBase64, decodeBase64 } from './utils/base64';
 
 /**
  * Decode the JWT without validation.
