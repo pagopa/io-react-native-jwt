@@ -22,6 +22,7 @@ import com.facebook.react.bridge.WritableNativeMap
 import com.nimbusds.jose.crypto.impl.RSA_OAEP
 import com.pagopa.ioreactnativejwt.Utils.convertJsonToMap
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
+import java.security.MessageDigest
 
 class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -89,6 +90,18 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
       val transcoded = transcodeSignatureToConcat(decodedBytes, coordinateOctetLength)
       val signature = Base64.encodeToString(transcoded, DEFAULT)
       promise.resolve(signature)
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
+
+  @ReactMethod
+  fun sha256(toHash: String, promise: Promise) {
+    try {
+      val digest = MessageDigest.getInstance("SHA-256")
+      val hashBytes = digest.digest(toHash.toByteArray(Charsets.UTF_8))
+      val base64String = Base64.encodeToString(hashBytes, Base64.NO_WRAP)
+      promise.resolve(base64String)
     } catch (ex: Exception) {
       promise.reject(ex)
     }
