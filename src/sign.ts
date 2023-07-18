@@ -84,7 +84,7 @@ export class SignJWT extends ProduceJWT {
     if (asn1Signature === '') throw new JWSInvalid('Invalid signature');
 
     const jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
-    let alg = jwtDecoded.header.alg;
+    const alg = jwtDecoded.header.alg;
     try {
       const encodedJws = await derToJose(asn1Signature, alg);
       return `${jwtWithoutSignature}.${encodedJws}`;
