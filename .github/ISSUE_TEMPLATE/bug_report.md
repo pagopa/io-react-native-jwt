@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 **Descrivi il problema**
-Una descrizione chiara e concisa del problema.
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -23,8 +23,8 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Versione dell'app**
-Copia i due numeri che appaiono in alto a destra nello schermo dell'app.
+**App version**
+Copy the two numbers that appear at the top right of the app screen.
 
 **Smartphone (please complete the following information):**
 
