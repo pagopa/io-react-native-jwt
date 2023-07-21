@@ -25,12 +25,18 @@ export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
 
   const encJwk = {
+    p: '-xeFWh5RKpL-glDQAjA9E5xykWajZv12vFsx60vxSjx9b1g8VQwM3xD4pvhUJ5a4JvbkBq_86P59x6Y1Nl7Hs-U3hZXgA9tkWY_DBrzyfiKgE2OQM0fK3Qmbj9QHESnhapMv_MLSxbX1Zmf5b8ubzSAI2V2MF9emGpdwnrEcDD0',
     kty: 'RSA',
+    q: 'wk4pcSSF_W3ikjIC8ZwAN_iAoGISB3shsa5mHgIb5PARcC4SAZEpHtOZyfvrs7RJnCBgVFjPwlVw--b15MTu5ZaP6V8EQOon-9dPk90D6BAdHi0xfG0kBX5Ptmbl60BenveOxBq4NkqI1o97BU-PRiGs5Su_OC0wP1aMsc-x_GE',
+    d: 'OT_TzvOUE9jRpzJbwCZEgt6FnC-JBU0m-rtGMwueVj7QcTH7OjavJseES97gI475FqingV2w18npdWDy2PhJWbo-4hCaw-fzqtdP0NK-_d6WYqZXMTHQo0UddG_qg2ZFcdlgluCoZPpdfNo4oyXH7T8HfBKUJkp5kkr6o84Kg4cH18q4o1YoW63SfQp50I3QrtONwzkwCMFQfzDt3A-CdFVpjISCRQJspjE780Nzp6XEV6OWzmBVrXVXLS_4LXF38kxDkN9z8DThsJxxgpjlHnBcwe2papsWx76ya6WoreNYfD50h4o5x5MJbfFmo6vxqgw1aEseHtFc6lAMQnA9gQ',
     e: 'AQAB',
     use: 'enc',
-    kid: '4OSR3APP5_rY9J3IypDZoZhWXl3Pn72H2skkNIOFqxk',
+    kid: 'JW12l9ZAiNUkg9Op2TMAdIbHxxDQnXBq1FIpQqHccW4',
+    qi: '58VCttcnaWPdqq514viq14XrJ9vSLCCmn0ace8pddB6D1ARBq21im75KH_jUmvDtcoojM_GVaTclMsBmSOrEEw2a2N-R9U-QAZ8UI-x9EDHPItUsOm_ejtOX1AcX-LVjGGqFMllJIYhZChzO6__od-WkXCyCC3oKkSBoWTRjCqU',
+    dp: 'L4MO37OW5jh0YlJKWe-ozvouj6bdSpKxkgirlHuFR-fUUGpg2DL0iI0cj_OzcN5LMExNb5qDf88QG-Quc4BRx4-bBvMKNZChF3VlkPPV6tpAcgrH8XwnPdYgkoGraKsFFXaOgQSYf4Lj0aHhCC995r2mDwNti-Fpc-SuEckvpn0',
     alg: 'RSA-OAEP-256',
-    n: '4XhlE7KFwlxFO7JX9GULuRVghvuTT4R-sDsYplA-U9Rk3EkVDm1Eqw-XEd07YkiSiCjekf_vsdXXBp4AIVFz4UZk7pTARDfVskvImndGxqFI2LfNcz1c3BHu28yxHsu_wdfU2aSbDQvVcwh3XMbeFs87tRad9nhmV0Jr3iyVA2UBYaqc0_-JOXQVb-XeNdGs-2wpTdEz4JkhrED0KnYU5Jxl0cN1tLaycS7AzMtOVGRIHtcUoKl9_vpQRwiwDuaP0S0-BSkvZpSMObNtC81kBNwlXG39n0O9dUZDsScUjwl9cUoCwVy23Qmm1-P9wWq4cgYZNUBTUdhO-HFVvD9nXw',
+    dq: 'Dqk5JUldNtcgvmk5oaNkvNRqWC-uLpRS4YZIPEFqe2bF2hIP18BtOt86fmwcx811tGsY-aRN4NrzkH5H1YAqinZG25QIzSEd7Tm8zmphzhPRLqK4ViwiCKwUNa4j8RFFUndZdWCSv731_0KKRMdRBzipRA19-y4lstHEAfKq-mE',
+    n: 'vpR83qn-xSu5asxFeKjl6rAMNNxze2R7Ut_oDTw2ERoAwRuIrrAceH_JU0bUiPD9Rwjo1000W7yN1T_w8N2cIh2uk3qll-CT9tUO1rifER7BsLbNHHpPDKYxuDZknLp7Ml-OMlb75i9WvHgRVqXVrIepfS-BM30u1eoxNygetWz_X-qkRv-5JXyGtL54Tc0x8oARsD-cMM6_rhgBJsx494cvwV5hw80j260WVtI8at727ZpXL1SpHVTI3R2m8g-xDkrRrlW8GbRbZ1WgJDVBJH5TAFGxEAd-Fva7ig2XC_zxrNpAupLDvwShIeIVpfmqkLsHlWGbIFU_v9bvgNmvHQ',
   };
 
   const generateAndSign = async () => {
@@ -97,11 +103,11 @@ export default function App() {
       .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
       .catch(showError);
 
-  const encryptPlaintext = (plaintext: String, publicKey: JWK) => {
+  const encryptPlaintext = (plaintext: String, encKey: JWK) => {
     const jwe = new EncryptJwe(plaintext)
       .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256CBC-HS512' })
-      .encrypt(publicKey);
-    jwe.then((encryptedJwe) => setResult(encryptedJwe)).catch(showError);
+      .encrypt(encKey);
+    jwe.then(setResult).catch(showError);
   };
 
   return (

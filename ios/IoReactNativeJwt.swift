@@ -1,6 +1,7 @@
 import JOSESwift
 import CommonCrypto
 
+
 @objc(IoReactNativeJwt)
 class IoReactNativeJwt: NSObject {
 
@@ -186,7 +187,7 @@ class IoReactNativeJwt: NSObject {
         do {
             let publicKeyJson = try JSONSerialization.data(withJSONObject: jwk, options:[] )
             let message = plaintext.data(using: .utf8)!
-            
+        
             if let content = header as? [String:AnyObject] {
                 let jweHeader = try JWEHeader(parameters: content)
                 let payload = Payload(message)
@@ -199,6 +200,7 @@ class IoReactNativeJwt: NSObject {
                     let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: publicKey)!
                     
                     let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
+
                     resolve(jwe.compactSerializedString)
                     
                 }
@@ -214,6 +216,40 @@ class IoReactNativeJwt: NSObject {
 
 
     }
+    /*
+    @objc
+    func dec(_ token: String, header: NSDictionary, jwk: NSDictionary, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+        do {
+            let privateKeyJson = try JSONSerialization.data(withJSONObject: jwk, options:[] )
+           
+            let jwe = try JWE(compactSerialization: token)
+            if isECKey(jwk:jwk) {
+                reject("Error", "EC not supported", nil);
+            } else {
+                let rsaJwk = try RSAPrivateKey(data: privateKeyJson)
+                let privateKey = try rsaJwk.converted(to:  SecKey.self)
+                let decrypter = Decrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), decryptionKey: rsaJwk)
+                if(decrypter != nil){
+                    let decrypted = try jwe.decrypt(using: decrypter!)
+                    let message = String(data: decrypted.data(), encoding: .utf8)!
+                    resolve(message)
+                } else {
+                    reject("Error", "Invalid decrypter", nil);
+                }
+                
+            }
+
+         
+        }
+        
+        catch let error as NSError {
+            reject("Error", "\(error)", error);
+        }
+
+
+    }
+     */
+
 
 
 
