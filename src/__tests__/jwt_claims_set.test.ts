@@ -1,5 +1,5 @@
-import type { JWSHeaderParameters, JWTPayload } from './../types';
-import verifyJwtClaimSet from './../jwt_claims_set';
+import type { JWSHeaderParameters, JWTPayload } from '../types';
+import verifyJwtClaimSet from '../jwt/jwt_claims_set';
 import { JWTClaimValidationFailed, JWTExpired } from './../utils/errors';
 
 const now = new Date();

@@ -4,10 +4,39 @@ import CommonCrypto
 @objc(IoReactNativeJwt)
 class IoReactNativeJwt: NSObject {
 
-
+    // create an enum with error values
+    enum HeaderError: Error {
+      case invalidAlg(String)
+      case invalidEnc(String)
+    }
+    
     func isECKey(jwk:NSDictionary) -> Bool{
         let kty = jwk["kty"] as! String
         return kty == "EC"
+    }
+    
+    func getKeyManagmentAlg(header:NSDictionary) throws -> KeyManagementAlgorithm{
+        let alg = header["alg"] as! String
+        switch alg{
+            case "RSA-OAEP":
+                return KeyManagementAlgorithm.RSAOAEP
+            case "RSA-OAEP-256":
+                return KeyManagementAlgorithm.RSAOAEP256
+        default:
+            throw HeaderError.invalidAlg("alg value not supported")
+        }
+    }
+    
+    func getContentEncryptionAlgorithm(header:NSDictionary) throws  -> ContentEncryptionAlgorithm{
+        let enc = header["enc"] as! String
+        switch enc{
+            case "A128CBC-HS256":
+                return ContentEncryptionAlgorithm.A128CBCHS256
+            case "A256CBC-HS512":
+                return ContentEncryptionAlgorithm.A256CBCHS512
+        default:
+            throw HeaderError.invalidAlg("enc value not supported")
+        }
     }
 
     @objc
@@ -151,6 +180,41 @@ class IoReactNativeJwt: NSObject {
             reject("Error", "Unable to parse string to hash", nil);
         }
     }
+    
+    @objc
+    func enc(_ plaintext: String, header: NSDictionary, jwk: NSDictionary, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+        do {
+            let publicKeyJson = try JSONSerialization.data(withJSONObject: jwk, options:[] )
+            let message = plaintext.data(using: .utf8)!
+            
+            if let content = header as? [String:AnyObject] {
+                let jweHeader = try JWEHeader(parameters: content)
+                let payload = Payload(message)
+                
+                if isECKey(jwk:jwk) {
+                    reject("Error", "EC not supported", nil);
+                } else {
+                    let rsaJwk = try RSAPublicKey(data: publicKeyJson)
+                    let publicKey = try rsaJwk.converted(to: SecKey.self)
+                    let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: publicKey)!
+                    
+                    let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
+                    resolve(jwe.compactSerializedString)
+                    
+                }
+ 
+            } else {
+                reject("Error", "Header is invalid", nil);
+            }
+        }
+        
+        catch {
+            reject("Error", "\(error)", error);
+        }
+
+
+    }
+
 
 
 }

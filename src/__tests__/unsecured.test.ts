@@ -1,6 +1,6 @@
 import { JWTInvalid } from '../utils/errors';
 import type { JWTPayload } from '../types';
-import { UnsecuredJWT } from '../unsecured';
+import { UnsecuredJWT } from '../jwt/unsecured';
 
 const jwtPayload: JWTPayload = {
   iss: 'demo',

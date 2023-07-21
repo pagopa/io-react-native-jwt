@@ -15,12 +15,23 @@ import {
   SignJWT,
   thumbprint,
   sha256ToBase64,
+  EncryptJwe,
 } from '@pagopa/io-react-native-jwt';
-import type { JWK } from 'src/types';
+
 import { generate, sign } from '@pagopa/io-react-native-crypto';
+import type { JWK } from 'src/types';
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
+
+  const encJwk = {
+    kty: 'RSA',
+    e: 'AQAB',
+    use: 'enc',
+    kid: '4OSR3APP5_rY9J3IypDZoZhWXl3Pn72H2skkNIOFqxk',
+    alg: 'RSA-OAEP-256',
+    n: '4XhlE7KFwlxFO7JX9GULuRVghvuTT4R-sDsYplA-U9Rk3EkVDm1Eqw-XEd07YkiSiCjekf_vsdXXBp4AIVFz4UZk7pTARDfVskvImndGxqFI2LfNcz1c3BHu28yxHsu_wdfU2aSbDQvVcwh3XMbeFs87tRad9nhmV0Jr3iyVA2UBYaqc0_-JOXQVb-XeNdGs-2wpTdEz4JkhrED0KnYU5Jxl0cN1tLaycS7AzMtOVGRIHtcUoKl9_vpQRwiwDuaP0S0-BSkvZpSMObNtC81kBNwlXG39n0O9dUZDsScUjwl9cUoCwVy23Qmm1-P9wWq4cgYZNUBTUdhO-HFVvD9nXw',
+  };
 
   const generateAndSign = async () => {
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
@@ -86,6 +97,13 @@ export default function App() {
       .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
       .catch(showError);
 
+  const encryptPlaintext = (plaintext: String, publicKey: JWK) => {
+    const jwe = new EncryptJwe(plaintext)
+      .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256CBC-HS512' })
+      .encrypt(publicKey);
+    jwe.then((encryptedJwe) => setResult(encryptedJwe)).catch(showError);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -129,6 +147,10 @@ export default function App() {
               .then(setResult)
               .catch(showError)
           }
+        />
+        <Button
+          title="Generate JWE"
+          onPress={() => encryptPlaintext('hello', encJwk)}
         />
       </View>
       <View>

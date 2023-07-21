@@ -1,14 +1,14 @@
-import { JOSENotSupported, JWSInvalid, JWTInvalid } from './utils/errors';
+import { JOSENotSupported, JWSInvalid, JWTInvalid } from '../utils/errors';
 import type {
   CompactJWSHeaderParameters,
   JWTDecodeResult,
   JWTPayload,
-} from './types';
+} from '../types';
 import { ProduceJWT } from './produce';
-import { decodeBase64, encodeBase64, removePadding } from './utils/base64';
-import { isAlgSupported } from './algorithms';
+import { decodeBase64, encodeBase64, removePadding } from '../utils/base64';
+import { isAlgSupported } from '../algorithms';
 
-import { derToJose } from './utils/asn1';
+import { derToJose } from '../utils/asn1';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.

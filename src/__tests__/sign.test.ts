@@ -1,5 +1,5 @@
 import type { CompactJWSHeaderParameters, JWTPayload } from '../types';
-import { SignJWT } from '../sign';
+import { SignJWT } from '../jwt/sign';
 import { JOSENotSupported, JWSInvalid } from '../utils/errors';
 
 const jwtPayload: JWTPayload = {
