@@ -1,6 +1,7 @@
 import { JOSENotSupported, JWSInvalid, JWTInvalid } from './utils/errors';
 import type {
   CompactJWSHeaderParameters,
+  JWSHeaderParameters,
   JWTDecodeResult,
   JWTPayload,
 } from './types';
@@ -176,5 +177,17 @@ export class SignJWT extends ProduceJWT {
       payload,
       protectedHeader,
     };
+  }
+
+   /**
+   * Decodes a JWT without signature
+   *
+   * @param jwtWithoutSignature JWT to sign that needs to be decoded.
+   */
+  static encode(jwt: {
+    payload: JWTPayload;
+  header: JWSHeaderParameters;
+  }): string {
+    return [jwt.header, jwt.payload].map(e =>JSON.stringify(e)).map(encodeBase64).join(".")
   }
 }
