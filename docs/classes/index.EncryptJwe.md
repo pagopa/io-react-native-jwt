@@ -37,8 +37,8 @@ console.log(jwe)
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `plaintext` | [`String`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String ) | String representation of the plaintext to encrypt. |
-| `header` | [`JWEHeaderParameters`](../interfaces/types.JWEHeaderParameters.md) & { `alg`: `string` ; `enc`: `string`  } | - |
+| `plaintext` | [`String`]( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String ) | - |
+| `header` | [`JWEHeaderParameters`](../interfaces/types.JWEHeaderParameters.md) & { `alg`: `string` ; `enc`: `string`  } | JWE header with alg and enc parameters. |
 
 ## Methods
 

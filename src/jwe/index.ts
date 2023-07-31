@@ -20,6 +20,7 @@ export class EncryptJwe {
   private _protectedHeader!: JWEHeaderParameters;
 
   /** @param plaintext String representation of the plaintext to encrypt. */
+  /** @param header JWE header with alg and enc parameters. */
   constructor(
     plaintext: String,
     header: JWEHeaderParameters & { alg: string; enc: string }
