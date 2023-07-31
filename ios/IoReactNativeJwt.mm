@@ -20,6 +20,12 @@ RCT_EXTERN_METHOD(sha256: (NSString)toHash
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(enc: (NSString)plaintext
+                  header: (NSDictionary *)header
+                  jwk: (NSDictionary *)jwk
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup
 {
   return NO;

@@ -1,6 +1,6 @@
-import type { JWTPayload } from './types';
-import isObject from './utils/is_object';
-import secs, { epoch } from './utils/secs';
+import type { JWTPayload } from '../types';
+import isObject from '../utils/is_object';
+import secs, { epoch } from '../utils/secs';
 
 /** Generic class for JWT producing. */
 export class ProduceJWT {

@@ -6,54 +6,6 @@ export interface JWTDecodeResult {
   protectedHeader: JWSHeaderParameters;
 }
 
-/**
- * JSON Web Key ({@link https://www.rfc-editor.org/rfc/rfc7517 JWK}). "RSA", "EC", "OKP", and "oct"
- * key types are supported.
- */
-export interface JWK {
-  /** JWK "alg" (Algorithm) Parameter. */
-  'alg'?: string;
-  'crv'?: string;
-  'd'?: string;
-  'dp'?: string;
-  'dq'?: string;
-  'e'?: string;
-  /** JWK "ext" (Extractable) Parameter. */
-  'ext'?: boolean;
-  'k'?: string;
-  /** JWK "key_ops" (Key Operations) Parameter. */
-  'key_ops'?: string[];
-  /** JWK "kid" (Key ID) Parameter. */
-  'kid'?: string;
-  /** JWK "kty" (Key Type) Parameter.
-   * This attribute is required to discriminate the
-   * type of EC/RSA algorithm */
-  'kty': string;
-  'n'?: string;
-  'oth'?: Array<{
-    d?: string;
-    r?: string;
-    t?: string;
-  }>;
-  'p'?: string;
-  'q'?: string;
-  'qi'?: string;
-  /** JWK "use" (Public Key Use) Parameter. */
-  'use'?: string;
-  'x'?: string;
-  'y'?: string;
-  /** JWK "x5c" (X.509 Certificate Chain) Parameter. */
-  'x5c'?: string[];
-  /** JWK "x5t" (X.509 Certificate SHA-1 Thumbprint) Parameter. */
-  'x5t'?: string;
-  /** "x5t#S256" (X.509 Certificate SHA-256 Thumbprint) Parameter. */
-  'x5t#S256'?: string;
-  /** JWK "x5u" (X.509 URL) Parameter. */
-  'x5u'?: string;
-
-  [propName: string]: unknown;
-}
-
 export interface JoseHeaderParameters {
   /** "kid" (Key ID) Header Parameter. */
   kid?: string;
@@ -101,6 +53,18 @@ export interface JWSHeaderParameters extends JoseHeaderParameters {
 /** Recognized Compact JWS Header Parameters, any other Header Members may also be present. */
 export interface CompactJWSHeaderParameters extends JWSHeaderParameters {
   alg: string;
+}
+
+/** Recognized JWE Header Parameters, any other Header members may also be present. */
+export interface JWEHeaderParameters extends JoseHeaderParameters {
+  /** JWE "alg" (Algorithm) Header Parameter. */
+  alg?: 'RSA-OAEP-256' | 'RSA-OAEP';
+
+  /** JWE "enc" (Encryption Algorithm) Header Parameter. */
+  enc?: 'A256CBC-HS512' | 'A128CBC-HS256';
+
+  /** Any other JWE Header member. */
+  [propName: string]: unknown;
 }
 
 /** Recognized JWT Claims Set members, any other members may also be present. */
@@ -200,4 +164,48 @@ export interface JWTClaimVerificationOptions {
    * set, then "iat" must be present.
    */
   requiredClaims?: string[];
+}
+
+export interface JWK {
+  /** JWK "alg" (Algorithm) Parameter. */
+  'alg'?: string;
+  'crv'?: string;
+  'd'?: string;
+  'dp'?: string;
+  'dq'?: string;
+  'e'?: string;
+  /** JWK "ext" (Extractable) Parameter. */
+  'ext'?: boolean;
+  'k'?: string;
+  /** JWK "key_ops" (Key Operations) Parameter. */
+  'key_ops'?: string[];
+  /** JWK "kid" (Key ID) Parameter. */
+  'kid'?: string;
+  /** JWK "kty" (Key Type) Parameter.
+   * This attribute is required to discriminate the
+   * type of EC/RSA algorithm */
+  'kty': string;
+  'n'?: string;
+  'oth'?: Array<{
+    d?: string;
+    r?: string;
+    t?: string;
+  }>;
+  'p'?: string;
+  'q'?: string;
+  'qi'?: string;
+  /** JWK "use" (Public Key Use) Parameter. */
+  'use'?: string;
+  'x'?: string;
+  'y'?: string;
+  /** JWK "x5c" (X.509 Certificate Chain) Parameter. */
+  'x5c'?: string[];
+  /** JWK "x5t" (X.509 Certificate SHA-1 Thumbprint) Parameter. */
+  'x5t'?: string;
+  /** "x5t#S256" (X.509 Certificate SHA-256 Thumbprint) Parameter. */
+  'x5t#S256'?: string;
+  /** JWK "x5u" (X.509 URL) Parameter. */
+  'x5u'?: string;
+
+  [propName: string]: unknown;
 }

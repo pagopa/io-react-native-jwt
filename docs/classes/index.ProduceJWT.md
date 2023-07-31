@@ -1,6 +1,6 @@
 # Class: ProduceJWT
 
-[produce](../modules/produce.md).ProduceJWT
+[index](../modules/index.md).ProduceJWT
 
 Generic class for JWT producing.
 
@@ -8,7 +8,7 @@ Generic class for JWT producing.
 
 - **`ProduceJWT`**
 
-  ↳ [`SignJWT`](sign.SignJWT.md)
+  ↳ [`SignJWT`](index.SignJWT.md)
 
   ↳ [`UnsecuredJWT`](index.UnsecuredJWT.md)
 
@@ -16,17 +16,17 @@ Generic class for JWT producing.
 
 ### Constructors
 
-- [constructor](produce.ProduceJWT.md#constructor)
+- [constructor](index.ProduceJWT.md#constructor)
 
 ### Methods
 
-- [setAudience](produce.ProduceJWT.md#setaudience)
-- [setExpirationTime](produce.ProduceJWT.md#setexpirationtime)
-- [setIssuedAt](produce.ProduceJWT.md#setissuedat)
-- [setIssuer](produce.ProduceJWT.md#setissuer)
-- [setJti](produce.ProduceJWT.md#setjti)
-- [setNotBefore](produce.ProduceJWT.md#setnotbefore)
-- [setSubject](produce.ProduceJWT.md#setsubject)
+- [setAudience](index.ProduceJWT.md#setaudience)
+- [setExpirationTime](index.ProduceJWT.md#setexpirationtime)
+- [setIssuedAt](index.ProduceJWT.md#setissuedat)
+- [setIssuer](index.ProduceJWT.md#setissuer)
+- [setJti](index.ProduceJWT.md#setjti)
+- [setNotBefore](index.ProduceJWT.md#setnotbefore)
+- [setSubject](index.ProduceJWT.md#setsubject)
 
 ## Constructors
 
@@ -44,7 +44,7 @@ Generic class for JWT producing.
 
 ### setAudience
 
-▸ **setAudience**(`audience`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setAudience**(`audience`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "aud" (Audience) Claim.
 
@@ -56,13 +56,13 @@ Set "aud" (Audience) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setExpirationTime
 
-▸ **setExpirationTime**(`input`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setExpirationTime**(`input`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "exp" (Expiration Time) Claim.
 
@@ -74,13 +74,13 @@ Set "exp" (Expiration Time) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setIssuedAt
 
-▸ **setIssuedAt**(`input?`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setIssuedAt**(`input?`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "iat" (Issued At) Claim.
 
@@ -92,13 +92,13 @@ Set "iat" (Issued At) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setIssuer
 
-▸ **setIssuer**(`issuer`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setIssuer**(`issuer`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "iss" (Issuer) Claim.
 
@@ -110,13 +110,13 @@ Set "iss" (Issuer) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setJti
 
-▸ **setJti**(`jwtId`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setJti**(`jwtId`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "jti" (JWT ID) Claim.
 
@@ -128,13 +128,13 @@ Set "jti" (JWT ID) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setNotBefore
 
-▸ **setNotBefore**(`input`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setNotBefore**(`input`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "nbf" (Not Before) Claim.
 
@@ -146,13 +146,13 @@ Set "nbf" (Not Before) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)
 
 ___
 
 ### setSubject
 
-▸ **setSubject**(`subject`): [`ProduceJWT`](produce.ProduceJWT.md)
+▸ **setSubject**(`subject`): [`ProduceJWT`](index.ProduceJWT.md)
 
 Set "sub" (Subject) Claim.
 
@@ -164,4 +164,4 @@ Set "sub" (Subject) Claim.
 
 #### Returns
 
-[`ProduceJWT`](produce.ProduceJWT.md)
+[`ProduceJWT`](index.ProduceJWT.md)

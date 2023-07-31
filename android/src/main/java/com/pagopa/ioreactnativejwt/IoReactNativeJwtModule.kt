@@ -1,28 +1,27 @@
 package com.pagopa.ioreactnativejwt
 
+import android.util.Base64
+import android.util.Base64.DEFAULT
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.Promise
-
-import android.util.Base64
-import android.util.Base64.DEFAULT
-import com.nimbusds.jose.JWSHeader
-import com.nimbusds.jose.crypto.RSASSASigner
-import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
-import com.nimbusds.jose.jwk.RSAKey
-import com.nimbusds.jose.jwk.ECKey
-import com.nimbusds.jwt.JWTClaimsSet
-import com.nimbusds.jwt.SignedJWT
 import com.facebook.react.bridge.ReadableMap
-import org.json.JSONObject
-import com.nimbusds.jose.crypto.RSASSAVerifier
+import com.nimbusds.jose.JWEEncrypter
+import com.nimbusds.jose.JWEHeader
+import com.nimbusds.jose.JWEObject
+import com.nimbusds.jose.Payload
 import com.nimbusds.jose.crypto.ECDSAVerifier
-import com.facebook.react.bridge.WritableNativeMap
-import com.nimbusds.jose.crypto.impl.RSA_OAEP
-import com.pagopa.ioreactnativejwt.Utils.convertJsonToMap
+import com.nimbusds.jose.crypto.RSAEncrypter
+import com.nimbusds.jose.crypto.RSASSAVerifier
+import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
+import com.nimbusds.jose.jwk.ECKey
+import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jwt.SignedJWT
+import org.json.JSONObject
 import java.security.MessageDigest
+
 
 class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -107,6 +106,27 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
     }
   }
 
+  @ReactMethod
+  fun enc(token: String, header: ReadableMap, jwk: ReadableMap, promise: Promise) {
+    try {
+      val jwkJson = JSONObject(jwk.toHashMap())
+      val headerJson = JSONObject(header.toHashMap())
+      val payload =  Payload(token)
+      if (isECKey(jwkJson)) {
+        promise.reject(Exception("EC is not supported"))
+      } else {
+        val publicKey = RSAKey.parse(jwkJson.toString())
+        val internalHeader = JWEHeader.parse(headerJson.toString())
+        val jweObject = JWEObject(internalHeader, payload)
+        val encrypter: JWEEncrypter = RSAEncrypter(publicKey)
+        jweObject.encrypt(encrypter)
+        val jweString = jweObject.serialize()
+        promise.resolve(jweString)
+      }
+    } catch (ex: Exception) {
+      promise.reject(ex)
+    }
+  }
 
   companion object {
     const val NAME = "IoReactNativeJwt"

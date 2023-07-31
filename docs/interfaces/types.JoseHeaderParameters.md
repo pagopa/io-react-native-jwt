@@ -8,6 +8,8 @@
 
   ↳ [`JWSHeaderParameters`](types.JWSHeaderParameters.md)
 
+  ↳ [`JWEHeaderParameters`](types.JWEHeaderParameters.md)
+
 ## Table of contents
 
 ### Properties
@@ -41,7 +43,7 @@ ___
 
 ### jwk
 
-• `Optional` **jwk**: [`Pick`]( https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys )<[`JWK`](types.JWK.md), ``"crv"`` \| ``"e"`` \| ``"kty"`` \| ``"n"`` \| ``"x"`` \| ``"y"``\>
+• `Optional` **jwk**: [`Pick`]( https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys )<[`JWK`](types.JWK.md), ``"kty"`` \| ``"crv"`` \| ``"x"`` \| ``"y"`` \| ``"e"`` \| ``"n"``\>
 
 "jwk" (JSON Web Key) Header Parameter.
 

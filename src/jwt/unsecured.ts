@@ -2,12 +2,12 @@ import type {
   JWSHeaderParameters,
   JWTClaimVerificationOptions,
   JWTPayload,
-} from './types';
+} from '../types';
 
-import { JWTInvalid } from './utils/errors';
+import { JWTInvalid } from '../utils/errors';
 import jwtPayload from './jwt_claims_set';
 import { ProduceJWT } from './produce';
-import { decodeBase64, encodeBase64 } from './utils/base64';
+import { decodeBase64, encodeBase64 } from '../utils/base64';
 
 export interface UnsecuredResult {
   payload: JWTPayload;

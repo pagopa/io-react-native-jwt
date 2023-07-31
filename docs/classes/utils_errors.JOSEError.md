@@ -34,6 +34,8 @@ if (err instanceof errors.JOSEError) {
 
   ↳↳ [`JWSSignatureVerificationFailed`](utils_errors.JWSSignatureVerificationFailed.md)
 
+  ↳↳ [`JWEInvalid`](utils_errors.JWEInvalid.md)
+
 ## Table of contents
 
 ### Constructors

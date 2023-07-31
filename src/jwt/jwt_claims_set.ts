@@ -5,10 +5,10 @@ import type {
   JWTPayload,
   JWTClaimVerificationOptions,
   JWSHeaderParameters,
-} from './types';
-import { JWTClaimValidationFailed, JWTExpired } from './utils/errors';
+} from '../types';
+import { JWTClaimValidationFailed, JWTExpired } from '../utils/errors';
 
-import secs, { epoch } from './utils/secs';
+import secs, { epoch } from '../utils/secs';
 
 const normalizeTyp = (value: string) =>
   value.toLowerCase().replace(/^application\//, '');

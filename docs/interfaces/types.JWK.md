@@ -2,9 +2,6 @@
 
 [types](../modules/types.md).JWK
 
-JSON Web Key ([JWK](https://www.rfc-editor.org/rfc/rfc7517)). "RSA", "EC", "OKP", and "oct"
-key types are supported.
-
 ## Indexable
 
 ▪ [propName: `string`]: `unknown`

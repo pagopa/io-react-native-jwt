@@ -4,11 +4,14 @@
 
 ### References
 
-- [ProduceJWT](index.md#producejwt)
-- [SignJWT](index.md#signjwt)
+- [decodeBase64](index.md#decodebase64)
+- [encodeBase64](index.md#encodebase64)
 
 ### Classes
 
+- [EncryptJwe](../classes/index.EncryptJwe.md)
+- [ProduceJWT](../classes/index.ProduceJWT.md)
+- [SignJWT](../classes/index.SignJWT.md)
 - [UnsecuredJWT](../classes/index.UnsecuredJWT.md)
 
 ### Interfaces
@@ -20,17 +23,18 @@
 - [decode](../functions/index.decode.md)
 - [derToJose](../functions/index.derToJose.md)
 - [isSignatureValid](../functions/index.isSignatureValid.md)
+- [sha256ToBase64](../functions/index.sha256ToBase64.md)
 - [thumbprint](../functions/index.thumbprint.md)
 - [verify](../functions/index.verify.md)
 
 ## References
 
-### ProduceJWT
+### decodeBase64
 
-Re-exports [ProduceJWT](../classes/produce.ProduceJWT.md)
+Re-exports [decodeBase64](../functions/utils_base64.decodeBase64.md)
 
 ___
 
-### SignJWT
+### encodeBase64
 
-Re-exports [SignJWT](../classes/sign.SignJWT.md)
+Re-exports [encodeBase64](../functions/utils_base64.encodeBase64.md)

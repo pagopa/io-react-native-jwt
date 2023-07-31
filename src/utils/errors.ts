@@ -204,3 +204,30 @@ export class JWSSignatureVerificationFailed extends JOSEError {
 
   message = 'signature verification failed';
 }
+
+/**
+ * An error subclass thrown when a JWE is invalid.
+ *
+ * @example Checking thrown error is this one using a stable error code
+ *
+ * ```js
+ * if (err.code === 'ERR_JWE_INVALID') {
+ *   // ...
+ * }
+ * ```
+ *
+ * @example Checking thrown error is this one using `instanceof`
+ *
+ * ```js
+ * if (err instanceof errors.JWEInvalid) {
+ *   // ...
+ * }
+ * ```
+ */
+export class JWEInvalid extends JOSEError {
+  static get code(): 'ERR_JWE_INVALID' {
+    return 'ERR_JWE_INVALID';
+  }
+
+  code = 'ERR_JWE_INVALID';
+}
