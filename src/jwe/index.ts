@@ -17,7 +17,7 @@ import { IoReactNativeJwt } from '../utils/proxy';
  */
 export class EncryptJwe {
   private _plaintext: String;
-  private _protectedHeader!: JWEHeaderParameters;
+  private _protectedHeader!: JWEHeaderParameters & { alg: string; enc: string };
 
   /** @param plaintext String representation of the plaintext to encrypt. */
   /** @param header JWE header with alg and enc parameters. */

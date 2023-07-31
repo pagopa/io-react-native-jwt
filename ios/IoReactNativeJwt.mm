@@ -25,13 +25,6 @@ RCT_EXTERN_METHOD(enc: (NSString)plaintext
                   jwk: (NSDictionary *)jwk
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject)
-/*
-RCT_EXTERN_METHOD(dec: (NSString)token
-                  header: (NSDictionary *)header
-                  jwk: (NSDictionary *)jwk
-                  resolver: (RCTPromiseResolveBlock)resolve
-                  rejecter: (RCTPromiseRejectBlock)reject)
-*/
 
 + (BOOL)requiresMainQueueSetup
 {
