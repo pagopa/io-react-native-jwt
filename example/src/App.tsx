@@ -104,9 +104,10 @@ export default function App() {
       .catch(showError);
 
   const encryptPlaintext = (plaintext: String, encKey: JWK) => {
-    const jwe = new EncryptJwe(plaintext)
-      .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256CBC-HS512' })
-      .encrypt(encKey);
+    const jwe = new EncryptJwe(plaintext, {
+      alg: 'RSA-OAEP-256',
+      enc: 'A256CBC-HS512',
+    }).encrypt(encKey);
     jwe.then(setResult).catch(showError);
   };
 
