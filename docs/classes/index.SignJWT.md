@@ -1,6 +1,6 @@
 # Class: SignJWT
 
-[sign](../modules/sign.md).SignJWT
+[index](../modules/index.md).SignJWT
 
 The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
 
@@ -25,7 +25,7 @@ console.log(jwt)
 
 ## Hierarchy
 
-- [`ProduceJWT`](produce.ProduceJWT.md)
+- [`ProduceJWT`](index.ProduceJWT.md)
 
   ↳ **`SignJWT`**
 
@@ -33,22 +33,22 @@ console.log(jwt)
 
 ### Constructors
 
-- [constructor](sign.SignJWT.md#constructor)
+- [constructor](index.SignJWT.md#constructor)
 
 ### Methods
 
-- [appendSignature](sign.SignJWT.md#appendsignature)
-- [decode](sign.SignJWT.md#decode)
-- [decodeJwtWithoutSignature](sign.SignJWT.md#decodejwtwithoutsignature)
-- [setAudience](sign.SignJWT.md#setaudience)
-- [setExpirationTime](sign.SignJWT.md#setexpirationtime)
-- [setIssuedAt](sign.SignJWT.md#setissuedat)
-- [setIssuer](sign.SignJWT.md#setissuer)
-- [setJti](sign.SignJWT.md#setjti)
-- [setNotBefore](sign.SignJWT.md#setnotbefore)
-- [setProtectedHeader](sign.SignJWT.md#setprotectedheader)
-- [setSubject](sign.SignJWT.md#setsubject)
-- [toSign](sign.SignJWT.md#tosign)
+- [appendSignature](index.SignJWT.md#appendsignature)
+- [decode](index.SignJWT.md#decode)
+- [decodeJwtWithoutSignature](index.SignJWT.md#decodejwtwithoutsignature)
+- [setAudience](index.SignJWT.md#setaudience)
+- [setExpirationTime](index.SignJWT.md#setexpirationtime)
+- [setIssuedAt](index.SignJWT.md#setissuedat)
+- [setIssuer](index.SignJWT.md#setissuer)
+- [setJti](index.SignJWT.md#setjti)
+- [setNotBefore](index.SignJWT.md#setnotbefore)
+- [setProtectedHeader](index.SignJWT.md#setprotectedheader)
+- [setSubject](index.SignJWT.md#setsubject)
+- [toSign](index.SignJWT.md#tosign)
 
 ## Constructors
 
@@ -64,7 +64,7 @@ console.log(jwt)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[constructor](produce.ProduceJWT.md#constructor)
+[ProduceJWT](index.ProduceJWT.md).[constructor](index.ProduceJWT.md#constructor)
 
 ## Methods
 
@@ -132,7 +132,7 @@ ___
 
 ### setAudience
 
-▸ **setAudience**(`audience`): [`SignJWT`](sign.SignJWT.md)
+▸ **setAudience**(`audience`): [`SignJWT`](index.SignJWT.md)
 
 Set "aud" (Audience) Claim.
 
@@ -144,17 +144,17 @@ Set "aud" (Audience) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setAudience](produce.ProduceJWT.md#setaudience)
+[ProduceJWT](index.ProduceJWT.md).[setAudience](index.ProduceJWT.md#setaudience)
 
 ___
 
 ### setExpirationTime
 
-▸ **setExpirationTime**(`input`): [`SignJWT`](sign.SignJWT.md)
+▸ **setExpirationTime**(`input`): [`SignJWT`](index.SignJWT.md)
 
 Set "exp" (Expiration Time) Claim.
 
@@ -166,17 +166,17 @@ Set "exp" (Expiration Time) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setExpirationTime](produce.ProduceJWT.md#setexpirationtime)
+[ProduceJWT](index.ProduceJWT.md).[setExpirationTime](index.ProduceJWT.md#setexpirationtime)
 
 ___
 
 ### setIssuedAt
 
-▸ **setIssuedAt**(`input?`): [`SignJWT`](sign.SignJWT.md)
+▸ **setIssuedAt**(`input?`): [`SignJWT`](index.SignJWT.md)
 
 Set "iat" (Issued At) Claim.
 
@@ -188,17 +188,17 @@ Set "iat" (Issued At) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setIssuedAt](produce.ProduceJWT.md#setissuedat)
+[ProduceJWT](index.ProduceJWT.md).[setIssuedAt](index.ProduceJWT.md#setissuedat)
 
 ___
 
 ### setIssuer
 
-▸ **setIssuer**(`issuer`): [`SignJWT`](sign.SignJWT.md)
+▸ **setIssuer**(`issuer`): [`SignJWT`](index.SignJWT.md)
 
 Set "iss" (Issuer) Claim.
 
@@ -210,17 +210,17 @@ Set "iss" (Issuer) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setIssuer](produce.ProduceJWT.md#setissuer)
+[ProduceJWT](index.ProduceJWT.md).[setIssuer](index.ProduceJWT.md#setissuer)
 
 ___
 
 ### setJti
 
-▸ **setJti**(`jwtId`): [`SignJWT`](sign.SignJWT.md)
+▸ **setJti**(`jwtId`): [`SignJWT`](index.SignJWT.md)
 
 Set "jti" (JWT ID) Claim.
 
@@ -232,17 +232,17 @@ Set "jti" (JWT ID) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setJti](produce.ProduceJWT.md#setjti)
+[ProduceJWT](index.ProduceJWT.md).[setJti](index.ProduceJWT.md#setjti)
 
 ___
 
 ### setNotBefore
 
-▸ **setNotBefore**(`input`): [`SignJWT`](sign.SignJWT.md)
+▸ **setNotBefore**(`input`): [`SignJWT`](index.SignJWT.md)
 
 Set "nbf" (Not Before) Claim.
 
@@ -254,17 +254,17 @@ Set "nbf" (Not Before) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setNotBefore](produce.ProduceJWT.md#setnotbefore)
+[ProduceJWT](index.ProduceJWT.md).[setNotBefore](index.ProduceJWT.md#setnotbefore)
 
 ___
 
 ### setProtectedHeader
 
-▸ **setProtectedHeader**(`protectedHeader`): [`SignJWT`](sign.SignJWT.md)
+▸ **setProtectedHeader**(`protectedHeader`): [`SignJWT`](index.SignJWT.md)
 
 Sets the JWS Protected Header on the SignJWT object.
 
@@ -276,13 +276,13 @@ Sets the JWS Protected Header on the SignJWT object.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 ___
 
 ### setSubject
 
-▸ **setSubject**(`subject`): [`SignJWT`](sign.SignJWT.md)
+▸ **setSubject**(`subject`): [`SignJWT`](index.SignJWT.md)
 
 Set "sub" (Subject) Claim.
 
@@ -294,11 +294,11 @@ Set "sub" (Subject) Claim.
 
 #### Returns
 
-[`SignJWT`](sign.SignJWT.md)
+[`SignJWT`](index.SignJWT.md)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setSubject](produce.ProduceJWT.md#setsubject)
+[ProduceJWT](index.ProduceJWT.md).[setSubject](index.ProduceJWT.md#setsubject)
 
 ___
 

@@ -1,16 +1,14 @@
-# Interface: JWSHeaderParameters
+# Interface: JWEHeaderParameters
 
-[types](../modules/types.md).JWSHeaderParameters
+[types](../modules/types.md).JWEHeaderParameters
 
-Recognized JWS Header Parameters, any other Header Members may also be present.
+Recognized JWE Header Parameters, any other Header members may also be present.
 
 ## Hierarchy
 
 - [`JoseHeaderParameters`](types.JoseHeaderParameters.md)
 
-  ↳ **`JWSHeaderParameters`**
-
-  ↳↳ [`CompactJWSHeaderParameters`](types.CompactJWSHeaderParameters.md)
+  ↳ **`JWEHeaderParameters`**
 
 ## Indexable
 
@@ -20,42 +18,24 @@ Recognized JWS Header Parameters, any other Header Members may also be present.
 
 ### Properties
 
-- [alg](types.JWSHeaderParameters.md#alg)
-- [b64](types.JWSHeaderParameters.md#b64)
-- [crit](types.JWSHeaderParameters.md#crit)
-- [cty](types.JWSHeaderParameters.md#cty)
-- [jku](types.JWSHeaderParameters.md#jku)
-- [jwk](types.JWSHeaderParameters.md#jwk)
-- [kid](types.JWSHeaderParameters.md#kid)
-- [typ](types.JWSHeaderParameters.md#typ)
-- [x5c](types.JWSHeaderParameters.md#x5c)
-- [x5t](types.JWSHeaderParameters.md#x5t)
-- [x5u](types.JWSHeaderParameters.md#x5u)
+- [alg](types.JWEHeaderParameters.md#alg)
+- [cty](types.JWEHeaderParameters.md#cty)
+- [enc](types.JWEHeaderParameters.md#enc)
+- [jku](types.JWEHeaderParameters.md#jku)
+- [jwk](types.JWEHeaderParameters.md#jwk)
+- [kid](types.JWEHeaderParameters.md#kid)
+- [typ](types.JWEHeaderParameters.md#typ)
+- [x5c](types.JWEHeaderParameters.md#x5c)
+- [x5t](types.JWEHeaderParameters.md#x5t)
+- [x5u](types.JWEHeaderParameters.md#x5u)
 
 ## Properties
 
 ### alg
 
-• `Optional` **alg**: `string`
+• `Optional` **alg**: ``"RSA-OAEP-256"`` \| ``"RSA-OAEP"``
 
-JWS "alg" (Algorithm) Header Parameter.
-
-___
-
-### b64
-
-• `Optional` **b64**: `boolean`
-
-This JWS Extension Header Parameter modifies the JWS Payload representation and the JWS Signing
-Input computation as per [RFC7797](https://www.rfc-editor.org/rfc/rfc7797).
-
-___
-
-### crit
-
-• `Optional` **crit**: `string`[]
-
-JWS "crit" (Critical) Header Parameter.
+JWE "alg" (Algorithm) Header Parameter.
 
 ___
 
@@ -68,6 +48,14 @@ ___
 #### Inherited from
 
 [JoseHeaderParameters](types.JoseHeaderParameters.md).[cty](types.JoseHeaderParameters.md#cty)
+
+___
+
+### enc
+
+• `Optional` **enc**: ``"A256CBC-HS512"`` \| ``"A128CBC-HS256"``
+
+JWE "enc" (Encryption Algorithm) Header Parameter.
 
 ___
 

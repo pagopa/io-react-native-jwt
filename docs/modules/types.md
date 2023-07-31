@@ -5,6 +5,7 @@
 ### Interfaces
 
 - [CompactJWSHeaderParameters](../interfaces/types.CompactJWSHeaderParameters.md)
+- [JWEHeaderParameters](../interfaces/types.JWEHeaderParameters.md)
 - [JWK](../interfaces/types.JWK.md)
 - [JWSHeaderParameters](../interfaces/types.JWSHeaderParameters.md)
 - [JWTClaimVerificationOptions](../interfaces/types.JWTClaimVerificationOptions.md)

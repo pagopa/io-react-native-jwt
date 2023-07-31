@@ -50,7 +50,7 @@ console.log(jwtToSign)
 
 ## Hierarchy
 
-- [`ProduceJWT`](produce.ProduceJWT.md)
+- [`ProduceJWT`](index.ProduceJWT.md)
 
   ↳ **`UnsecuredJWT`**
 
@@ -87,7 +87,7 @@ console.log(jwtToSign)
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[constructor](produce.ProduceJWT.md#constructor)
+[ProduceJWT](index.ProduceJWT.md).[constructor](index.ProduceJWT.md#constructor)
 
 ## Methods
 
@@ -159,7 +159,7 @@ Set "aud" (Audience) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setAudience](produce.ProduceJWT.md#setaudience)
+[ProduceJWT](index.ProduceJWT.md).[setAudience](index.ProduceJWT.md#setaudience)
 
 ___
 
@@ -181,7 +181,7 @@ Set "exp" (Expiration Time) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setExpirationTime](produce.ProduceJWT.md#setexpirationtime)
+[ProduceJWT](index.ProduceJWT.md).[setExpirationTime](index.ProduceJWT.md#setexpirationtime)
 
 ___
 
@@ -203,7 +203,7 @@ Set "iat" (Issued At) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setIssuedAt](produce.ProduceJWT.md#setissuedat)
+[ProduceJWT](index.ProduceJWT.md).[setIssuedAt](index.ProduceJWT.md#setissuedat)
 
 ___
 
@@ -225,7 +225,7 @@ Set "iss" (Issuer) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setIssuer](produce.ProduceJWT.md#setissuer)
+[ProduceJWT](index.ProduceJWT.md).[setIssuer](index.ProduceJWT.md#setissuer)
 
 ___
 
@@ -247,7 +247,7 @@ Set "jti" (JWT ID) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setJti](produce.ProduceJWT.md#setjti)
+[ProduceJWT](index.ProduceJWT.md).[setJti](index.ProduceJWT.md#setjti)
 
 ___
 
@@ -269,7 +269,7 @@ Set "nbf" (Not Before) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setNotBefore](produce.ProduceJWT.md#setnotbefore)
+[ProduceJWT](index.ProduceJWT.md).[setNotBefore](index.ProduceJWT.md#setnotbefore)
 
 ___
 
@@ -291,4 +291,4 @@ Set "sub" (Subject) Claim.
 
 #### Inherited from
 
-[ProduceJWT](produce.ProduceJWT.md).[setSubject](produce.ProduceJWT.md#setsubject)
+[ProduceJWT](index.ProduceJWT.md).[setSubject](index.ProduceJWT.md#setsubject)
