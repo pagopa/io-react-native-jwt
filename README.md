@@ -52,6 +52,20 @@ const {protectedHeader, payload} = await verify(jwt, pubJwk, options);
 console.log(protectedHeader, payload)
 ```
 
+### Verify JWT with JWKS fetched from remote URL
+
+```js
+import { verify, getRemoteJWKSet } from '@pagopa/io-react-native-jwt';
+
+// ...
+const wellKnownUrl = 'https://example.com/.well-known/openid-federation';
+const jwks = await getRemoteJWKSet(wellKnownUrl);
+
+const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+
+const {protectedHeader, payload} = await verify(jwt, jwks);
+console.log(protectedHeader, payload)
+```
 
 ### Verify a JWT signature (JWS)
 
