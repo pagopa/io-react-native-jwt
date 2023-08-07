@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface JWTDecodeResult {
   /** JWT Claims Set. */
   payload: JWTPayload;
@@ -166,53 +168,55 @@ export interface JWTClaimVerificationOptions {
   requiredClaims?: string[];
 }
 
-export interface JWK {
-  /** JWK "alg" (Algorithm) Parameter. */
-  'alg'?: string;
-  'crv'?: string;
-  'd'?: string;
-  'dp'?: string;
-  'dq'?: string;
-  'e'?: string;
+export type JWK = z.infer<typeof JWK>;
+export const JWK = z.object({
+  'alg': z.string().optional(),
+  'crv': z.string().optional(),
+  'd': z.string().optional(),
+  'dp': z.string().optional(),
+  'dq': z.string().optional(),
+  'e': z.string().optional(),
   /** JWK "ext" (Extractable) Parameter. */
-  'ext'?: boolean;
-  'k'?: string;
+  'ext': z.boolean().optional(),
+  'k': z.string().optional(),
   /** JWK "key_ops" (Key Operations) Parameter. */
-  'key_ops'?: string[];
+  'key_ops': z.array(z.string()).optional(),
   /** JWK "kid" (Key ID) Parameter. */
-  'kid'?: string;
+  'kid': z.string().optional(),
   /** JWK "kty" (Key Type) Parameter.
    * This attribute is required to discriminate the
    * type of EC/RSA algorithm */
-  'kty': string;
-  'n'?: string;
-  'oth'?: Array<{
-    d?: string;
-    r?: string;
-    t?: string;
-  }>;
-  'p'?: string;
-  'q'?: string;
-  'qi'?: string;
+  'kty': z.string(),
+  'n': z.string().optional(),
+  'oth': z
+    .array(
+      z.object({
+        d: z.string().optional(),
+        r: z.string().optional(),
+        t: z.string().optional(),
+      })
+    )
+    .optional(),
+  'p': z.string().optional(),
+  'q': z.string().optional(),
+  'qi': z.string().optional(),
   /** JWK "use" (Public Key Use) Parameter. */
-  'use'?: string;
-  'x'?: string;
-  'y'?: string;
+  'use': z.string().optional(),
+  'x': z.string().optional(),
+  'y': z.string().optional(),
   /** JWK "x5c" (X.509 Certificate Chain) Parameter. */
-  'x5c'?: string[];
+  'x5c': z.array(z.string()).optional(),
   /** JWK "x5t" (X.509 Certificate SHA-1 Thumbprint) Parameter. */
-  'x5t'?: string;
+  'x5t': z.string().optional(),
   /** "x5t#S256" (X.509 Certificate SHA-256 Thumbprint) Parameter. */
-  'x5t#S256'?: string;
+  'x5t#S256': z.string().optional(),
   /** JWK "x5u" (X.509 URL) Parameter. */
-  'x5u'?: string;
+  'x5u': z.string().optional(),
+});
 
-  [propName: string]: unknown;
-}
-
-export interface WithJWKS {
-  /** JWK "alg" (Algorithm) Parameter. */
-  jwks: {
-    keys: JWK[];
-  };
-}
+export type WithJWKS = z.infer<typeof WithJWKS>;
+export const WithJWKS = z.object({
+  jwks: z.object({
+    keys: z.array(JWK),
+  }),
+});
