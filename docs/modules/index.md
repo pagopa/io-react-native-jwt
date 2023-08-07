@@ -22,6 +22,7 @@
 
 - [decode](../functions/index.decode.md)
 - [derToJose](../functions/index.derToJose.md)
+- [getRemoteJWKSet](../functions/index.getRemoteJWKSet.md)
 - [isSignatureValid](../functions/index.isSignatureValid.md)
 - [sha256ToBase64](../functions/index.sha256ToBase64.md)
 - [thumbprint](../functions/index.thumbprint.md)

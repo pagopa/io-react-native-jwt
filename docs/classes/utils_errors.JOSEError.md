@@ -36,6 +36,10 @@ if (err instanceof errors.JOSEError) {
 
   ↳↳ [`JWEInvalid`](utils_errors.JWEInvalid.md)
 
+  ↳↳ [`JWKSetInvalid`](utils_errors.JWKSetInvalid.md)
+
+  ↳↳ [`JWKNotFound`](utils_errors.JWKNotFound.md)
+
 ## Table of contents
 
 ### Constructors

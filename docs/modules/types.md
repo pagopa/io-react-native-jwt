@@ -5,6 +5,7 @@
 ### Interfaces
 
 - [CompactJWSHeaderParameters](../interfaces/types.CompactJWSHeaderParameters.md)
+- [GenericMetadata](../interfaces/types.GenericMetadata.md)
 - [JWEHeaderParameters](../interfaces/types.JWEHeaderParameters.md)
 - [JWK](../interfaces/types.JWK.md)
 - [JWSHeaderParameters](../interfaces/types.JWSHeaderParameters.md)

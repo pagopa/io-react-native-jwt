@@ -209,3 +209,10 @@ export interface JWK {
 
   [propName: string]: unknown;
 }
+
+export interface GenericMetadata {
+  /** JWK "alg" (Algorithm) Parameter. */
+  jwks: {
+    keys: JWK[];
+  };
+}
