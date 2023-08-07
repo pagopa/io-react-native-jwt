@@ -1,5 +1,5 @@
 import { IoReactNativeJwt } from '../utils/proxy';
-import type { GenericMetadata, JWK } from '../types';
+import type { WithJWKS, JWK } from '../types';
 import { JWKSetInvalid } from '../utils/errors';
 import { decode } from '..';
 
@@ -41,7 +41,8 @@ export const getRemoteJWKSet = async (
   if (response.status === 200) {
     let jwt = await response.text();
     let { payload } = await decode(jwt);
-    let metadata = payload as unknown as GenericMetadata;
+
+    let metadata = payload as unknown as WithJWKS;
     if (metadata.jwks && metadata.jwks.keys) {
       return metadata.jwks.keys;
     } else {

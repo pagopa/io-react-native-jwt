@@ -105,11 +105,11 @@ export const verify = async (
 ): Promise<JWTDecodeResult> => {
   const { protectedHeader, payload } = await decode(token);
 
-  if (Array.isArray(jwk)) {
-    jwk = getJwkFromHeader(protectedHeader, jwk);
-  }
+  const selectedJwk = Array.isArray(jwk)
+    ? getJwkFromHeader(protectedHeader, jwk)
+    : jwk;
 
-  let signatureIsValid = await isSignatureValid(token, jwk);
+  let signatureIsValid = await isSignatureValid(token, selectedJwk);
   if (signatureIsValid) {
     const verifiedPayload = jwtPayload(protectedHeader, payload, options);
     return { payload: verifiedPayload, protectedHeader };
@@ -137,20 +137,13 @@ export const getJwkFromHeader = (
   header: JWSHeaderParameters,
   jwks: JWK[]
 ): JWK => {
-  let alg = header.alg;
-  let kid = header.kid;
-
-  if (alg !== undefined && kid !== undefined) {
+  const { alg, kid } = header;
+  if (alg && kid) {
     let kty = getKtyFromAlg(alg);
-    let filteredJwks = jwks.filter((el) => {
-      if (el.kty === kty && el.kid === kid) {
-        return true;
-      }
-      return false;
-    });
+    let filteredJwks = jwks.find((el) => el.kty === kty && el.kid === kid);
 
-    if (filteredJwks.length === 1 && filteredJwks[0] !== undefined) {
-      return filteredJwks[0];
+    if (filteredJwks) {
+      return filteredJwks;
     }
   }
 
