@@ -41,7 +41,7 @@ export default function App() {
   };
 
   const generateAndSign = async () => {
-    loadding();
+    loading();
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
     const pk = await generate(randomKeyTag);
     console.log(pk);
@@ -91,7 +91,7 @@ export default function App() {
     'eyJ0eXAiOiJlbnRpdHktc3RhdGVtZW50K2p3dCIsImtpZCI6IkVDIzEiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0LyIsInN1YiI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvIiwiYXV0aG9yaXR5X2hpbnRzIjoiaHR0cHM6Ly9kZW1vLmZlZGVyYXRpb24uZXVkaS53YWxsZXQuZGV2ZWxvcGVycy5pdGFsaWEuaXQvIiwiandrcyI6eyJrZXlzIjpbeyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InFySnJqM0FmX0I1N3NiT0lScmNCTTdicjd3T2M4eW5qN2xIRlBUZWZmVWsiLCJ5IjoiMUgwY1dEeUdndlU4dy1rUEtVX3h5Y09DVU5UMm8wYndzbElRdG5QVTZpTSIsImtpZCI6IkVDIzEifV19LCJtZXRhZGF0YSI6eyJ3YWxsZXRfcHJvdmlkZXIiOnsiandrcyI6eyJrZXlzIjpbeyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InFySnJqM0FmX0I1N3NiT0lScmNCTTdicjd3T2M4eW5qN2xIRlBUZWZmVWsiLCJ5IjoiMUgwY1dEeUdndlU4dy1rUEtVX3h5Y09DVU5UMm8wYndzbElRdG5QVTZpTSIsImtpZCI6IkVDIzEifV19LCJ0b2tlbl9lbmRwb2ludCI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvdG9rZW4iLCJhc2NfdmFsdWVzX3N1cHBvcnRlZCI6WyJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0L0xvQS9iYXNpYyIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL21lZGl1bSIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL2hpZ2h0Il0sImdyYW50X3R5cGVzX3N1cHBvcnRlZCI6WyJ1cm46aWV0ZjpwYXJhbXM6b2F1dGg6Y2xpZW50LWFzc2VydGlvbi10eXBlOmp3dC1rZXktYXR0ZXN0YXRpb24iXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9tZXRob2RzX3N1cHBvcnRlZCI6WyJwcml2YXRlX2tleV9qd3QiXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIiwiRVMzODQiLCJFUzUxMiIsIlJTMjU2IiwiUlMzODQiLCJSUzUxMiIsIlBTMjU2IiwiUFMzODQiLCJQUzUxMiJdfSwiZmVkZXJhdGlvbl9lbnRpdHkiOnsib3JnYW5pemF0aW9uX25hbWUiOiJQYWdvUGEgUy5wLkEuIiwiaG9tZXBhZ2VfdXJpIjoiaHR0cHM6Ly9pby5pdGFsaWEuaXQvIiwicG9saWN5X3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L3ByaXZhY3ktcG9saWN5LyIsInRvc191cmkiOiJodHRwczovL2lvLml0YWxpYS5pdC9wcml2YWN5LXBvbGljeS8iLCJsb2dvX3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L2Fzc2V0cy9pbWcvaW8taXQtbG9nby13aGl0ZS5zdmcifX0sImlhdCI6MTY5MTM5NjUzMiwiZXhwIjoxNjkxNDAwMTMyfQ.frqGqBswu0pRdM6qQUk5E8ajyzsPuTFObvGFAOxDzDZBJduO8s8ljO9YGmapETqT1BkcpcSktMIN1JqvNEKd-Q';
 
   const verifyJwtSignature = (jwt: string, publicKey: JWK) => {
-    loadding();
+    loading();
     isSignatureValid(jwt, publicKey)
       .then((isValid) => {
         isValid
@@ -101,7 +101,7 @@ export default function App() {
       .catch(showError);
   };
   const verifyPayload = (jwt: string, publicKey: JWK) => {
-    loadding();
+    loading();
     verify(jwt, publicKey, {
       currentDate: new Date('2023-07-13T10:30:00.000+02:00'),
       typ: 'entity-statement+jwt',
@@ -112,7 +112,7 @@ export default function App() {
   };
 
   const encryptPlaintext = (plaintext: String, encKey: JWK) => {
-    loadding();
+    loading();
     const jwe = new EncryptJwe(plaintext, {
       alg: 'RSA-OAEP-256',
       enc: 'A256CBC-HS512',
@@ -121,7 +121,7 @@ export default function App() {
   };
 
   const verifyWithJwks = () => {
-    loadding();
+    loading();
     const metadataUrl =
       'https://io-d-wallet-it.azurewebsites.net/.well-known/openid-federation';
     getRemoteJWKSet(metadataUrl)
@@ -138,7 +138,7 @@ export default function App() {
       .catch(showError);
   };
 
-  const loadding = () => setResult('⏱️');
+  const loading = () => setResult('⏱️');
 
   return (
     <SafeAreaView style={styles.container}>

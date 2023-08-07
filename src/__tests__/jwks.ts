@@ -33,16 +33,14 @@ describe('getJwkFromHeader', function () {
       alg: 'ES256',
       kid: '#EC2',
     };
-    const jwk = getJwkFromHeader(header, jwks);
-    expect(jwk).toBe(jwks[1]);
+    expect(getJwkFromHeader(header, jwks)).toBe(jwks[1]);
   });
   it('it should return the correct JWK with RS256', async () => {
     const header = {
       alg: 'RS256',
       kid: '#RSA1',
     };
-    const jwk = getJwkFromHeader(header, jwks);
-    expect(jwk).toBe(jwks[2]);
+    expect(getJwkFromHeader(header, jwks)).toBe(jwks[2]);
   });
   it('it should fail with wrong kid', async () => {
     const header = {
