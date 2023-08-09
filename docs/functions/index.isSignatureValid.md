@@ -25,10 +25,33 @@ const isSignatureValid = await verify(jwt, jwk)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `token` | `string` |
-| `jwk` | [`JWK`](../interfaces/types.JWK.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `token` | `string` | - |
+| `jwk` | `Object` | - |
+| `jwk.kty` | `string` | JWK "kty" (Key Type) Parameter. This attribute is required to discriminate the type of EC/RSA algorithm |
+| `jwk.alg?` | `string` | - |
+| `jwk.crv?` | `string` | - |
+| `jwk.d?` | `string` | - |
+| `jwk.dp?` | `string` | - |
+| `jwk.dq?` | `string` | - |
+| `jwk.e?` | `string` | - |
+| `jwk.ext?` | `boolean` | JWK "ext" (Extractable) Parameter. |
+| `jwk.k?` | `string` | - |
+| `jwk.key_ops?` | `string`[] | JWK "key_ops" (Key Operations) Parameter. |
+| `jwk.kid?` | `string` | JWK "kid" (Key ID) Parameter. |
+| `jwk.n?` | `string` | - |
+| `jwk.oth?` | { d?: string \| undefined; r?: string \| undefined; t?: string \| undefined; }[] | - |
+| `jwk.p?` | `string` | - |
+| `jwk.q?` | `string` | - |
+| `jwk.qi?` | `string` | - |
+| `jwk.use?` | `string` | JWK "use" (Public Key Use) Parameter. |
+| `jwk.x?` | `string` | - |
+| `jwk.x5c?` | `string`[] | JWK "x5c" (X.509 Certificate Chain) Parameter. |
+| `jwk.x5t?` | `string` | JWK "x5t" (X.509 Certificate SHA-1 Thumbprint) Parameter. |
+| `jwk.x5t#S256?` | `string` | "x5t#S256" (X.509 Certificate SHA-256 Thumbprint) Parameter. |
+| `jwk.x5u?` | `string` | JWK "x5u" (X.509 URL) Parameter. |
+| `jwk.y?` | `string` | - |
 
 #### Returns
 

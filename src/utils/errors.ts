@@ -231,3 +231,25 @@ export class JWEInvalid extends JOSEError {
 
   code = 'ERR_JWE_INVALID';
 }
+
+/**
+ * An error subclass thrown when a JWKSet is invalid.
+ */
+export class JWKSetInvalid extends JOSEError {
+  static get code(): 'ERR_JWKS_INVALID' {
+    return 'ERR_JWKS_INVALID';
+  }
+
+  code = 'ERR_JWKS_INVALID';
+}
+
+/**
+ * An error subclass thrown when a JWK is not found.
+ */
+export class JWKNotFound extends JOSEError {
+  static get code(): 'ERR_JWK_NOT_FOUND' {
+    return 'ERR_JWK_NOT_FOUND';
+  }
+
+  code = 'ERR_JWK_NOT_FOUND';
+}

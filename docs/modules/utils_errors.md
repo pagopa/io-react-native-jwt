@@ -8,6 +8,8 @@
 - [JOSEError](../classes/utils_errors.JOSEError.md)
 - [JOSENotSupported](../classes/utils_errors.JOSENotSupported.md)
 - [JWEInvalid](../classes/utils_errors.JWEInvalid.md)
+- [JWKNotFound](../classes/utils_errors.JWKNotFound.md)
+- [JWKSetInvalid](../classes/utils_errors.JWKSetInvalid.md)
 - [JWSInvalid](../classes/utils_errors.JWSInvalid.md)
 - [JWSSignatureVerificationFailed](../classes/utils_errors.JWSSignatureVerificationFailed.md)
 - [JWTClaimValidationFailed](../classes/utils_errors.JWTClaimValidationFailed.md)

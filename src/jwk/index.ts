@@ -1,5 +1,7 @@
 import { IoReactNativeJwt } from '../utils/proxy';
-import type { JWK } from '../types';
+import { WithJWKS, JWK } from '../types';
+import { JWKSetInvalid } from '../utils/errors';
+import { decode } from '..';
 
 /**
  * Calculate JWK thumbprint
@@ -22,3 +24,28 @@ import type { JWK } from '../types';
  */
 export const thumbprint = (jwk: JWK): Promise<string> =>
   IoReactNativeJwt.thumbprint(jwk);
+
+/**
+ * Returns a JSON Web Key Set (JWKS) downloaded from a remote endpoint,
+ * that is, for example, an OAuth 2.0 or OIDC jwks_uri.
+ *
+ * @param url URL string to fetch the JSON Web Key Set from.
+ * @param appFetch fetch function (optional)
+ */
+export const getRemoteJWKSet = async (
+  url: string,
+  appFetch: GlobalFetch['fetch'] = fetch
+): Promise<JWK[]> => {
+  let response = await appFetch(url);
+
+  if (response.status === 200) {
+    const jwt = await response.text();
+    const { payload } = await decode(jwt);
+    const parsedPayload = WithJWKS.parse(payload);
+    return parsedPayload.jwks.keys;
+  }
+
+  throw new JWKSetInvalid(
+    `Unable to obtain JWKSet from given url. Response status: ${response.status}`
+  );
+};
