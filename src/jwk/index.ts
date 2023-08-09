@@ -39,9 +39,9 @@ export const getRemoteJWKSet = async (
   let response = await appFetch(url);
 
   if (response.status === 200) {
-    let jwt = await response.text();
-    let { payload } = await decode(jwt);
-    let parsedPayload = WithJWKS.parse(payload);
+    const jwt = await response.text();
+    const { payload } = await decode(jwt);
+    const parsedPayload = WithJWKS.parse(payload);
     return parsedPayload.jwks.keys;
   }
 

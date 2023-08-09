@@ -109,7 +109,7 @@ export const verify = async (
     ? getJwkFromHeader(protectedHeader, jwk)
     : jwk;
 
-  let signatureIsValid = await isSignatureValid(token, selectedJwk);
+  const signatureIsValid = await isSignatureValid(token, selectedJwk);
   if (signatureIsValid) {
     const verifiedPayload = jwtPayload(protectedHeader, payload, options);
     return { payload: verifiedPayload, protectedHeader };
@@ -136,8 +136,8 @@ export const getJwkFromHeader = (
 ): JWK => {
   const { alg, kid } = header;
   if (alg && kid) {
-    let kty = getKtyFromAlg(alg);
-    let filteredJwks = jwks.find((el) => el.kty === kty && el.kid === kid);
+    const kty = getKtyFromAlg(alg);
+    const filteredJwks = jwks.find((el) => el.kty === kty && el.kid === kid);
 
     if (filteredJwks) {
       return filteredJwks;
