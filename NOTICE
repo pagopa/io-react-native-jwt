@@ -1,0 +1,9 @@
+io-react-native-jwt
+Copyright 2023 PagoPa S.p.A.
+
+This software uses the library nimbus-jose-jwt,
+written by Connect2id Ltd. Copyright 2023.
+
+This software uses the library JOSESwift,
+written by Airside Mobile, Inc. an Onfido company.
+Copyright 2023.
