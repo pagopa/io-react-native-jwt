@@ -28,7 +28,10 @@ export const derToJose = async (
       asn1Signature,
       getCoordinateOctetLength(alg)
     );
-    const encodedJws = removePadding(unpackedJws);
+    const encodedJws = removePadding(unpackedJws).replace(
+      /(?:\r\n|\r|\n)/g,
+      ''
+    );
     return encodedJws;
   } else {
     throw new JOSENotSupported('Unsupported "alg" value');
