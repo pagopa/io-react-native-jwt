@@ -6,7 +6,7 @@ import type {
 } from '../types';
 import { ProduceJWT } from './produce';
 import { decodeBase64, encodeBase64, removePadding } from '../utils/base64';
-import { isAlgSupported } from '../algorithms';
+import { getKtyFromAlg, isAlgSupported } from '../algorithms';
 
 import { derToJose } from '../utils/asn1';
 
@@ -87,10 +87,12 @@ export class SignJWT extends ProduceJWT {
 
     const jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
     const alg = jwtDecoded.header.alg;
-    try {
+    const kty = getKtyFromAlg(alg);
+
+    if (kty === 'EC') {
       const encodedJws = await derToJose(signature, alg);
       return `${jwtWithoutSignature}.${encodedJws}`;
-    } catch {
+    } else {
       const encodedJws = removePadding(signature);
       return `${jwtWithoutSignature}.${encodedJws}`;
     }
