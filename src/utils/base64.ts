@@ -23,7 +23,7 @@ export function encodeBase64(value: string): string {
 }
 
 export function decodeBase64(value: string): string {
-  let decoded = atob(value);
+  let decoded = atob(addPadding(value));
   if (decoded) {
     return decoded;
   } else {
@@ -34,4 +34,18 @@ export function decodeBase64(value: string): string {
 export function removePadding(encoded: string): string {
   // eslint-disable-next-line no-div-regex
   return encoded.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+export function addPadding(encoded: string): string {
+  encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');
+  var pad = encoded.length % 4;
+  if (pad) {
+    if (pad === 1) {
+      throw new JOSEError(
+        'InvalidLengthError: Input base64url string is the wrong length to determine padding'
+      );
+    }
+    encoded += new Array(5 - pad).join('=');
+  }
+  return encoded;
 }
