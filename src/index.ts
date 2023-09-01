@@ -12,5 +12,10 @@ export { UnsecuredJWT } from './jwt/unsecured';
 export type { UnsecuredResult } from './jwt/unsecured';
 
 export { derToJose } from './utils/asn1';
-export { encodeBase64, decodeBase64 } from './utils/base64';
+export {
+  encodeBase64,
+  decodeBase64,
+  removePadding,
+  addPadding,
+} from './utils/base64';
 export { sha256ToBase64 } from './hash';
