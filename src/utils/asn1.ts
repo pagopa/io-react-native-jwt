@@ -1,4 +1,8 @@
-import { getCoordinateOctetLength, getKtyFromAlg } from '../algorithms';
+import {
+  getCoordinateOctetLength,
+  getKtyFromAlg,
+  type SupportedAlgorithm,
+} from '../algorithms';
 import { IoReactNativeJwt } from './proxy';
 import { removePadding } from './base64';
 import { JOSENotSupported } from './errors';
@@ -20,7 +24,7 @@ import { JOSENotSupported } from './errors';
  */
 export const derToJose = async (
   asn1Signature: string,
-  alg: string
+  alg: SupportedAlgorithm
 ): Promise<string> => {
   const kty = getKtyFromAlg(alg);
   if (kty === 'EC') {

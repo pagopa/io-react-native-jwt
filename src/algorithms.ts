@@ -10,10 +10,11 @@ export const supportedAlgorithms = [
   'ES256',
   'ES384',
   'ES512',
-];
+] as const;
+export type SupportedAlgorithm = (typeof supportedAlgorithms)[number];
 
-export const isAlgSupported = (alg: string) =>
-  supportedAlgorithms.includes(alg.toUpperCase());
+export const isAlgSupported = (alg: string): alg is SupportedAlgorithm =>
+  (supportedAlgorithms as unknown as string[]).includes(alg.toUpperCase());
 
 export const getKtyFromAlg = (alg: string) => {
   switch (alg.slice(0, 2)) {

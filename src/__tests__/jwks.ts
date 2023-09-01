@@ -30,28 +30,28 @@ const jwks: JWK[] = [
 describe('getJwkFromHeader', function () {
   it('it should return the correct JWK with ES256', async () => {
     const header = {
-      alg: 'ES256',
+      alg: 'ES256' as const,
       kid: '#EC2',
     };
     expect(getJwkFromHeader(header, jwks)).toBe(jwks[1]);
   });
   it('it should return the correct JWK with RS256', async () => {
     const header = {
-      alg: 'RS256',
+      alg: 'RS256' as const,
       kid: '#RSA1',
     };
     expect(getJwkFromHeader(header, jwks)).toBe(jwks[2]);
   });
   it('it should fail with wrong kid', async () => {
     const header = {
-      alg: 'ES256',
+      alg: 'ES256' as const,
       kid: '#RSA1',
     };
     expect(() => getJwkFromHeader(header, jwks)).toThrowError(JWKNotFound);
   });
   it('it should fail with an invalid header', async () => {
     const header = {
-      alg: 'ES256',
+      alg: 'ES256' as const,
     };
     expect(() => getJwkFromHeader(header, jwks)).toThrowError(JWKNotFound);
   });
