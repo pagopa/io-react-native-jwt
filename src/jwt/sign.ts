@@ -47,7 +47,7 @@ export class SignJWT extends ProduceJWT {
   }
 
   /**
-   * Return a JWT without signature (`header.payload`) to sign.
+   * Return a JWT w ithout signature (`header.payload`) to sign.
    *
    */
   toSign(): string {

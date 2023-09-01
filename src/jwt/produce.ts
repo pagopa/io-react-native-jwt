@@ -4,14 +4,15 @@ import secs, { epoch } from '../utils/secs';
 
 /** Generic class for JWT producing. */
 export class ProduceJWT {
-  protected _payload!: JWTPayload;
+  protected _payload: JWTPayload = {};
 
   /** @param payload The JWT Claims Set object. */
-  constructor(payload: JWTPayload) {
+  setPayload(payload: JWTPayload) {
     if (!isObject(payload)) {
       throw new TypeError('JWT Claims Set MUST be an object');
     }
-    this._payload = payload;
+    this._payload = { ...this._payload, ...payload };
+    return this;
   }
 
   /**

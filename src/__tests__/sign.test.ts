@@ -18,7 +18,10 @@ const jwtHeader: CompactJWSHeaderParameters = {
 const signature =
   '6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q';
 
-let toSign = new SignJWT(jwtPayload).setProtectedHeader(jwtHeader).toSign();
+let toSign = new SignJWT()
+  .setPayload(jwtPayload)
+  .setProtectedHeader(jwtHeader)
+  .toSign();
 
 describe('Sign JWT', function () {
   it('it should be signed correctly', async () => {
@@ -29,10 +32,14 @@ describe('Sign JWT', function () {
   });
   it('it should fails with invalid alg', async () => {
     expect(() =>
-      new SignJWT(jwtPayload).setProtectedHeader({ alg: 'invalid' })
+      new SignJWT()
+        .setPayload(jwtPayload)
+        .setProtectedHeader({ alg: 'invalid' })
     ).toThrowError(JOSENotSupported);
   });
   it('it should fails without header', async () => {
-    expect(() => new SignJWT(jwtPayload).toSign()).toThrowError(JWSInvalid);
+    expect(() => new SignJWT().setPayload(jwtPayload).toSign()).toThrowError(
+      JWSInvalid
+    );
   });
 });

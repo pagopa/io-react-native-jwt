@@ -14,12 +14,12 @@ const encodedUnsecureJwt =
 
 describe('Unsecured JWT', function () {
   it('it should be encoded correctly', async () => {
-    const unsecured = new UnsecuredJWT(jwtPayload).encode();
+    const unsecured = new UnsecuredJWT().setPayload(jwtPayload).encode();
     expect(unsecured).toBe(encodedUnsecureJwt);
   });
   it('it should fail encoding with unknown payload', async () => {
     expect(() =>
-      new UnsecuredJWT('' as unknown as JWTPayload).encode()
+      new UnsecuredJWT().setPayload('' as unknown as JWTPayload).encode()
     ).toThrowError(TypeError);
   });
   it('it should be decoded correctly', async () => {
