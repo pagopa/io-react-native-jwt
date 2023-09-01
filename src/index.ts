@@ -19,3 +19,4 @@ export {
   addPadding,
 } from './utils/base64';
 export { sha256ToBase64 } from './hash';
+export { type CryptoContext } from './utils/crypto';
