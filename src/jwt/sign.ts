@@ -1,14 +1,15 @@
-import { JOSENotSupported, JWSInvalid, JWTInvalid } from '../utils/errors';
-import type {
-  CompactJWSHeaderParameters,
-  JWTDecodeResult,
-  JWTPayload,
-} from '../types';
+import { JOSENotSupported, JWTInvalid } from '../utils/errors';
+import type { JWSHeaderParameters, JWTDecodeResult } from '../types';
 import { ProduceJWT } from './produce';
 import { decodeBase64, encodeBase64, removePadding } from '../utils/base64';
-import { getKtyFromAlg, isAlgSupported } from '../algorithms';
+import {
+  getAlgFromKey,
+  isAlgSupported,
+  type SupportedAlgorithm,
+} from '../algorithms';
 
 import { derToJose } from '../utils/asn1';
+import type { CryptoContext } from 'src/utils/crypto';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
@@ -16,134 +17,97 @@ import { derToJose } from '../utils/asn1';
  * @example Usage with a given signature
  *
  * ```js
- * const alg = 'RS256'
- * const signature = 'Axy0....'
+ * const crypto: Crypto = { any implementation fo Crypto interface }
  *
- * const jwt = new SignJWT({ 'urn:example:claim': true })
- *   .setProtectedHeader({ alg })
+ * const jwt = new SignJWT(crypto)
+ *   .setPayload({ 'urn:example:claim': true })
+ *   .setProtectedHeader({ typ })
  *   .setIssuedAt()
  *   .setIssuer('urn:example:issuer')
  *   .setAudience('urn:example:audience')
  *   .setExpirationTime('2h')
- *   .sign(signature)
  *
- * console.log(jwt)
+ * jwt.data()
+ * await jwt.unsigned()
+ * await jwt.signed()
  * ```
  */
+
 export class SignJWT extends ProduceJWT {
-  private _protectedHeader!: CompactJWSHeaderParameters;
+  private _protectedHeader: Omit<JWSHeaderParameters, 'alg'> = {};
+  private crypto: CryptoContext;
+
+  /**
+   * @param crypto An implementation of the crypto interface. @see utils/crypto for more.
+   */
+  constructor(crypto: CryptoContext) {
+    super();
+    this.crypto = crypto;
+  }
 
   /**
    * Sets the JWS Protected Header on the SignJWT object.
+   * Any invocation overrides what's been already put in the header.
+   * Value for "alg" are ignored, as it will be inferred by the key used by the cryptographic context.
    *
-   * @param protectedHeader JWS Protected Header. Must contain an "alg" (JWS Algorithm) property.
+   * @param protectedHeader JWS Protected Header.
    */
-  setProtectedHeader(protectedHeader: CompactJWSHeaderParameters) {
-    if (protectedHeader.alg && isAlgSupported(protectedHeader.alg)) {
-      this._protectedHeader = protectedHeader;
-      return this;
-    }
-    throw new JOSENotSupported('Unsupported "alg" value');
+  setProtectedHeader(protectedHeader: Omit<JWSHeaderParameters, 'alg'>) {
+    this._protectedHeader = protectedHeader;
+    return this;
   }
 
   /**
-   * Return a JWT w ithout signature (`header.payload`) to sign.
+   * Return a JWT without signature (`header.payload`).
    *
    */
-  toSign(): string {
-    if (!this._protectedHeader || !this._protectedHeader.alg) {
-      throw new JWSInvalid(
-        'Missing signature algorithm. Specify the `alg` field'
-      );
-    }
-    const protectedHeader = encodeBase64(JSON.stringify(this._protectedHeader));
-    const payload = encodeBase64(JSON.stringify(this._payload));
-    if (payload && protectedHeader) {
-      return `${protectedHeader}.${payload}`;
-    } else {
-      throw new JWSInvalid();
-    }
+  async unsigned(): Promise<string> {
+    const { alg } = await this.getSelectedSigningAlgorithm();
+
+    return [{ ...this._protectedHeader, alg }, this._payload]
+      .map((e) => JSON.stringify(e))
+      .map(encodeBase64)
+      .join('.');
+  }
+
+  private async getSelectedSigningAlgorithm(): Promise<{
+    kty: string;
+    alg: SupportedAlgorithm;
+  }> {
+    const publicKey = await this.crypto.getPublicKey();
+    const alg = getAlgFromKey(publicKey);
+
+    return { kty: publicKey.kty, alg };
   }
 
   /**
-   * Append signature to unsigned JWT.
-   * For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
-   * The same format used by the TEE. Conversion to JWS is handled automatically.
+   * Return a signed JWT.
    *
-   * @param jwtWithoutSignature
-   * @param signature
    */
-  static async appendSignature(
-    jwtWithoutSignature: string,
-    signature: string
-  ): Promise<string> {
-    if (
-      typeof jwtWithoutSignature !== 'string' ||
-      typeof signature !== 'string'
-    ) {
-      throw new JWTInvalid('JWS must be a string');
-    }
-    if (signature === '') throw new JWSInvalid('Invalid signature');
+  async signed(): Promise<string> {
+    const unsigned = await this.unsigned();
+    const signature = await this.crypto.getSignature(unsigned);
 
-    const jwtDecoded = SignJWT.decodeJwtWithoutSignature(jwtWithoutSignature);
-    const alg = jwtDecoded.header.alg;
-    const kty = getKtyFromAlg(alg);
+    const { kty, alg } = await this.getSelectedSigningAlgorithm();
 
-    if (kty === 'EC') {
-      const encodedJws = await derToJose(signature, alg);
-      return `${jwtWithoutSignature}.${encodedJws}`;
-    } else {
-      const encodedJws = removePadding(signature);
-      return `${jwtWithoutSignature}.${encodedJws}`;
-    }
+    const encodedJws = await (kty === 'EC'
+      ? derToJose(signature, alg)
+      : removePadding(signature));
+
+    return `${unsigned}.${encodedJws}`;
   }
 
   /**
-   * Decodes a JWT without signature
-   *
-   * @param jwtWithoutSignature JWT to sign that needs to be decoded.
+   * Plain data of the produced JWT
    */
-  static decodeJwtWithoutSignature(jwtWithoutSignature: string): {
-    payload: JWTPayload;
-    header: CompactJWSHeaderParameters;
-  } {
-    if (typeof jwtWithoutSignature !== 'string') {
-      throw new JWTInvalid('JWT must be a string');
-    }
-    const {
-      0: encodedHeader,
-      1: encodedPayload,
-      length,
-    } = jwtWithoutSignature.split('.');
-
-    let header: CompactJWSHeaderParameters;
-    try {
-      let decoded = decodeBase64(encodedHeader!);
-      header = JSON.parse(decoded);
-      if (!header.alg || !isAlgSupported(header.alg)) {
-        throw new JOSENotSupported('Unsupported "alg" value');
-      }
-    } catch {
-      throw new JWTInvalid('Unable to decode JWT header');
-    }
-
-    if (length !== 2 || encodedPayload === '') {
-      throw new JWTInvalid('Invalid JWT to sign');
-    }
-
-    let decodedPayload = decodeBase64(encodedPayload!);
-    const payload = JSON.parse(decodedPayload);
-
-    return {
-      payload,
-      header,
-    };
+  data(): JWTDecodeResult {
+    return { protectedHeader: this._protectedHeader, payload: this._payload };
   }
 
   /**
-   * Decodes a JWT without signature
+   * Decodes a signed JWT
    *
-   * @param jwtWithoutSignature JWT to sign that needs to be decoded.
+   * @param jwt JWT to sign that needs to be decoded.
    */
   static decode(jwt: string): JWTDecodeResult {
     if (typeof jwt !== 'string') {
@@ -156,7 +120,7 @@ export class SignJWT extends ProduceJWT {
       length,
     } = jwt.split('.');
 
-    let protectedHeader: CompactJWSHeaderParameters;
+    let protectedHeader: JWSHeaderParameters;
     try {
       let decoded = decodeBase64(encodedHeader!);
       protectedHeader = JSON.parse(decoded);
