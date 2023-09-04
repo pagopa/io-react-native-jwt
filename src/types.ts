@@ -53,6 +53,11 @@ export interface JWSHeaderParameters extends JoseHeaderParameters {
   [propName: string]: unknown;
 }
 
+/** JOSE Header for an unsecued JWT */
+export interface JWTUnsecuredHeaderParameters extends JoseHeaderParameters {
+  alg?: 'none';
+}
+
 /** Recognized JWE Header Parameters, any other Header members may also be present. */
 export interface JWEHeaderParameters extends JoseHeaderParameters {
   /** JWE "alg" (Algorithm) Header Parameter. */
