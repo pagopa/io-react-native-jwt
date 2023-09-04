@@ -93,21 +93,20 @@ if isValid {
 ### Create and sign a JWT with a JWS
 
 ```js
-// Create unsecured jwt
-let jwtToSign = new SignJWT({ metadata: 'demo' })
-  .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
+// Define a cryptographic context suitable for the application needs
+const crypto: CryptoContext = userDefinedCryptoContext();
+
+// Create jwt
+const jwt = new SignJWT(crypto)
+  .setPayload({ metadata: 'demo' })
+  .setProtectedHeader({ typ: 'JWT' })
   .setAudience('demo')
   .setExpirationTime('1h')
-  .setIssuedAt()
-  .toSign();
+  .setIssuedAt();
 
-// Create signature
-let signature = signWithMyCustomFunction(jwtToSign);
+// get signed jwt
+const signedJwt = jwt.signed();
 
-// Create signed JWT
-let signedJwt = await SignJWT.appendSignature(jwtToSign, signature);
-
-console.log(signedJwt)
 ```
 
 ### JWK thumbprint
