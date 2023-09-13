@@ -31,49 +31,6 @@ export const getKtyFromAlg = (alg: string) => {
   }
 };
 
-/**
- * Given a key type, valdates if a signing algorithm is compatible
- *
- * @param kty The given key type
- * @param alg The signing algorithm
- *
- * @returns The provided algorithm in case it's compatible
- * @throws {JOSENotSupported} If the signing algorithm is not compatible with the provided key type
- */
-export const validateAlgFromKty = (
-  kty: string,
-  alg: string
-): SupportedAlgorithm => {
-  if (!isAlgSupported(alg)) {
-    throw new JOSENotSupported(`Unsupported algorithm ${alg}`);
-  }
-
-  const signatureAlg = alg.slice(0, 2);
-  const hashingAlg = alg.slice(2, 5);
-
-  const supportedHashes = ['256', '384', '512'];
-
-  if (!supportedHashes.includes(hashingAlg)) {
-    throw new JOSENotSupported(
-      `Unsupported hashing algorithm, expected one of {${supportedHashes.join(
-        ', '
-      )}}, received ${hashingAlg}`
-    );
-  }
-
-  if (
-    /* is valid for EC */ (kty === 'EC' && signatureAlg === 'ES') ||
-    /* OR is valid for RSA */ (kty === 'RSA' &&
-      ['RS', 'PS'].includes(signatureAlg))
-  ) {
-    return alg;
-  }
-
-  throw new JOSENotSupported(
-    `Unsupported "alg" value for a JSON Web Key Set. alg=${alg} is not compatible with kty=${kty}`
-  );
-};
-
 export const getAlgFromKey = ({ kty, alg, crv }: JWK): SupportedAlgorithm => {
   if (kty === 'RSA' && alg && isAlgSupported(alg)) {
     return alg;
