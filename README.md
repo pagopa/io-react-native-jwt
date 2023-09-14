@@ -4,11 +4,9 @@ A fast implementation of `jwt` module.
 Provides much greater performance for decoding, signing and verifying JWTs!
 
 🚀 Use only native functions via the following libraries:
+
 - 🤖 [nimbus-jose-jwt](https://github.com/felx/nimbus-jose-jwt/) on Android
 - 📱 [JOSESwift](https://github.com/airsidemobile/JOSESwift/) on iOS
-
-
-
 
 ## Installation
 
@@ -26,7 +24,7 @@ For detailed documentation go [here](/docs/modules/index.md)
 import { decode } from '@pagopa/io-react-native-jwt';
 
 // ...
-const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+const jwt = 'eyJ0eXAiOiJlbnRpdHktc3.....';
 const result = await decode(jwt);
 console.log(result);
 ```
@@ -38,18 +36,18 @@ import { verify } from '@pagopa/io-react-native-jwt';
 
 // ...
 const pubJwk = {
-    crv: 'P-256',
-    kty: 'EC',
-    x: 'qrJrj.....',
-    y: '1H0cW.....',
-  };
-const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+  crv: 'P-256',
+  kty: 'EC',
+  x: 'qrJrj.....',
+  y: '1H0cW.....',
+};
+const jwt = 'eyJ0eXAiOiJlbnRpdHktc3.....';
 const options = {
-    typ: 'jwt',
-    requiredClaims: ['iss', 'sub'],
-}
-const {protectedHeader, payload} = await verify(jwt, pubJwk, options);
-console.log(protectedHeader, payload)
+  typ: 'jwt',
+  requiredClaims: ['iss', 'sub'],
+};
+const { protectedHeader, payload } = await verify(jwt, pubJwk, options);
+console.log(protectedHeader, payload);
 ```
 
 ### Verify JWT with JWKS fetched from remote URL
@@ -61,10 +59,10 @@ import { verify, getRemoteJWKSet } from '@pagopa/io-react-native-jwt';
 const wellKnownUrl = 'https://example.com/.well-known/openid-federation';
 const jwks = await getRemoteJWKSet(wellKnownUrl);
 
-const jwt = "eyJ0eXAiOiJlbnRpdHktc3.....";
+const jwt = 'eyJ0eXAiOiJlbnRpdHktc3.....';
 
-const {protectedHeader, payload} = await verify(jwt, jwks);
-console.log(protectedHeader, payload)
+const { protectedHeader, payload } = await verify(jwt, jwks);
+console.log(protectedHeader, payload);
 ```
 
 ### Verify a JWT signature (JWS)
@@ -105,8 +103,7 @@ const jwt = new SignJWT(crypto)
   .setIssuedAt();
 
 // get signed jwt
-const signedJwt = jwt.signed();
-
+const signedJwt = jwt.sign();
 ```
 
 ### JWK thumbprint
@@ -116,13 +113,13 @@ import { thumbprint } from '@pagopa/io-react-native-jwt';
 
 // ...
 const pubJwk = {
-    crv: 'P-256',
-    kty: 'EC',
-    x: 'qrJrj.....',
-    y: '1H0cW.....',
-  };
+  crv: 'P-256',
+  kty: 'EC',
+  x: 'qrJrj.....',
+  y: '1H0cW.....',
+};
 const thumbprint = await thumbprint(pubJwk);
-console.log(thumbprint)
+console.log(thumbprint);
 ```
 
 ##  Signature format

@@ -60,7 +60,7 @@ export default function App() {
         iss: 'PagoPa',
       })
       .setProtectedHeader({ typ: 'JWT' })
-      .signed();
+      .sign();
 
     verifyJwtSignature(signedJwt, pk);
   };

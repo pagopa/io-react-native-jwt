@@ -28,8 +28,7 @@ import type { CryptoContext } from 'src/utils/crypto';
  *   .setExpirationTime('2h')
  *
  * jwt.data()
- * await jwt.unsigned()
- * await jwt.signed()
+ * await jwt.sign()
  * ```
  */
 
@@ -61,7 +60,7 @@ export class SignJWT extends ProduceJWT {
    * Return a JWT without signature (`header.payload`).
    *
    */
-  async unsigned(): Promise<string> {
+  private async unsigned(): Promise<string> {
     const { alg } = await this.getSelectedSigningAlgorithm();
 
     return [{ ...this._protectedHeader, alg }, this._payload]
@@ -84,7 +83,7 @@ export class SignJWT extends ProduceJWT {
    * Return a signed JWT.
    *
    */
-  async signed(): Promise<string> {
+  async sign(): Promise<string> {
     const unsigned = await this.unsigned();
     const signature = await this.crypto.getSignature(unsigned);
 

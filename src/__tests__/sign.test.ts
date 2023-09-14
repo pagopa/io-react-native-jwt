@@ -42,7 +42,7 @@ describe('Sign JWT', function () {
     const signedJwt = await new SignJWT(mockCrypto)
       .setPayload(jwtPayload)
       .setProtectedHeader(jwtHeader)
-      .signed();
+      .sign();
 
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
@@ -53,7 +53,7 @@ describe('Sign JWT', function () {
     const signed = await new SignJWT(mockCrypto)
       .setPayload(jwtPayload)
       .setProtectedHeader({ alg: 'RS512' /* any alg */ })
-      .signed();
+      .sign();
 
     const decoded = SignJWT.decode(signed);
 
@@ -71,7 +71,7 @@ describe('Sign JWT', function () {
       const signed = await new SignJWT(mockCrypto)
         .setPayload(jwtPayload)
         .setProtectedHeader(jwtHeader)
-        .signed();
+        .sign();
 
       const decoded = SignJWT.decode(signed);
 
