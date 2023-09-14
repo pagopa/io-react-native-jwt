@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { SupportedAlgorithm } from './algorithms';
 
 export interface JWTDecodeResult {
   /** JWT Claims Set. */
@@ -37,7 +38,7 @@ export interface JoseHeaderParameters {
 /** Recognized JWS Header Parameters, any other Header Members may also be present. */
 export interface JWSHeaderParameters extends JoseHeaderParameters {
   /** JWS "alg" (Algorithm) Header Parameter. */
-  alg?: string;
+  alg?: SupportedAlgorithm;
 
   /**
    * This JWS Extension Header Parameter modifies the JWS Payload representation and the JWS Signing
@@ -52,9 +53,9 @@ export interface JWSHeaderParameters extends JoseHeaderParameters {
   [propName: string]: unknown;
 }
 
-/** Recognized Compact JWS Header Parameters, any other Header Members may also be present. */
-export interface CompactJWSHeaderParameters extends JWSHeaderParameters {
-  alg: string;
+/** JOSE Header for an unsecued JWT */
+export interface JWTUnsecuredHeaderParameters extends JoseHeaderParameters {
+  alg?: 'none';
 }
 
 /** Recognized JWE Header Parameters, any other Header members may also be present. */

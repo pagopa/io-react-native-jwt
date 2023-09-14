@@ -1,7 +1,7 @@
 import type {
-  JWSHeaderParameters,
   JWTClaimVerificationOptions,
   JWTPayload,
+  JWTUnsecuredHeaderParameters,
 } from '../types';
 
 import { JWTInvalid } from '../utils/errors';
@@ -11,7 +11,7 @@ import { decodeBase64, encodeBase64 } from '../utils/base64';
 
 export interface UnsecuredResult {
   payload: JWTPayload;
-  header: JWSHeaderParameters;
+  header: JWTUnsecuredHeaderParameters;
 }
 
 /**
@@ -86,18 +86,18 @@ export class UnsecuredJWT extends ProduceJWT {
       throw new JWTInvalid('Invalid Unsecured JWT');
     }
 
-    let header: JWSHeaderParameters;
+    let header: JWTUnsecuredHeaderParameters;
     try {
       let decoded = decodeBase64(encodedHeader!);
       header = JSON.parse(decoded);
-      if (header.alg !== 'none') throw new Error();
+      if ('alg' in header && header.alg !== 'none') throw new Error();
     } catch {
       throw new JWTInvalid('Invalid Unsecured JWT');
     }
 
     let payload = UnsecuredJWT.decodePayload(encodedPayload, options);
 
-    return { payload, header };
+    return { payload, header: JSON.parse(decodeBase64(encodedHeader!)) };
   }
 
   /**
