@@ -1,6 +1,6 @@
 {
   "name": "@pagopa/io-react-native-jwt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Native support for JWT",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -90,7 +90,7 @@
   "engines": {
     "node": ">= 16.0.0"
   },
-  "packageManager": "^yarn@1.22.15",
+  "packageManager": "^yarn@1.22.21",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
