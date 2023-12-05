@@ -78,7 +78,7 @@ PODS:
   - OpenSSL-Universal (1.1.1100)
   - pagopa-io-react-native-crypto (0.2.3):
     - React-Core
-  - pagopa-io-react-native-jwt (0.5.0):
+  - pagopa-io-react-native-jwt (1.0.0):
     - JOSESwift (~> 2.3)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -687,7 +687,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   pagopa-io-react-native-crypto: 93f984df8711eb72f3fb030eca51be6268fc96d6
-  pagopa-io-react-native-jwt: 9259f417a86101afe7c550b9d31dce7e7f18c162
+  pagopa-io-react-native-jwt: 637df21a8a7839c70e52c4a7614a04cca7335fb3
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c52ee8fb2b35c1b54031dd8e92d88ad4dba8f2ce
   RCTTypeSafety: 75fa444becadf0ebfa0a456b8c64560c7c89c7df
@@ -726,4 +726,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 62d711153542b9a04ba1a46be5495618cd5bff86
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2

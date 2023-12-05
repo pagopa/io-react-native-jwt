@@ -18,7 +18,6 @@ import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.RSAKey
-import com.nimbusds.jwt.SignedJWT
 import org.json.JSONObject
 import java.security.MessageDigest
 
@@ -37,7 +36,7 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun verify(token: String, jwk: ReadableMap, promise: Promise) {
     try {
-      val signedJWT = SignedJWT.parse(token)
+      val signedJWT = CustomSignedJWT.parse(token)
       val jwkJson = JSONObject(jwk.toHashMap())
       var isValid = false
 

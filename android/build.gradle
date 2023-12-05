@@ -83,7 +83,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.nimbusds:nimbus-jose-jwt:8.0'
+  implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
   implementation 'org.bouncycastle:bcprov-jdk15on:[1.56,)'
 
 }
