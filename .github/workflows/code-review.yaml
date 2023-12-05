@@ -13,10 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Workaround suggested in https://github.com/actions/setup-node/issues/899#issuecomment-1823139737 
-      - name: Enable Corepack before setting up Node
-        run: corepack enable
-
       - name: Setup
         uses: ./.github/actions/setup
 

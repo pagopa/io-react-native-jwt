@@ -8,6 +8,14 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
+    # Workaround suggested in https://github.com/actions/setup-node/issues/899#issuecomment-1823139737 
+    - name: Enable Corepack before setting up Node
+      run: corepack enable
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with: 
+        node-version-file: .nvmrc
+        cache: yarn
 
     - name: Cache dependencies
       id: yarn-cache
