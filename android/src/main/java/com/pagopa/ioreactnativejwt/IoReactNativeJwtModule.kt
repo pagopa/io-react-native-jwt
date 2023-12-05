@@ -20,6 +20,7 @@ import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jose.util.JSONObjectUtils
 import com.nimbusds.jose.util.StandardCharset
 import org.json.JSONObject
 import java.security.MessageDigest
@@ -46,7 +47,10 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
         throw ParseException("Unexpected number of Base64URL parts, must be three", 0)
       }
 
-      val header = JWSHeader.parse(parts[0])
+      val headerString = parts[0]
+      val headerJson = JSONObjectUtils.parse(headerString.decodeToString(), -1);
+      val header = JWSHeader.parse(headerJson, headerString);
+
       val payload = Payload(parts[1])
       val signature = parts[2]
 
