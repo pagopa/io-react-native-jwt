@@ -90,6 +90,7 @@
   "engines": {
     "node": ">= 16.0.0"
   },
+  "packageManager": "^yarn@3.6.4",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
