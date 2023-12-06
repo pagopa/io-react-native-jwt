@@ -2658,12 +2658,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pagopa/io-react-native-crypto@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@pagopa/io-react-native-crypto@npm:0.2.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: fb489aebd7b79db31392f7d924490ea5c0b3943a1afa5d32e6ed6dcd1de992ef9fcdec695c248a7b6add252e0813910df80196007c45b22ad5403f66ffc1491b
+  languageName: node
+  linkType: hard
+
 "@pagopa/io-react-native-jwt@workspace:.":
   version: 0.0.0-use.local
   resolution: "@pagopa/io-react-native-jwt@workspace:."
   dependencies:
     "@commitlint/config-conventional": ^17.0.2
     "@evilmartians/lefthook": ^1.2.2
+    "@pagopa/io-react-native-crypto": ^0.2.3
     "@react-native-community/eslint-config": ^3.0.2
     "@release-it/conventional-changelog": ^5.0.0
     "@types/jest": ^28.1.2
