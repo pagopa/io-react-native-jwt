@@ -21,6 +21,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
+          corepack-enable: true
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
