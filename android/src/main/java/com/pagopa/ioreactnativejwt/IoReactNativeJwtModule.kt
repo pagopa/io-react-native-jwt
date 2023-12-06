@@ -7,9 +7,11 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
+import com.nimbusds.jose.JOSEObject
 import com.nimbusds.jose.JWEEncrypter
 import com.nimbusds.jose.JWEHeader
 import com.nimbusds.jose.JWEObject
+import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.Payload
 import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.nimbusds.jose.crypto.RSAEncrypter
@@ -18,9 +20,11 @@ import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.RSAKey
-import com.nimbusds.jwt.SignedJWT
+import com.nimbusds.jose.util.JSONObjectUtils
+import com.nimbusds.jose.util.StandardCharset
 import org.json.JSONObject
 import java.security.MessageDigest
+import java.text.ParseException
 
 
 class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
@@ -37,7 +41,21 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun verify(token: String, jwk: ReadableMap, promise: Promise) {
     try {
-      val signedJWT = SignedJWT.parse(token)
+
+      val parts = JOSEObject.split(token)
+      if (parts.size != 3) {
+        throw ParseException("Unexpected number of Base64URL parts, must be three", 0)
+      }
+
+      val headerString = parts[0]
+      val headerJson = JSONObjectUtils.parse(headerString.decodeToString(), -1);
+      val header = JWSHeader.parse(headerJson, headerString);
+
+      val payload = Payload(parts[1])
+      val signature = parts[2]
+
+      var signingInput = header.toBase64URL().toString() + '.' + payload.toBase64URL().toString();
+      val signingInputByteArray = signingInput.toByteArray(StandardCharset.UTF_8)
       val jwkJson = JSONObject(jwk.toHashMap())
       var isValid = false
 
@@ -45,12 +63,12 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
         val internalJwk = ECKey.parse(jwkJson.toString())
         val verifier = ECDSAVerifier(internalJwk)
         verifier.jcaContext.provider = BouncyCastleProviderSingleton.getInstance()
-        isValid = signedJWT.verify(verifier)
+        isValid = verifier.verify(header, signingInputByteArray, signature);
       } else {
         val internalJwk = RSAKey.parse(jwkJson.toString())
         val verifier = RSASSAVerifier(internalJwk)
         verifier.jcaContext.provider = BouncyCastleProviderSingleton.getInstance()
-        isValid = signedJWT.verify(verifier)
+        isValid = verifier.verify(header, signingInputByteArray, signature);
       }
       promise.resolve(isValid)
 

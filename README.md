@@ -5,7 +5,7 @@ Provides much greater performance for decoding, signing and verifying JWTs!
 
 🚀 Use only native functions via the following libraries:
 
-- 🤖 [nimbus-jose-jwt](https://github.com/felx/nimbus-jose-jwt/) on Android
+- 🤖 [nimbus-jose-jwt](https://bitbucket.org/connect2id/nimbus-jose-jwt) on Android
 - 📱 [JOSESwift](https://github.com/airsidemobile/JOSESwift/) on iOS
 
 ## Installation
