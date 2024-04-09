@@ -6,11 +6,11 @@ const jwtPayload: JWTPayload = {
   iss: 'demo',
   sub: 'demo',
   iat: 1675206000,
-  exp: 1706742000,
+  exp: 32512187377,
 };
 
 const encodedUnsecureJwt =
-  'eyJhbGciOiJub25lIn0.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.';
+  'eyJhbGciOiJub25lIn0.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjozMjUxMjE4NzM3N30.';
 
 const encodedSecuredJwt =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2OTM4MTY4OTEsImV4cCI6MTcyNTM1Mjg5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.27lkkQduvc_SCmOLzlF6wFhoiUh0eC9g-30MuBERqcI';
