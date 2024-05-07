@@ -78,7 +78,7 @@ PODS:
   - OpenSSL-Universal (1.1.1100)
   - pagopa-io-react-native-crypto (0.2.3):
     - React-Core
-  - pagopa-io-react-native-jwt (1.1.0):
+  - pagopa-io-react-native-jwt (1.2.0):
     - JOSESwift (~> 2.3)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -667,7 +667,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 57d2868c099736d80fcd648bf211b4431e51a558
+  boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: a31ac2336aea59512b5b982f8e231f65d7d148e1
@@ -687,7 +687,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   pagopa-io-react-native-crypto: 93f984df8711eb72f3fb030eca51be6268fc96d6
-  pagopa-io-react-native-jwt: 9e8cc8aeba411aee33a575816bb79ae5f9074a2b
+  pagopa-io-react-native-jwt: 662d4e722715996758b079774abea1996b057467
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: b6cea797b684c6d8d82ba0107cef58cbb679afdb
   RCTTypeSafety: d2eb5e0e8af9181b24034f5171f9b659994b4678
