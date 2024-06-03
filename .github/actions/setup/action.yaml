@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3
       with:
         node-version-file: .nvmrc
     # Workaround suggested in https://github.com/actions/setup-node/issues/899#issuecomment-1823139737
@@ -13,14 +13,14 @@ runs:
       shell: bash
       run: corepack enable
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3
       with:
         node-version-file: .nvmrc
         cache: yarn
 
     - name: Cache dependencies
       id: yarn-cache
-      uses: actions/cache@v3
+      uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3
       with:
         path: |
           **/node_modules
