@@ -2272,13 +2272,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pagopa/io-react-native-crypto@github:pagopa/io-react-native-crypto#upgrade-rn-to-0.75":
-  version: 0.3.0
-  resolution: "@pagopa/io-react-native-crypto@https://github.com/pagopa/io-react-native-crypto.git#commit=077ccb9e6f7955cb59769c703e8af63a970ef875"
+"@pagopa/io-react-native-crypto@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@pagopa/io-react-native-crypto@npm:0.2.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 5fcfb65939f0545722b647be735a19779d933539f4f3edaeac4de0057d923dfe01f16f2c537cdc8eee3e15d225da688b2bf5da958f6093acd56b729f01b66495
+  checksum: fb489aebd7b79db31392f7d924490ea5c0b3943a1afa5d32e6ed6dcd1de992ef9fcdec695c248a7b6add252e0813910df80196007c45b22ad5403f66ffc1491b
   languageName: node
   linkType: hard
 
@@ -3025,7 +3025,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
-    "@pagopa/io-react-native-crypto": "github:pagopa/io-react-native-crypto#upgrade-rn-to-0.75"
+    "@pagopa/io-react-native-crypto": ^0.2.3
     "@react-native/babel-preset": 0.75.4
     "@react-native/eslint-config": ^0.75.4
     "@react-native/metro-config": ^0.75.4

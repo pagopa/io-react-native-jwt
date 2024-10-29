@@ -9,7 +9,7 @@
     "pods": "pod-install --quiet"
   },
   "dependencies": {
-    "@pagopa/io-react-native-crypto": "github:pagopa/io-react-native-crypto#upgrade-rn-to-0.75",
+    "@pagopa/io-react-native-crypto": "^0.2.3",
     "react": "18.3.1",
     "react-native": "0.75.4"
   },
