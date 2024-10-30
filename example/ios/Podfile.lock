@@ -8,27 +8,8 @@ PODS:
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
   - JOSESwift (2.4.0)
-  - pagopa-io-react-native-crypto (0.3.0):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
+  - pagopa-io-react-native-crypto (0.2.3):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - pagopa-io-react-native-jwt (1.2.0):
     - DoubleConversion
     - glog
@@ -1756,7 +1737,7 @@ SPEC CHECKSUMS:
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
-  pagopa-io-react-native-crypto: 70e911f8e99cd9bebb82a56321fb97abd5e8bbc1
+  pagopa-io-react-native-crypto: 93f984df8711eb72f3fb030eca51be6268fc96d6
   pagopa-io-react-native-jwt: 7011e1526da2b9f81caf7d2f9716256dfce582ce
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
@@ -1818,4 +1799,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a2c9d49bbf8a792d10e8a2f8dfebd03cf31e351c
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.0
