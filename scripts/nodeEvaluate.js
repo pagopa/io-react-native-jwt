@@ -1,6 +1,6 @@
 const turboDryJson = process.argv[2];
 
-const cacheStatus = JSON.parse(turboDryJson).tasks.find(
+const cacheStatus = JSON.parse(turboDryJson.trim()).tasks.find(
   (t) => t.task === 'build:android'
 ).cache.status;
 
