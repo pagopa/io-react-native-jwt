@@ -3031,6 +3031,7 @@ __metadata:
     "@react-native/metro-config": ^0.75.4
     "@types/metro-config": ^0.76.3
     babel-plugin-module-resolver: ^5.0.0
+    pod-install: ^0.1.0
     react: 18.3.1
     react-native: 0.75.4
   languageName: unknown
@@ -7177,6 +7178,15 @@ __metadata:
   dependencies:
     find-up: ^3.0.0
   checksum: 5bac346b7c7c903613c057ae3ab722f320716199d753f4a7d053d38f2b5955460f3e6ab73b4762c62fd3e947f58e04f1343e92089e7bb6091c90877406fcd8c8
+  languageName: node
+  linkType: hard
+
+"pod-install@npm:^0.1.0":
+  version: 0.1.39
+  resolution: "pod-install@npm:0.1.39"
+  bin:
+    pod-install: build/index.js
+  checksum: 200302341847251d4db25f950d15367f6f45f5358d87b18bf01054094f02b2572d007f73c8020b1565dd3e6b23f861965f9bad434873d3c8e834be0e7124fa3e
   languageName: node
   linkType: hard
 

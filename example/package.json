@@ -21,7 +21,8 @@
     "@react-native/eslint-config": "^0.75.4",
     "@react-native/metro-config": "^0.75.4",
     "@types/metro-config": "^0.76.3",
-    "babel-plugin-module-resolver": "^5.0.0"
+    "babel-plugin-module-resolver": "^5.0.0",
+    "pod-install": "^0.1.0"
   },
   "engines": {
     "node": ">=18"
