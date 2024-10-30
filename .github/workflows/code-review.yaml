@@ -67,7 +67,9 @@ jobs:
 
       - name: Check turborepo cache for Android
         run: |
-          TURBO_JSON=$(yarn --silent run turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json); TURBO_CACHE_STATUS=$(node scripts/nodeEvaluate.js $TURBO_JSON)
+          TURBO_JSON=$(yarn --silent run turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)
+
+          TURBO_CACHE_STATUS=$(node scripts/nodeEvaluate.js $TURBO_JSON)
 
           if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
             echo "turbo_cache_hit=1" >> $GITHUB_ENV
@@ -121,7 +123,9 @@ jobs:
 
       - name: Check turborepo cache for iOS
         run: |
-          TURBO_JSON=$(yarn --silent run turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json); TURBO_CACHE_STATUS=$(node scripts/nodeEvaluate.js $TURBO_JSON)
+          TURBO_JSON=$(yarn --silent run turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)
+
+          TURBO_CACHE_STATUS=$(node scripts/nodeEvaluate.js $TURBO_JSON)
 
           if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
             echo "turbo_cache_hit=1" >> $GITHUB_ENV
