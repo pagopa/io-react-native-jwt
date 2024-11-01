@@ -1,4 +1,4 @@
-import type { JWK } from 'src/types';
+import type { JWK } from '../types';
 
 /**
  * The interface of a cryptographic context to be used to sign tokens.

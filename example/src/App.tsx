@@ -20,7 +20,7 @@ import {
 } from '@pagopa/io-react-native-jwt';
 
 import { generate, sign, getPublicKey } from '@pagopa/io-react-native-crypto';
-import type { JWK } from 'src/types';
+import type { JWK } from '../../src/types';
 
 // Factory to create context bound to a key
 const createCryptoContext = (keyTag: string) => ({

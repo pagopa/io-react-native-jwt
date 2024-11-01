@@ -1,4 +1,4 @@
-package com.ioreactnativejwtexample;
+package ioreactnativejwt.example
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
