@@ -1,5 +1,5 @@
-import { btoa, atob } from 'abab';
 import { JOSEError } from './errors';
+import { Base64 } from 'js-base64';
 
 /*
  * In Base64 encoding, the length of an output-encoded String
@@ -14,21 +14,11 @@ import { JOSEError } from './errors';
  * ('=') is not URL safe.
  */
 export function encodeBase64(value: string): string {
-  let encoded = btoa(value);
-  if (encoded) {
-    return removePadding(encoded);
-  } else {
-    throw new JOSEError('Unable to encode string to base64');
-  }
+  return Base64.encode(value, true);
 }
 
 export function decodeBase64(value: string): string {
-  let decoded = atob(addPadding(value));
-  if (decoded) {
-    return decoded;
-  } else {
-    throw new JOSEError('Unable to decode base64 string');
-  }
+  return Base64.decode(value);
 }
 
 export function removePadding(encoded: string): string {

@@ -2496,13 +2496,13 @@ __metadata:
     "@release-it/conventional-changelog": ^5.0.0
     "@types/jest": ^29.5.5
     "@types/react": ^18.2.44
-    abab: ^2.0.6
     commitlint: ^17.0.2
     del-cli: ^5.1.0
     eslint: ^8.51.0
     eslint-config-prettier: ^9.0.0
     eslint-plugin-prettier: ^5.0.1
     jest: ^29.7.0
+    js-base64: ^3.7.7
     prettier: ^3.0.3
     react: 18.3.1
     react-native: 0.76.1
@@ -3405,13 +3405,6 @@ __metadata:
   bin:
     JSONStream: ./bin.js
   checksum: 2605fa124260c61bad38bb65eba30d2f72216a78e94d0ab19b11b4e0327d572b8d530c0c9cc3b0764f727ad26d39e00bf7ebad57781ca6368394d73169c59e46
-  languageName: node
-  linkType: hard
-
-"abab@npm:^2.0.6":
-  version: 2.0.6
-  resolution: "abab@npm:2.0.6"
-  checksum: 6ffc1af4ff315066c62600123990d87551ceb0aafa01e6539da77b0f5987ac7019466780bf480f1787576d4385e3690c81ccc37cfda12819bf510b8ab47e5a3e
   languageName: node
   linkType: hard
 
@@ -8490,6 +8483,13 @@ __metadata:
     "@sideway/formula": ^3.0.1
     "@sideway/pinpoint": ^2.0.0
   checksum: 66ed454fee3d8e8da1ce21657fd2c7d565d98f3e539d2c5c028767e5f38cbd6297ce54df8312d1d094e62eb38f9452ebb43da4ce87321df66cf5e3f128cbc400
+  languageName: node
+  linkType: hard
+
+"js-base64@npm:^3.7.7":
+  version: 3.7.7
+  resolution: "js-base64@npm:3.7.7"
+  checksum: d1b02971db9dc0fd35baecfaf6ba499731fb44fe3373e7e1d6681fbd3ba665f29e8d9d17910254ef8104e2cb8b44117fe4202d3dc54c7cafe9ba300fe5433358
   languageName: node
   linkType: hard
 
