@@ -9,7 +9,7 @@ import {
 } from '../algorithms';
 
 import { derToJose } from '../utils/asn1';
-import type { CryptoContext } from 'src/utils/crypto';
+import type { CryptoContext } from '../utils/crypto';
 
 /**
  * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.

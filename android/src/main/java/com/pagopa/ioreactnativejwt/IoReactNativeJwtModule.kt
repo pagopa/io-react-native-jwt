@@ -56,7 +56,7 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
 
       var signingInput = header.toBase64URL().toString() + '.' + payload.toBase64URL().toString();
       val signingInputByteArray = signingInput.toByteArray(StandardCharset.UTF_8)
-      val jwkJson = JSONObject(jwk.toHashMap())
+      val jwkJson = JSONObject(jwk.toHashMap() as Map<*, *>?)
       var isValid = false
 
       if (isECKey(jwkJson)) {
@@ -80,7 +80,7 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun thumbprint(jwk: ReadableMap, promise: Promise) {
     try {
-      val jwkJson = JSONObject(jwk.toHashMap())
+      val jwkJson = JSONObject(jwk.toHashMap() as Map<*, *>?)
       var thumbprint = ""
       if (isECKey(jwkJson)) {
         val internalJwk = ECKey.parse(jwkJson.toString())
@@ -127,8 +127,8 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun enc(token: String, header: ReadableMap, jwk: ReadableMap, promise: Promise) {
     try {
-      val jwkJson = JSONObject(jwk.toHashMap())
-      val headerJson = JSONObject(header.toHashMap())
+      val jwkJson = JSONObject(jwk.toHashMap() as Map<*, *>?)
+      val headerJson = JSONObject(header.toHashMap() as Map<*, *>?)
       val payload =  Payload(token)
       if (isECKey(jwkJson)) {
         promise.reject(Exception("EC is not supported"))

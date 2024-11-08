@@ -14,15 +14,17 @@ buildscript {
   }
 }
 
+def reactNativeArchitectures() {
+  def value = rootProject.getProperties().get("reactNativeArchitectures")
+  return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
+}
+
 def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-
-
-def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -36,14 +38,24 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["IoReactNativeJwt_" + name]).toInteger()
 }
 
-def isAGPVersionGreaterThan(version) {
-  def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
-  return agpVersion > version
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def major = parsed[0].toInteger()
+  def minor = parsed[1].toInteger()
+
+  // Namespace support was added in 7.3.0
+  return (major == 7 && minor >= 3) || major >= 8
 }
 
 android {
-  if (isAGPVersionGreaterThan(7)) {
+  if (supportsNamespace()) {
     namespace "com.pagopa.ioreactnativejwt"
+
+    sourceSets {
+      main {
+        manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+    }
   }
 
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
@@ -51,8 +63,9 @@ android {
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
-    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
   }
+
   buildTypes {
     release {
       minifyEnabled false
@@ -86,12 +99,4 @@ dependencies {
   implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
   implementation 'org.bouncycastle:bcprov-jdk15on:[1.56,)'
 
-}
-
-if (isNewArchitectureEnabled()) {
-  react {
-    jsRootDir = file("../src/")
-    libraryName = "IoReactNativeJwt"
-    codegenJavaPackageName = "com.pagopa.ioreactnativejwt"
-  }
 }
