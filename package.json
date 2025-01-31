@@ -1,6 +1,6 @@
 {
   "name": "@pagopa/io-react-native-jwt",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Native support for JWT",
   "source": "src/index",
   "main": "lib/commonjs/index",
