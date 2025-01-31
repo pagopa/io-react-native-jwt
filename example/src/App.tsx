@@ -46,6 +46,16 @@ export default function App() {
     n: 'vpR83qn-xSu5asxFeKjl6rAMNNxze2R7Ut_oDTw2ERoAwRuIrrAceH_JU0bUiPD9Rwjo1000W7yN1T_w8N2cIh2uk3qll-CT9tUO1rifER7BsLbNHHpPDKYxuDZknLp7Ml-OMlb75i9WvHgRVqXVrIepfS-BM30u1eoxNygetWz_X-qkRv-5JXyGtL54Tc0x8oARsD-cMM6_rhgBJsx494cvwV5hw80j260WVtI8at727ZpXL1SpHVTI3R2m8g-xDkrRrlW8GbRbZ1WgJDVBJH5TAFGxEAd-Fva7ig2XC_zxrNpAupLDvwShIeIVpfmqkLsHlWGbIFU_v9bvgNmvHQ',
   };
 
+  const ecEncJwk = {
+    kty: 'EC',
+    use: 'enc',
+    crv: 'P-256',
+    kid: 'ebedaab1-4df4-44a7-8588-7dcf07434a6d',
+    x: 'IrxU7LHlxBligUjnQnra-Lfx2gKGGMDgZwQQE7RszPo',
+    y: 'yRBrbX_0iMlsrDKEh5g8xfGgadBr0VnVQQWk4SGq71Y',
+    alg: 'ECDH-ES',
+  };
+
   const generateAndSign = async () => {
     loading();
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
@@ -106,7 +116,7 @@ export default function App() {
       .catch(showError);
   };
 
-  const encryptPlaintext = (plaintext: String, encKey: JWK) => {
+  const encryptPlaintextRsa = (plaintext: String, encKey: JWK) => {
     loading();
     const jwe = new EncryptJwe(plaintext, {
       alg: 'RSA-OAEP-256',
@@ -114,6 +124,19 @@ export default function App() {
     }).encrypt(encKey);
     jwe.then(setResult).catch(showError);
   };
+
+  const encryptPlaintextEcdh = (plaintext: String, encKey: JWK) => {
+    loading();
+    const jwe = new EncryptJwe(plaintext, {
+      alg: 'ECDH-ES',
+      enc: 'A128CBC-HS256',
+    }).encrypt(encKey);
+    jwe.then(setResult).catch(showError);
+  };
+
+  React.useEffect(() => {
+    console.log(result);
+  }, [result]);
 
   const verifyWithJwks = () => {
     loading();
@@ -180,8 +203,12 @@ export default function App() {
           }
         />
         <Button
-          title="Generate JWE"
-          onPress={() => encryptPlaintext('hello', encJwk)}
+          title="Generate JWE (RSA)"
+          onPress={() => encryptPlaintextRsa('hello', encJwk)}
+        />
+        <Button
+          title="Generate JWE (EC)"
+          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk)}
         />
         <Button title="Verify with JWKSet" onPress={() => verifyWithJwks()} />
       </View>
