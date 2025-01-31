@@ -2,7 +2,6 @@ package com.pagopa.ioreactnativejwt
 
 import android.util.Base64
 import android.util.Base64.DEFAULT
-import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
