@@ -61,10 +61,10 @@ export interface JWTUnsecuredHeaderParameters extends JoseHeaderParameters {
 /** Recognized JWE Header Parameters, any other Header members may also be present. */
 export interface JWEHeaderParameters extends JoseHeaderParameters {
   /** JWE "alg" (Algorithm) Header Parameter. */
-  alg?: 'RSA-OAEP-256' | 'RSA-OAEP' | 'ECDH-ES';
+  alg?: 'RSA-OAEP-256' | 'RSA-OAEP';
 
   /** JWE "enc" (Encryption Algorithm) Header Parameter. */
-  enc?: 'A256CBC-HS512' | 'A128CBC-HS256' | 'A128CBC-HS256';
+  enc?: 'A256CBC-HS512' | 'A128CBC-HS256';
 
   /** Any other JWE Header member. */
   [propName: string]: unknown;
