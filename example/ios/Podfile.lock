@@ -7,7 +7,7 @@ PODS:
   - hermes-engine (0.76.1):
     - hermes-engine/Pre-built (= 0.76.1)
   - hermes-engine/Pre-built (0.76.1)
-  - JOSESwift (2.4.0)
+  - JOSESwift (3.0.0)
   - pagopa-io-react-native-crypto (0.2.3):
     - RCT-Folly
     - RCTRequired
@@ -15,11 +15,11 @@ PODS:
     - React-Codegen
     - React-Core
     - ReactCommon/turbomodule/core
-  - pagopa-io-react-native-jwt (1.2.0):
+  - pagopa-io-react-native-jwt (1.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
-    - JOSESwift (~> 2.3)
+    - JOSESwift (~> 3.0)
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
@@ -1758,9 +1758,9 @@ SPEC CHECKSUMS:
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 46f1ffbf0297f4298862068dd4c274d4ac17a1fd
-  JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
+  JOSESwift: 7784b1b844194d0f534eb6ac4fba5af683bccc79
   pagopa-io-react-native-crypto: 4f58db16d6100eb26155948bd7517e5e5f6053f4
-  pagopa-io-react-native-jwt: f7d3312ef152b8c045be6ddc0b2afe2e5b1e8fd8
+  pagopa-io-react-native-jwt: 2ff95200df33349d36346609885408cfb3454a00
   RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: fde92935b3caa6cb65cbff9fbb7d3a9867ffb259
   RCTRequired: 75c6cee42d21c1530a6f204ba32ff57335d19007
@@ -1819,7 +1819,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 865bafc5c17ec2181620ced1a32c39c38ab2951d
   ReactCommon: 422e364463f33e336fc4db196aeb50fd801d90d6
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: 157bed1c62656587df4639d4dc29714898f8fb10
+  Yoga: db69236006b8b1c6d55ab453390c882306cbf219
 
 PODFILE CHECKSUM: a2c9d49bbf8a792d10e8a2f8dfebd03cf31e351c
 
