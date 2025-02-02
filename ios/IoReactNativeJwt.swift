@@ -1,5 +1,6 @@
 import JOSESwift
 import CommonCrypto
+import Foundation
 
 
 @objc(IoReactNativeJwt)
@@ -23,6 +24,8 @@ class IoReactNativeJwt: NSObject {
                 return KeyManagementAlgorithm.RSAOAEP
             case "RSA-OAEP-256":
                 return KeyManagementAlgorithm.RSAOAEP256
+            case "ECDH-ES":
+                return KeyManagementAlgorithm.ECDH_ES
         default:
             throw HeaderError.invalidAlg("alg value not supported")
         }
@@ -52,11 +55,11 @@ class IoReactNativeJwt: NSObject {
                 if isECKey(jwk:jwk) {
                     let ecJwk = try ECPublicKey(data: publicKeyJson)
                     let publicKey = try ecJwk.converted(to: SecKey.self)
-                    verifier = Verifier(verifyingAlgorithm: jws.header.algorithm!, key: publicKey)!
+                  verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
                 } else {
                     let rsaJwk = try RSAPublicKey(data: publicKeyJson)
                     let publicKey = try rsaJwk.converted(to: SecKey.self)
-                    verifier = Verifier(verifyingAlgorithm: jws.header.algorithm!, key: publicKey)!
+                  verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
                 }
                 _ = try jws.validate(using: verifier!)
                 resolve(true)
@@ -193,12 +196,17 @@ class IoReactNativeJwt: NSObject {
                 let payload = Payload(message)
 
                 if isECKey(jwk:jwk) {
-                    reject("Error", "EC not supported", nil);
+                    // --- ECDH-ES / EC Key ---
+                    let ecPublicKey = try ECPublicKey(data: publicKeyJson)
+                    let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: ecPublicKey)!
+                    
+                    let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
+
+                    resolve(jwe.compactSerializedString)
                 } else {
                     let rsaJwk = try RSAPublicKey(data: publicKeyJson)
                     let publicKey = try rsaJwk.converted(to: SecKey.self)
                     let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: publicKey)!
-
                     let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
 
                     resolve(jwe.compactSerializedString)
