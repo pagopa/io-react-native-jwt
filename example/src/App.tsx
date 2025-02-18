@@ -129,7 +129,7 @@ export default function App() {
     loading();
     const jwe = new EncryptJwe(plaintext, {
       alg: 'ECDH-ES',
-      enc: 'A128CBC-HS256',
+      enc: 'A256GCM',
     }).encrypt(encKey);
     jwe.then(setResult).catch(showError);
   };
