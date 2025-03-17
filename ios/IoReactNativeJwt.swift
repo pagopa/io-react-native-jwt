@@ -200,7 +200,11 @@ class IoReactNativeJwt: NSObject {
                 if isECKey(jwk:jwk) {
                     // --- ECDH-ES / EC Key ---
                     let ecPublicKey = try ECPublicKey(data: publicKeyJson)
-                    let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: ecPublicKey)!
+                    guard let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: ecPublicKey)
+                    else {
+                      reject("Error", "Error creating Encrypter, incompatible key", nil)
+                      return
+                    }
                     
                     let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
 
@@ -208,7 +212,11 @@ class IoReactNativeJwt: NSObject {
                 } else {
                     let rsaJwk = try RSAPublicKey(data: publicKeyJson)
                     let publicKey = try rsaJwk.converted(to: SecKey.self)
-                    let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: publicKey)!
+                    guard let encrypter = Encrypter(keyManagementAlgorithm: try getKeyManagmentAlg(header: header), contentEncryptionAlgorithm: try getContentEncryptionAlgorithm(header: header), encryptionKey: publicKey)
+                    else {
+                      reject("Error", "Error creating Encrypter, incompatible key", nil)
+                      return
+                    }
                     let jwe = try JWE(header: jweHeader, payload: payload, encrypter: encrypter)
 
                     resolve(jwe.compactSerializedString)
