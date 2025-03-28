@@ -15,7 +15,7 @@ PODS:
     - React-Codegen
     - React-Core
     - ReactCommon/turbomodule/core
-  - pagopa-io-react-native-jwt (1.5.0):
+  - pagopa-io-react-native-jwt (2.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1760,7 +1760,7 @@ SPEC CHECKSUMS:
   hermes-engine: 46f1ffbf0297f4298862068dd4c274d4ac17a1fd
   JOSESwift: 7784b1b844194d0f534eb6ac4fba5af683bccc79
   pagopa-io-react-native-crypto: 4f58db16d6100eb26155948bd7517e5e5f6053f4
-  pagopa-io-react-native-jwt: 2ff95200df33349d36346609885408cfb3454a00
+  pagopa-io-react-native-jwt: 504efa2b740fc5f143b9b08c19be5532dfe52d31
   RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: fde92935b3caa6cb65cbff9fbb7d3a9867ffb259
   RCTRequired: 75c6cee42d21c1530a6f204ba32ff57335d19007
