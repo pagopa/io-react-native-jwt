@@ -40,6 +40,8 @@ class IoReactNativeJwt: NSObject {
                 return ContentEncryptionAlgorithm.A256CBCHS512
             case "A256GCM":
                 return ContentEncryptionAlgorithm.A256GCM
+            case "A128GCM":
+              return ContentEncryptionAlgorithm.A128GCM
         default:
             throw HeaderError.invalidAlg("enc value not supported")
         }

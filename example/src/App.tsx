@@ -125,11 +125,15 @@ export default function App() {
     jwe.then(setResult).catch(showError);
   };
 
-  const encryptPlaintextEcdh = (plaintext: String, encKey: JWK) => {
+  const encryptPlaintextEcdh = (
+    plaintext: String,
+    encKey: JWK,
+    enc: ConstructorParameters<typeof EncryptJwe>[1]['enc']
+  ) => {
     loading();
     const jwe = new EncryptJwe(plaintext, {
       alg: 'ECDH-ES',
-      enc: 'A256GCM',
+      enc,
     }).encrypt(encKey);
     jwe.then(setResult).catch(showError);
   };
@@ -207,8 +211,12 @@ export default function App() {
           onPress={() => encryptPlaintextRsa('hello', encJwk)}
         />
         <Button
-          title="Generate JWE (EC)"
-          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk)}
+          title="Generate JWE (EC A256GCM)"
+          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A256GCM')}
+        />
+        <Button
+          title="Generate JWE (EC A128GCM)"
+          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A128GCM')}
         />
         <Button
           title="Generate JWE (RSA) (WrongKey)"
@@ -216,7 +224,7 @@ export default function App() {
         />
         <Button
           title="Generate JWE (EC) (WrongKey)"
-          onPress={() => encryptPlaintextEcdh('hello', encJwk)}
+          onPress={() => encryptPlaintextEcdh('hello', encJwk, 'A256GCM')}
         />
         <Button title="Verify with JWKSet" onPress={() => verifyWithJwks()} />
       </View>
