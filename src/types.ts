@@ -64,7 +64,12 @@ export interface JWEHeaderParameters extends JoseHeaderParameters {
   alg?: 'RSA-OAEP-256' | 'RSA-OAEP' | 'ECDH-ES';
 
   /** JWE "enc" (Encryption Algorithm) Header Parameter. */
-  enc?: 'A256CBC-HS512' | 'A128CBC-HS256' | 'A128CBC-HS256' | 'A256GCM';
+  enc?:
+    | 'A256CBC-HS512'
+    | 'A128CBC-HS256'
+    | 'A128CBC-HS256'
+    | 'A256GCM'
+    | 'A128GCM';
 
   /** Any other JWE Header member. */
   [propName: string]: unknown;
