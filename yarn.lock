@@ -2513,7 +2513,7 @@ __metadata:
     typedoc-plugin-markdown: ^3.15.3
     typedoc-plugin-mdn-links: ^3.0.3
     typescript: ^5.2.2
-    zod: ^3.22.4
+    zod: 4.3.6
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -13628,9 +13628,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.22.4":
-  version: 3.23.8
-  resolution: "zod@npm:3.23.8"
-  checksum: 15949ff82118f59c893dacd9d3c766d02b6fa2e71cf474d5aa888570c469dbf5446ac5ad562bb035bf7ac9650da94f290655c194f4a6de3e766f43febd432c5c
+"zod@npm:4.3.6":
+  version: 4.3.6
+  resolution: "zod@npm:4.3.6"
+  checksum: 19cec761b46bae4b6e7e861ea740f3f248e50a6671825afc8a5758e27b35d6f20ccde9942422fd5cf6f8b697f18bd05ef8bb33f5f2db112ab25cc628de2fae47
   languageName: node
   linkType: hard
