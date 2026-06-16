@@ -83,7 +83,7 @@
     "react": "18.3.1",
     "react-native": "0.76.1",
     "react-native-builder-bob": "^0.30.3",
-    "release-it": "^15.0.0",
+    "release-it": "^19.0.6",
     "turbo": "^1.10.7",
     "typedoc": "^0.24.8",
     "typedoc-plugin-markdown": "^3.15.3",
@@ -193,6 +193,6 @@
   },
   "dependencies": {
     "js-base64": "^3.7.7",
-    "zod": "^3.22.4"
+    "zod": "4.3.6"
   }
 }
