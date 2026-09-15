@@ -85,11 +85,9 @@ class IoReactNativeJwt: NSObject {
             let varlenS = try Data(ecSignature.skip(.integer).read(.integer))
             let fixlenR = Asn1IntegerConversion.toRaw(varlenR, of: coordinateOctetLength)
             let fixlenS = Asn1IntegerConversion.toRaw(varlenS, of: coordinateOctetLength)
-            let sign = fixlenR + fixlenS
-            resolve(String(
-                decoding: Data(sign).base64EncodedData(),
-                as: UTF8.self
-              ))
+            let sign: Data = fixlenR + fixlenS
+
+            resolve(sign.base64EncodedString())
 
         }
         catch {
