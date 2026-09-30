@@ -53,7 +53,7 @@ ___
 
 ### enc
 
-• `Optional` **enc**: ``"A256CBC-HS512"`` \| ``"A128CBC-HS256"``
+• `Optional` **enc**: ``"A256CBC-HS512"`` \| ``"A128CBC-HS256"``| ``"A256GCM"``
 
 JWE "enc" (Encryption Algorithm) Header Parameter.
 

@@ -13,12 +13,14 @@ import com.nimbusds.jose.JWEHeader
 import com.nimbusds.jose.JWEObject
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.Payload
+import com.nimbusds.jose.crypto.ECDHEncrypter
 import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.nimbusds.jose.crypto.RSAEncrypter
 import com.nimbusds.jose.crypto.RSASSAVerifier
 import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton
 import com.nimbusds.jose.crypto.impl.ECDSA.transcodeSignatureToConcat
 import com.nimbusds.jose.jwk.ECKey
+import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.util.JSONObjectUtils
 import com.nimbusds.jose.util.StandardCharset
@@ -124,23 +126,25 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
     }
   }
 
+
   @ReactMethod
   fun enc(token: String, header: ReadableMap, jwk: ReadableMap, promise: Promise) {
     try {
       val jwkJson = JSONObject(jwk.toHashMap() as Map<*, *>?)
       val headerJson = JSONObject(header.toHashMap() as Map<*, *>?)
-      val payload =  Payload(token)
-      if (isECKey(jwkJson)) {
-        promise.reject(Exception("EC is not supported"))
-      } else {
-        val publicKey = RSAKey.parse(jwkJson.toString())
-        val internalHeader = JWEHeader.parse(headerJson.toString())
-        val jweObject = JWEObject(internalHeader, payload)
-        val encrypter: JWEEncrypter = RSAEncrypter(publicKey)
-        jweObject.encrypt(encrypter)
-        val jweString = jweObject.serialize()
-        promise.resolve(jweString)
+      val payload = Payload(token)
+      val internalHeader = JWEHeader.parse(headerJson.toString())
+
+      val publicKey: JWK = JWK.parse(jwkJson.toString())
+      val encrypter: JWEEncrypter = when (publicKey) {
+        is ECKey -> ECDHEncrypter(publicKey)
+        is RSAKey -> RSAEncrypter(publicKey)
+        else -> throw IllegalArgumentException("Unsupported key type for encryption")
       }
+
+      val jweObject = JWEObject(internalHeader, payload)
+      jweObject.encrypt(encrypter)
+      promise.resolve(jweObject.serialize())
     } catch (ex: Exception) {
       promise.reject(ex)
     }
