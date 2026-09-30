@@ -1,22 +1,23 @@
 {
   "name": "@pagopa/io-react-native-jwt",
-  "version": "2.1.0",
+  "version": "2.2.4",
   "description": "Native support for JWT",
-  "source": "src/index",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./lib/typescript/module/src/index.d.ts",
-        "default": "./lib/module/index.js"
-      },
-      "require": {
-        "types": "./lib/typescript/commonjs/src/index.d.ts",
-        "default": "./lib/commonjs/index.js"
-      }
-    }
+  "keywords": [
+    "android",
+    "ios",
+    "react-native"
+  ],
+  "homepage": "https://github.com/pagopa/io-react-native-jwt#readme",
+  "bugs": {
+    "url": "https://github.com/pagopa/io-react-native-jwt/issues"
   },
+  "license": "MIT",
+  "author": "PagoPa (https://github.com/pagopa)",
+  "repository": "https://github.com/pagopa/io-react-native-jwt",
+  "source": "src/index",
+  "workspaces": [
+    "example"
+  ],
   "files": [
     "src",
     "lib",
@@ -37,6 +38,23 @@
     "!**/__mocks__",
     "!**/.*"
   ],
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/typescript/module/src/index.d.ts",
+        "default": "./lib/module/index.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/index.d.ts",
+        "default": "./lib/commonjs/index.js"
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "example": "yarn workspace io-react-native-jwt-example",
     "test": "jest",
@@ -50,20 +68,9 @@
     "bootstrap": "yarn example && yarn install && yarn example pods",
     "docs:generate": "typedoc"
   },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
-  "repository": "https://github.com/pagopa/io-react-native-jwt",
-  "author": "PagoPa (https://github.com/pagopa)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pagopa/io-react-native-jwt/issues"
-  },
-  "homepage": "https://github.com/pagopa/io-react-native-jwt#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+  "dependencies": {
+    "js-base64": "^3.7.7",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
@@ -90,54 +97,32 @@
     "typedoc-plugin-mdn-links": "^3.0.3",
     "typescript": "^5.2.2"
   },
-  "resolutions": {
-    "@types/react": "^18.2.44"
-  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
-  "packageManager": "yarn@3.6.1",
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
+  "resolutions": {
+    "@types/react": "^18.2.44"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular"
-      }
-    }
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
   },
   "eslintConfig": {
-    "root": true,
     "extends": [
       "@react-native",
       "prettier"
     ],
+    "root": true,
     "rules": {
-      "react/react-in-jsx-scope": "off",
       "prettier/prettier": [
         "error",
         {
@@ -147,19 +132,26 @@
           "trailingComma": "es5",
           "useTabs": false
         }
-      ]
+      ],
+      "react/react-in-jsx-scope": "off"
     }
   },
   "eslintIgnore": [
     "node_modules/",
     "lib/"
   ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ],
+    "preset": "react-native"
+  },
+  "packageManager": "yarn@3.6.1",
+  "create-react-native-library": {
+    "type": "module-legacy",
+    "languages": "kotlin-swift",
+    "version": "0.42.2"
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -186,13 +178,21 @@
       ]
     ]
   },
-  "create-react-native-library": {
-    "type": "module-legacy",
-    "languages": "kotlin-swift",
-    "version": "0.42.2"
-  },
-  "dependencies": {
-    "js-base64": "^3.7.7",
-    "zod": "4.3.6"
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
   }
 }

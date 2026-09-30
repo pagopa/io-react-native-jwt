@@ -59,11 +59,11 @@ class IoReactNativeJwt: NSObject {
                 if isECKey(jwk:jwk) {
                     let ecJwk = try ECPublicKey(data: publicKeyJson)
                     let publicKey = try ecJwk.converted(to: SecKey.self)
-                  verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
+                    verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
                 } else {
                     let rsaJwk = try RSAPublicKey(data: publicKeyJson)
                     let publicKey = try rsaJwk.converted(to: SecKey.self)
-                  verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
+                    verifier = Verifier(signatureAlgorithm: jws.header.algorithm!, key: publicKey)!
                 }
                 _ = try jws.validate(using: verifier!)
                 resolve(true)
@@ -92,11 +92,9 @@ class IoReactNativeJwt: NSObject {
             let varlenS = try Data(ecSignature.skip(.integer).read(.integer))
             let fixlenR = Asn1IntegerConversion.toRaw(varlenR, of: coordinateOctetLength)
             let fixlenS = Asn1IntegerConversion.toRaw(varlenS, of: coordinateOctetLength)
-            let sign = fixlenR + fixlenS
-            resolve(String(
-                decoding: Data(sign).base64EncodedData(),
-                as: UTF8.self
-              ))
+            let sign: Data = fixlenR + fixlenS
+
+            resolve(sign.base64EncodedString())
 
         }
         catch {
