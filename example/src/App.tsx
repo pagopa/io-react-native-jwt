@@ -9,24 +9,16 @@ import {
   Alert,
 } from 'react-native';
 import {
-  decode,
-  verify,
-  isSignatureValid,
-  SignJWT,
+  enc,
+  sha256,
   thumbprint,
-  sha256ToBase64,
-  EncryptJwe,
-  getRemoteJWKSet,
+  unpackBerEncodedASN1,
+  verify,
 } from '@pagopa/io-react-native-jwt';
 
-import { generate, sign, getPublicKey } from '@pagopa/io-react-native-crypto';
-import type { JWK } from '../../src/types';
+import { generate, sign } from '@pagopa/io-react-native-crypto';
 
-// Factory to create context bound to a key
-const createCryptoContext = (keyTag: string) => ({
-  getPublicKey: () => getPublicKey(keyTag),
-  getSignature: (value: string) => sign(value, keyTag),
-});
+type JWK = Record<string, unknown>;
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
@@ -56,23 +48,13 @@ export default function App() {
     alg: 'ECDH-ES',
   };
 
-  const generateAndSign = async () => {
+  const generateSignAndUnpack = async () => {
     loading();
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
     const pk = await generate(randomKeyTag);
     console.log(pk);
-    const crypto = createCryptoContext(randomKeyTag);
-
-    // Create jwt
-    const signedJwt = await new SignJWT(crypto)
-      .setPayload({
-        sub: 'demoApp',
-        iss: 'PagoPa',
-      })
-      .setProtectedHeader({ typ: 'JWT' })
-      .sign();
-
-    verifyJwtSignature(signedJwt, pk);
+    const derSignature = await sign('hello', randomKeyTag);
+    setResult(await unpackBerEncodedASN1(derSignature, 32));
   };
 
   const demoJwt =
@@ -92,12 +74,9 @@ export default function App() {
     y: '99_z6-vO97nwY-5mXL_d9qcryitmVRYezySt-0_LEqU',
   };
 
-  const remoteMetadataJwt =
-    'eyJ0eXAiOiJlbnRpdHktc3RhdGVtZW50K2p3dCIsImtpZCI6IkVDIzEiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0LyIsInN1YiI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvIiwiYXV0aG9yaXR5X2hpbnRzIjoiaHR0cHM6Ly9kZW1vLmZlZGVyYXRpb24uZXVkaS53YWxsZXQuZGV2ZWxvcGVycy5pdGFsaWEuaXQvIiwiandrcyI6eyJrZXlzIjpbeyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InFySnJqM0FmX0I1N3NiT0lScmNCTTdicjd3T2M4eW5qN2xIRlBUZWZmVWsiLCJ5IjoiMUgwY1dEeUdndlU4dy1rUEtVX3h5Y09DVU5UMm8wYndzbElRdG5QVTZpTSIsImtpZCI6IkVDIzEifV19LCJtZXRhZGF0YSI6eyJ3YWxsZXRfcHJvdmlkZXIiOnsiandrcyI6eyJrZXlzIjpbeyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InFySnJqM0FmX0I1N3NiT0lScmNCTTdicjd3T2M4eW5qN2xIRlBUZWZmVWsiLCJ5IjoiMUgwY1dEeUdndlU4dy1rUEtVX3h5Y09DVU5UMm8wYndzbElRdG5QVTZpTSIsImtpZCI6IkVDIzEifV19LCJ0b2tlbl9lbmRwb2ludCI6Imh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvdG9rZW4iLCJhc2NfdmFsdWVzX3N1cHBvcnRlZCI6WyJodHRwczovL2lvLWQtd2FsbGV0LWl0LmF6dXJld2Vic2l0ZXMubmV0L0xvQS9iYXNpYyIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL21lZGl1bSIsImh0dHBzOi8vaW8tZC13YWxsZXQtaXQuYXp1cmV3ZWJzaXRlcy5uZXQvTG9BL2hpZ2h0Il0sImdyYW50X3R5cGVzX3N1cHBvcnRlZCI6WyJ1cm46aWV0ZjpwYXJhbXM6b2F1dGg6Y2xpZW50LWFzc2VydGlvbi10eXBlOmp3dC1rZXktYXR0ZXN0YXRpb24iXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9tZXRob2RzX3N1cHBvcnRlZCI6WyJwcml2YXRlX2tleV9qd3QiXSwidG9rZW5fZW5kcG9pbnRfYXV0aF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIiwiRVMzODQiLCJFUzUxMiIsIlJTMjU2IiwiUlMzODQiLCJSUzUxMiIsIlBTMjU2IiwiUFMzODQiLCJQUzUxMiJdfSwiZmVkZXJhdGlvbl9lbnRpdHkiOnsib3JnYW5pemF0aW9uX25hbWUiOiJQYWdvUGEgUy5wLkEuIiwiaG9tZXBhZ2VfdXJpIjoiaHR0cHM6Ly9pby5pdGFsaWEuaXQvIiwicG9saWN5X3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L3ByaXZhY3ktcG9saWN5LyIsInRvc191cmkiOiJodHRwczovL2lvLml0YWxpYS5pdC9wcml2YWN5LXBvbGljeS8iLCJsb2dvX3VyaSI6Imh0dHBzOi8vaW8uaXRhbGlhLml0L2Fzc2V0cy9pbWcvaW8taXQtbG9nby13aGl0ZS5zdmcifX0sImlhdCI6MTY5MTM5NjUzMiwiZXhwIjoxNjkxNDAwMTMyfQ.frqGqBswu0pRdM6qQUk5E8ajyzsPuTFObvGFAOxDzDZBJduO8s8ljO9YGmapETqT1BkcpcSktMIN1JqvNEKd-Q';
-
   const verifyJwtSignature = (jwt: string, publicKey: JWK) => {
     loading();
-    isSignatureValid(jwt, publicKey)
+    verify(jwt, publicKey)
       .then((isValid) => {
         isValid
           ? setResult('✅ Signature is valid')
@@ -105,36 +84,23 @@ export default function App() {
       })
       .catch(showError);
   };
-  const verifyPayload = (jwt: string, publicKey: JWK) => {
+  const encryptPlaintextRsa = (plaintext: string, encKey: JWK) => {
     loading();
-    verify(jwt, publicKey, {
-      currentDate: new Date('2023-07-13T10:30:00.000+02:00'),
-      typ: 'entity-statement+jwt',
-      requiredClaims: ['iss', 'sub', 'metadata'],
-    })
-      .then((decodedJwt) => setResult(JSON.stringify(decodedJwt)))
-      .catch(showError);
-  };
-
-  const encryptPlaintextRsa = (plaintext: String, encKey: JWK) => {
-    loading();
-    const jwe = new EncryptJwe(plaintext, {
-      alg: 'RSA-OAEP-256',
-      enc: 'A256CBC-HS512',
-    }).encrypt(encKey);
+    const jwe = enc(
+      plaintext,
+      { alg: 'RSA-OAEP-256', enc: 'A256CBC-HS512' },
+      encKey
+    );
     jwe.then(setResult).catch(showError);
   };
 
   const encryptPlaintextEcdh = (
-    plaintext: String,
+    plaintext: string,
     encKey: JWK,
-    enc: ConstructorParameters<typeof EncryptJwe>[1]['enc']
+    encryption: string
   ) => {
     loading();
-    const jwe = new EncryptJwe(plaintext, {
-      alg: 'ECDH-ES',
-      enc,
-    }).encrypt(encKey);
+    const jwe = enc(plaintext, { alg: 'ECDH-ES', enc: encryption }, encKey);
     jwe.then(setResult).catch(showError);
   };
 
@@ -142,40 +108,11 @@ export default function App() {
     console.log(result);
   }, [result]);
 
-  const verifyWithJwks = () => {
-    loading();
-    const metadataUrl =
-      'https://io-d-wallet-it.azurewebsites.net/.well-known/openid-federation';
-    getRemoteJWKSet(metadataUrl)
-      .then((jwks) => {
-        setResult(JSON.stringify(jwks));
-        verify(remoteMetadataJwt, jwks)
-          .then((isValid) => {
-            isValid
-              ? setResult('✅ Signature is valid')
-              : setResult('🛑 Invalid signature!');
-          })
-          .catch(showError);
-      })
-      .catch(showError);
-  };
-
   const loading = () => setResult('⏱️');
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Button
-          title="Decode JWT"
-          onPress={() => {
-            try {
-              let decodedJwt = decode(demoJwt);
-              return setResult(JSON.stringify(decodedJwt));
-            } catch (e) {
-              showError(e);
-            }
-          }}
-        />
         <Button
           title="Verify JWT with valid JWK"
           onPress={() => verifyJwtSignature(demoJwt, validJwk)}
@@ -185,21 +122,17 @@ export default function App() {
           onPress={() => verifyJwtSignature(demoJwt, invalidJwk)}
         />
         <Button
-          title="Verify JWT payload"
-          onPress={() => verifyPayload(demoJwt, validJwk)}
-        />
-        <Button
           title="JWK thumbprint"
           onPress={() => thumbprint(validJwk).then(setResult).catch(showError)}
         />
         <Button
-          title="Generate and sign JWT"
-          onPress={() => generateAndSign().catch(showError)}
+          title="Generate key, sign and unpack DER signature"
+          onPress={() => generateSignAndUnpack().catch(showError)}
         />
         <Button
           title="SHA256"
           onPress={() =>
-            sha256ToBase64(
+            sha256(
               'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
             )
               .then(setResult)
@@ -226,7 +159,6 @@ export default function App() {
           title="Generate JWE (EC) (WrongKey)"
           onPress={() => encryptPlaintextEcdh('hello', encJwk, 'A256GCM')}
         />
-        <Button title="Verify with JWKSet" onPress={() => verifyWithJwks()} />
       </View>
       <View>
         <Text style={styles.title}>{result}</Text>

@@ -1,7 +1,7 @@
 {
   "name": "@pagopa/io-react-native-jwt",
   "version": "2.2.5",
-  "description": "Native support for JWT",
+  "description": "Native bridge for JWT related functions",
   "keywords": [
     "android",
     "ios",
@@ -65,12 +65,7 @@
     "release": "release-it",
     "build:android": "cd example/android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
     "build:ios": "cd example/ios && xcodebuild -workspace IoReactNativeJwtExample.xcworkspace -scheme IoReactNativeJwtExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
-    "bootstrap": "yarn example && yarn install && yarn example pods",
-    "docs:generate": "typedoc"
-  },
-  "dependencies": {
-    "js-base64": "^3.7.7",
-    "zod": "4.3.6"
+    "bootstrap": "yarn example && yarn install && yarn example pods"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
@@ -92,9 +87,6 @@
     "react-native-builder-bob": "^0.30.3",
     "release-it": "^19.0.6",
     "turbo": "^1.10.7",
-    "typedoc": "^0.24.8",
-    "typedoc-plugin-markdown": "^3.15.3",
-    "typedoc-plugin-mdn-links": "^3.0.3",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
