@@ -14,11 +14,11 @@ import {
   thumbprint,
   unpackBerEncodedASN1,
   verify,
+  type JWEHeader,
+  type JWK,
 } from '@pagopa/io-react-native-jwt';
 
 import { generate, sign } from '@pagopa/io-react-native-crypto';
-
-type JWK = Record<string, unknown>;
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
@@ -97,7 +97,7 @@ export default function App() {
   const encryptPlaintextEcdh = (
     plaintext: string,
     encKey: JWK,
-    encryption: string
+    encryption: JWEHeader['enc']
   ) => {
     loading();
     const jwe = enc(plaintext, { alg: 'ECDH-ES', enc: encryption }, encKey);

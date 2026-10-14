@@ -21,7 +21,9 @@ npm install @pagopa/io-react-native-jwt
 | `unpackBerEncodedASN1(signature: string, coordinateOctetLength: number): Promise<string>` | Transcodes a base64 ASN.1/DER ECDSA signature into the base64 concatenated R + S format required by JWS ([RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-A.3.1)). The coordinate length is 32 for P-256, 48 for P-384 and 66 for P-521. |
 | `thumbprint(jwk: JWK): Promise<string>` | Computes the [RFC7638](https://datatracker.ietf.org/doc/html/rfc7638) thumbprint of an EC or RSA key. |
 | `sha256(toHash: string): Promise<string>` | Computes the base64 SHA-256 hash of a UTF-8 string. |
-| `enc(plaintext: string, header: { alg: string; enc: string }, jwk: JWK): Promise<string>` | Encrypts the plaintext as a compact JWE with an EC or RSA public key. |
+| `enc(plaintext: string, header: JWEHeader, jwk: JWK): Promise<string>` | Encrypts the plaintext as a compact JWE with an EC or RSA public key. Supported `alg`: `RSA-OAEP-256`, `RSA-OAEP`, `ECDH-ES`; supported `enc`: `A256CBC-HS512`, `A128CBC-HS256`, `A256GCM`, `A128GCM`. |
+
+Arguments and native results are validated at runtime with [Zod](https://zod.dev): invalid values reject the returned promise before reaching the native module. The `JWK` and `JWEHeader` schemas (and types) are exported as well.
 
 ## Usage
 
