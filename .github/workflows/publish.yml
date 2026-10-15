@@ -25,8 +25,12 @@ jobs:
       - name: Publish package on NPM 📦
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([a-zA-Z]+)\.[0-9]+$ ]]; then
-            npm publish --access=public --tag=${BASH_REMATCH[1]} --provenance
+
+          # If prerelease (contains "-"), publish with a non-latest tag
+          if [[ "$VERSION" == *-* ]]; then
+            # Derive tag from prerelease identifier before optional dot
+            TAG=$(echo "$VERSION" | sed -E 's/^[0-9]+\.[0-9]+\.[0-9]+-([0-9A-Za-z-]+)(\..*)?$/\1/')
+            npm publish --access=public --tag="$TAG" --provenance
           else
             npm publish --access=public --provenance
           fi
