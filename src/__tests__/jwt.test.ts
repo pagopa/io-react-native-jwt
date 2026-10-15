@@ -1,5 +1,5 @@
 import type { JWTPayload } from '../types';
-import { SignJWT } from '../jwt/sign';
+import { JWT } from '../jwt/jwt';
 
 const jwtPayload: JWTPayload = {
   iss: 'demo',
@@ -29,20 +29,17 @@ const pk1 = {
   n: 'gwZ0FqSsW18PufbHZBXijW4nEdIo5FLAt9MjDjzwCL9VXP4f9qs0c1mhzlgQtQ5GssqxkY1-APa1DA4LdhCaYzI5rKpRRPIqqgiTUErVtf2P36d0ZmjBdOQXumyGZjYSkQYSuMeTLVu_WZ9wg9O2V37DEcAqFwsbLVse1dvjv1Rz9nI_DoiXKMY7RozL560SK3V1gitPN1rx56Uc02t5eC6inmxSpZgs9Dhs61ntm0r6LVgRHmL0Mq8Q7waGqP9LSnA9t1E4Nn5CWvAkaqb2X6VsRJZBdkoxkPXwxi-PETfenVQk8A11Ppd9QFTlST8Tu5i5vZZkbuMDgNyH3ooAhQ',
 };
 
-const mockCrypto = {
-  getPublicKey: jest.fn(async () => pk0 /* just the first */),
-  getSignature: jest.fn(
-    async () =>
-      '6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
-  ),
-};
+const signFn = jest.fn(
+  async () =>
+    '6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
+);
 
-describe('Sign JWT', function () {
+describe('JWT', function () {
   it('it should be signed correctly', async () => {
-    const signedJwt = await new SignJWT(mockCrypto)
+    const signedJwt = await new JWT(pk0)
       .setPayload(jwtPayload)
       .setProtectedHeader(jwtHeader)
-      .sign();
+      .sign(signFn);
 
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
@@ -50,12 +47,12 @@ describe('Sign JWT', function () {
   });
 
   it('it should ignore a passed alg', async () => {
-    const signed = await new SignJWT(mockCrypto)
+    const signed = await new JWT(pk0)
       .setPayload(jwtPayload)
       .setProtectedHeader({ alg: 'RS512' /* any alg */ })
-      .sign();
+      .sign(signFn);
 
-    const decoded = SignJWT.decode(signed);
+    const decoded = JWT.decode(signed);
 
     expect(decoded.protectedHeader.alg).not.toEqual('RS512');
   });
@@ -67,13 +64,12 @@ describe('Sign JWT', function () {
   `(
     'it should select the right signing algorithm for the used key ($key.kid)',
     async ({ key, expected }) => {
-      mockCrypto.getPublicKey.mockImplementationOnce(async () => key);
-      const signed = await new SignJWT(mockCrypto)
+      const signed = await new JWT(key)
         .setPayload(jwtPayload)
         .setProtectedHeader(jwtHeader)
-        .sign();
+        .sign(signFn);
 
-      const decoded = SignJWT.decode(signed);
+      const decoded = JWT.decode(signed);
 
       expect(decoded.protectedHeader.alg).toEqual(expected);
     }

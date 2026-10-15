@@ -12,21 +12,15 @@ import {
   decode,
   verify,
   isSignatureValid,
-  SignJWT,
+  JWT,
   thumbprint,
   sha256ToBase64,
   EncryptJwe,
   getRemoteJWKSet,
 } from '@pagopa/io-react-native-jwt';
 
-import { generate, sign, getPublicKey } from '@pagopa/io-react-native-crypto';
+import { generate, sign } from '@pagopa/io-react-native-crypto';
 import type { JWK } from '../../src/types';
-
-// Factory to create context bound to a key
-const createCryptoContext = (keyTag: string) => ({
-  getPublicKey: () => getPublicKey(keyTag),
-  getSignature: (value: string) => sign(value, keyTag),
-});
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
@@ -61,16 +55,15 @@ export default function App() {
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
     const pk = await generate(randomKeyTag);
     console.log(pk);
-    const crypto = createCryptoContext(randomKeyTag);
 
     // Create jwt
-    const signedJwt = await new SignJWT(crypto)
+    const signedJwt = await new JWT(pk)
       .setPayload({
         sub: 'demoApp',
         iss: 'PagoPa',
       })
       .setProtectedHeader({ typ: 'JWT' })
-      .sign();
+      .sign((value) => sign(value, randomKeyTag));
 
     verifyJwtSignature(signedJwt, pk);
   };

@@ -6,12 +6,12 @@ import type {
 import jwtPayload from './jwt_claims_set';
 import { JWKNotFound, JWSSignatureVerificationFailed } from '../utils/errors';
 import { IoReactNativeJwt } from '../utils/proxy';
-import { SignJWT } from './sign';
+import { JWT } from './jwt';
 import type { JWK } from '../types';
 import { getKtyFromAlg } from '../algorithms';
 
 export * from './produce';
-export * from './sign';
+export * from './jwt';
 export * from './unsecured';
 export { derToJose } from '../utils/asn1';
 export { encodeBase64, decodeBase64 } from '../utils/base64';
@@ -31,7 +31,7 @@ export { sha256ToBase64 } from '../hash';
  *
  * @param jwt JSON Web Token value (encoded as JWS).
  */
-export const decode = (token: string): JWTDecodeResult => SignJWT.decode(token);
+export const decode = (token: string): JWTDecodeResult => JWT.decode(token);
 
 /**
  * Verifies the JWS signature
