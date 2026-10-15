@@ -1,6 +1,6 @@
 {
   "name": "@pagopa/io-react-native-jwt",
-  "version": "2.2.5",
+  "version": "3.0.0-remote-hsm",
   "description": "Native support for JWT",
   "keywords": [
     "android",
