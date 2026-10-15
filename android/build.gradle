@@ -97,6 +97,6 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
-  implementation 'org.bouncycastle:bcprov-jdk15on:[1.56,)'
+  implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
 
 }
