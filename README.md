@@ -91,11 +91,12 @@ if isValid {
 ### Create and sign a JWT with a JWS
 
 ```js
-// Define a cryptographic context suitable for the application needs
-const crypto: CryptoContext = userDefinedCryptoContext();
+// Public key of the signing key pair, and a function signing with the paired private key
+const publicKey: JWK = userDefinedPublicKey();
+const signFn = (value: string) => userDefinedSign(value);
 
 // Create jwt
-const jwt = new SignJWT(crypto)
+const jwt = new JWT(publicKey)
   .setPayload({ metadata: 'demo' })
   .setProtectedHeader({ typ: 'JWT' })
   .setAudience('demo')
@@ -103,7 +104,7 @@ const jwt = new SignJWT(crypto)
   .setIssuedAt();
 
 // get signed jwt
-const signedJwt = jwt.sign();
+const signedJwt = await jwt.sign(signFn);
 ```
 
 ### JWK thumbprint
