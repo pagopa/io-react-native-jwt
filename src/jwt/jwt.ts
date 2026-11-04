@@ -1,7 +1,11 @@
 import { JOSENotSupported, JWTInvalid } from '../utils/errors';
-import type { JWSHeaderParameters, JWTDecodeResult } from '../types';
+import type { JWK, JWSHeaderParameters, JWTDecodeResult } from '../types';
 import { ProduceJWT } from './produce';
-import { decodeBase64, encodeBase64, removePadding } from '../utils/base64';
+import {
+  decodeBase64Url,
+  encodeBase64Url,
+  base64ToBase64Url,
+} from '../utils/base64';
 import {
   getAlgFromKey,
   isAlgSupported,
@@ -9,17 +13,31 @@ import {
 } from '../algorithms';
 
 import { derToJose } from '../utils/asn1';
-import type { CryptoContext } from '../utils/crypto';
 
 /**
- * The SignJWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
+ * Function that signs the given value with the private key paired with the public key of the {@link Signer}.
+ * For EC keys the signature MUST be DER encoded, for RSA keys base64 encoded.
+ */
+export type SignFunction = (value: string) => Promise<string>;
+
+/**
+ * A public key bound to the function signing with its paired private key.
+ */
+export type Signer = {
+  publicKey: JWK;
+  sign: SignFunction;
+};
+
+/**
+ * The JWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
  *
  * @example Usage with a given signature
  *
  * ```js
- * const crypto: Crypto = { any implementation fo Crypto interface }
+ * const publicKey: JWK = { public key of the signing key pair }
+ * const sign = (value: string) => { any implementation signing with the paired private key }
  *
- * const jwt = new SignJWT(crypto)
+ * const jwt = new JWT({ publicKey, sign })
  *   .setPayload({ 'urn:example:claim': true })
  *   .setProtectedHeader({ typ })
  *   .setIssuedAt()
@@ -32,22 +50,23 @@ import type { CryptoContext } from '../utils/crypto';
  * ```
  */
 
-export class SignJWT extends ProduceJWT {
+export class JWT extends ProduceJWT {
   private _protectedHeader: Omit<JWSHeaderParameters, 'alg'> = {};
-  private crypto: CryptoContext;
+  private signer: Signer;
 
   /**
-   * @param crypto An implementation of the crypto interface. @see utils/crypto for more.
+   * @param signer The public key and the function signing with the paired private key.
+   * The public key determines the signing algorithm.
    */
-  constructor(crypto: CryptoContext) {
+  constructor(signer: Signer) {
     super();
-    this.crypto = crypto;
+    this.signer = signer;
   }
 
   /**
-   * Sets the JWS Protected Header on the SignJWT object.
+   * Sets the JWS Protected Header on the JWT object.
    * Any invocation overrides what's been already put in the header.
-   * Value for "alg" are ignored, as it will be inferred by the key used by the cryptographic context.
+   * Value for "alg" are ignored, as it will be inferred by the public key.
    *
    * @param protectedHeader JWS Protected Header.
    */
@@ -60,38 +79,36 @@ export class SignJWT extends ProduceJWT {
    * Return a JWT without signature (`header.payload`).
    *
    */
-  private async unsigned(): Promise<string> {
-    const { alg } = await this.getSelectedSigningAlgorithm();
+  private unsigned(): string {
+    const { alg } = this.getSelectedSigningAlgorithm();
 
     return [{ ...this._protectedHeader, alg }, this._payload]
       .map((e) => JSON.stringify(e))
-      .map(encodeBase64)
+      .map(encodeBase64Url)
       .join('.');
   }
 
-  private async getSelectedSigningAlgorithm(): Promise<{
+  private getSelectedSigningAlgorithm(): {
     kty: string;
     alg: SupportedAlgorithm;
-  }> {
-    const publicKey = await this.crypto.getPublicKey();
-    const alg = getAlgFromKey(publicKey);
+  } {
+    const alg = getAlgFromKey(this.signer.publicKey);
 
-    return { kty: publicKey.kty, alg };
+    return { kty: this.signer.publicKey.kty, alg };
   }
 
   /**
    * Return a signed JWT.
-   *
    */
   async sign(): Promise<string> {
-    const unsigned = await this.unsigned();
-    const signature = await this.crypto.getSignature(unsigned);
+    const unsigned = this.unsigned();
+    const signature = await this.signer.sign(unsigned);
 
-    const { kty, alg } = await this.getSelectedSigningAlgorithm();
+    const { kty, alg } = this.getSelectedSigningAlgorithm();
 
     const encodedJws = await (kty === 'EC'
       ? derToJose(signature, alg)
-      : removePadding(signature));
+      : base64ToBase64Url(signature));
 
     return `${unsigned}.${encodedJws}`;
   }
@@ -121,7 +138,7 @@ export class SignJWT extends ProduceJWT {
 
     let protectedHeader: JWSHeaderParameters;
     try {
-      let decoded = decodeBase64(encodedHeader!);
+      let decoded = decodeBase64Url(encodedHeader!);
       protectedHeader = JSON.parse(decoded);
       if (!protectedHeader.alg || !isAlgSupported(protectedHeader.alg)) {
         throw new JOSENotSupported('Unsupported "alg" value');
@@ -134,7 +151,7 @@ export class SignJWT extends ProduceJWT {
       throw new JWTInvalid('Invalid JWT');
     }
 
-    let decodedPayload = decodeBase64(encodedPayload!);
+    let decodedPayload = decodeBase64Url(encodedPayload!);
     const payload = JSON.parse(decodedPayload);
 
     return {

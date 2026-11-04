@@ -5,6 +5,7 @@ import {
   View,
   Text,
   SafeAreaView,
+  ScrollView,
   Button,
   Alert,
 } from 'react-native';
@@ -12,21 +13,15 @@ import {
   decode,
   verify,
   isSignatureValid,
-  SignJWT,
+  JWT,
   thumbprint,
-  sha256ToBase64,
+  sha256ToBase64Url,
   EncryptJwe,
   getRemoteJWKSet,
 } from '@pagopa/io-react-native-jwt';
 
-import { generate, sign, getPublicKey } from '@pagopa/io-react-native-crypto';
+import { generate, sign } from '@pagopa/io-react-native-crypto';
 import type { JWK } from '../../src/types';
-
-// Factory to create context bound to a key
-const createCryptoContext = (keyTag: string) => ({
-  getPublicKey: () => getPublicKey(keyTag),
-  getSignature: (value: string) => sign(value, keyTag),
-});
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
@@ -61,10 +56,12 @@ export default function App() {
     const randomKeyTag = Math.random().toString(36).substr(2, 5);
     const pk = await generate(randomKeyTag);
     console.log(pk);
-    const crypto = createCryptoContext(randomKeyTag);
 
     // Create jwt
-    const signedJwt = await new SignJWT(crypto)
+    const signedJwt = await new JWT({
+      publicKey: pk,
+      sign: (value) => sign(value, randomKeyTag),
+    })
       .setPayload({
         sub: 'demoApp',
         iss: 'PagoPa',
@@ -139,7 +136,7 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    console.log(result);
+    if (result !== undefined) console.log(result);
   }, [result]);
 
   const verifyWithJwks = () => {
@@ -164,73 +161,77 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Button
-          title="Decode JWT"
-          onPress={() => {
-            try {
-              let decodedJwt = decode(demoJwt);
-              return setResult(JSON.stringify(decodedJwt));
-            } catch (e) {
-              showError(e);
+      <ScrollView contentContainerStyle={styles.content}>
+        <View>
+          <Button
+            title="Decode JWT"
+            onPress={() => {
+              try {
+                let decodedJwt = decode(demoJwt);
+                return setResult(JSON.stringify(decodedJwt));
+              } catch (e) {
+                showError(e);
+              }
+            }}
+          />
+          <Button
+            title="Verify JWT with valid JWK"
+            onPress={() => verifyJwtSignature(demoJwt, validJwk)}
+          />
+          <Button
+            title="Verify JWT with invalid JWK"
+            onPress={() => verifyJwtSignature(demoJwt, invalidJwk)}
+          />
+          <Button
+            title="Verify JWT payload"
+            onPress={() => verifyPayload(demoJwt, validJwk)}
+          />
+          <Button
+            title="JWK thumbprint"
+            onPress={() =>
+              thumbprint(validJwk).then(setResult).catch(showError)
             }
-          }}
-        />
-        <Button
-          title="Verify JWT with valid JWK"
-          onPress={() => verifyJwtSignature(demoJwt, validJwk)}
-        />
-        <Button
-          title="Verify JWT with invalid JWK"
-          onPress={() => verifyJwtSignature(demoJwt, invalidJwk)}
-        />
-        <Button
-          title="Verify JWT payload"
-          onPress={() => verifyPayload(demoJwt, validJwk)}
-        />
-        <Button
-          title="JWK thumbprint"
-          onPress={() => thumbprint(validJwk).then(setResult).catch(showError)}
-        />
-        <Button
-          title="Generate and sign JWT"
-          onPress={() => generateAndSign().catch(showError)}
-        />
-        <Button
-          title="SHA256"
-          onPress={() =>
-            sha256ToBase64(
-              'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
-            )
-              .then(setResult)
-              .catch(showError)
-          }
-        />
-        <Button
-          title="Generate JWE (RSA)"
-          onPress={() => encryptPlaintextRsa('hello', encJwk)}
-        />
-        <Button
-          title="Generate JWE (EC A256GCM)"
-          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A256GCM')}
-        />
-        <Button
-          title="Generate JWE (EC A128GCM)"
-          onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A128GCM')}
-        />
-        <Button
-          title="Generate JWE (RSA) (WrongKey)"
-          onPress={() => encryptPlaintextRsa('hello', ecEncJwk)}
-        />
-        <Button
-          title="Generate JWE (EC) (WrongKey)"
-          onPress={() => encryptPlaintextEcdh('hello', encJwk, 'A256GCM')}
-        />
-        <Button title="Verify with JWKSet" onPress={() => verifyWithJwks()} />
-      </View>
-      <View>
-        <Text style={styles.title}>{result}</Text>
-      </View>
+          />
+          <Button
+            title="Generate and sign JWT"
+            onPress={() => generateAndSign().catch(showError)}
+          />
+          <Button
+            title="SHA256"
+            onPress={() =>
+              sha256ToBase64Url(
+                'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
+              )
+                .then(setResult)
+                .catch(showError)
+            }
+          />
+          <Button
+            title="Generate JWE (RSA)"
+            onPress={() => encryptPlaintextRsa('hello', encJwk)}
+          />
+          <Button
+            title="Generate JWE (EC A256GCM)"
+            onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A256GCM')}
+          />
+          <Button
+            title="Generate JWE (EC A128GCM)"
+            onPress={() => encryptPlaintextEcdh('hello', ecEncJwk, 'A128GCM')}
+          />
+          <Button
+            title="Generate JWE (RSA) (WrongKey)"
+            onPress={() => encryptPlaintextRsa('hello', ecEncJwk)}
+          />
+          <Button
+            title="Generate JWE (EC) (WrongKey)"
+            onPress={() => encryptPlaintextEcdh('hello', encJwk, 'A256GCM')}
+          />
+          <Button title="Verify with JWKSet" onPress={() => verifyWithJwks()} />
+        </View>
+        <View>
+          <Text style={styles.title}>{result}</Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -241,8 +242,11 @@ const showError = (e: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     marginHorizontal: 16,
+  },
+  content: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   title: {
     textAlign: 'center',

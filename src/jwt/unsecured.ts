@@ -7,7 +7,7 @@ import type {
 import { JWTInvalid } from '../utils/errors';
 import jwtPayload from './jwt_claims_set';
 import { ProduceJWT } from './produce';
-import { decodeBase64, encodeBase64 } from '../utils/base64';
+import { decodeBase64Url, encodeBase64Url } from '../utils/base64';
 
 export interface UnsecuredResult {
   payload: JWTPayload;
@@ -56,8 +56,8 @@ export interface UnsecuredResult {
 export class UnsecuredJWT extends ProduceJWT {
   /** Encodes the Unsecured JWT. */
   encode(): string {
-    const header = encodeBase64(JSON.stringify({ alg: 'none' }));
-    const payload = encodeBase64(JSON.stringify(this._payload));
+    const header = encodeBase64Url(JSON.stringify({ alg: 'none' }));
+    const payload = encodeBase64Url(JSON.stringify(this._payload));
 
     return `${header}.${payload}.`;
   }
@@ -88,7 +88,7 @@ export class UnsecuredJWT extends ProduceJWT {
 
     let header: JWTUnsecuredHeaderParameters;
     try {
-      let decoded = decodeBase64(encodedHeader!);
+      let decoded = decodeBase64Url(encodedHeader!);
       header = JSON.parse(decoded);
       if ('alg' in header && header.alg !== 'none') throw new Error();
     } catch {
@@ -97,7 +97,7 @@ export class UnsecuredJWT extends ProduceJWT {
 
     let payload = UnsecuredJWT.decodePayload(encodedPayload, options);
 
-    return { payload, header: JSON.parse(decodeBase64(encodedHeader!)) };
+    return { payload, header: JSON.parse(decodeBase64Url(encodedHeader!)) };
   }
 
   /**
@@ -119,7 +119,7 @@ export class UnsecuredJWT extends ProduceJWT {
       throw new JWTInvalid('Invalid Unsecured JWT');
     }
 
-    let decodedPayload = decodeBase64(encodedPayload!);
+    let decodedPayload = decodeBase64Url(encodedPayload!);
     const payload = jwtPayload({}, JSON.parse(decodedPayload), options);
 
     return payload;
