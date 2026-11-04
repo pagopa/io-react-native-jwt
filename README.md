@@ -93,10 +93,10 @@ if isValid {
 ```js
 // Public key of the signing key pair, and a function signing with the paired private key
 const publicKey: JWK = userDefinedPublicKey();
-const signFn = (value: string) => userDefinedSign(value);
+const sign = (value: string) => userDefinedSign(value);
 
 // Create jwt
-const jwt = new JWT(publicKey)
+const jwt = new JWT({ publicKey, sign })
   .setPayload({ metadata: 'demo' })
   .setProtectedHeader({ typ: 'JWT' })
   .setAudience('demo')
@@ -104,7 +104,7 @@ const jwt = new JWT(publicKey)
   .setIssuedAt();
 
 // get signed jwt
-const signedJwt = await jwt.sign(signFn);
+const signedJwt = await jwt.sign();
 ```
 
 ### JWK thumbprint

@@ -11,10 +11,18 @@ import {
 import { derToJose } from '../utils/asn1';
 
 /**
- * Function that signs the given value with the private key paired with the public key given to {@link JWT}.
+ * Function that signs the given value with the private key paired with the public key of the {@link Signer}.
  * For EC keys the signature MUST be DER encoded, for RSA keys base64 encoded.
  */
 export type SignFunction = (value: string) => Promise<string>;
+
+/**
+ * A public key bound to the function signing with its paired private key.
+ */
+export type Signer = {
+  publicKey: JWK;
+  sign: SignFunction;
+};
 
 /**
  * The JWT class is used to build and sign Compact JWS formatted JSON Web Tokens.
@@ -23,9 +31,9 @@ export type SignFunction = (value: string) => Promise<string>;
  *
  * ```js
  * const publicKey: JWK = { public key of the signing key pair }
- * const signFn = (value: string) => { any implementation signing with the paired private key }
+ * const sign = (value: string) => { any implementation signing with the paired private key }
  *
- * const jwt = new JWT(publicKey)
+ * const jwt = new JWT({ publicKey, sign })
  *   .setPayload({ 'urn:example:claim': true })
  *   .setProtectedHeader({ typ })
  *   .setIssuedAt()
@@ -34,20 +42,21 @@ export type SignFunction = (value: string) => Promise<string>;
  *   .setExpirationTime('2h')
  *
  * jwt.data()
- * await jwt.sign(signFn)
+ * await jwt.sign()
  * ```
  */
 
 export class JWT extends ProduceJWT {
   private _protectedHeader: Omit<JWSHeaderParameters, 'alg'> = {};
-  private publicKey: JWK;
+  private signer: Signer;
 
   /**
-   * @param publicKey The public key paired with the private key used to sign. It determines the signing algorithm.
+   * @param signer The public key and the function signing with the paired private key.
+   * The public key determines the signing algorithm.
    */
-  constructor(publicKey: JWK) {
+  constructor(signer: Signer) {
     super();
-    this.publicKey = publicKey;
+    this.signer = signer;
   }
 
   /**
@@ -79,19 +88,17 @@ export class JWT extends ProduceJWT {
     kty: string;
     alg: SupportedAlgorithm;
   } {
-    const alg = getAlgFromKey(this.publicKey);
+    const alg = getAlgFromKey(this.signer.publicKey);
 
-    return { kty: this.publicKey.kty, alg };
+    return { kty: this.signer.publicKey.kty, alg };
   }
 
   /**
    * Return a signed JWT.
-   *
-   * @param signFn Function that signs `header.payload` with the private key paired with the public key.
    */
-  async sign(signFn: SignFunction): Promise<string> {
+  async sign(): Promise<string> {
     const unsigned = this.unsigned();
-    const signature = await signFn(unsigned);
+    const signature = await this.signer.sign(unsigned);
 
     const { kty, alg } = this.getSelectedSigningAlgorithm();
 

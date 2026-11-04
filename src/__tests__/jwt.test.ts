@@ -36,10 +36,10 @@ const signFn = jest.fn(
 
 describe('JWT', function () {
   it('it should be signed correctly', async () => {
-    const signedJwt = await new JWT(pk0)
+    const signedJwt = await new JWT({ publicKey: pk0, sign: signFn })
       .setPayload(jwtPayload)
       .setProtectedHeader(jwtHeader)
-      .sign(signFn);
+      .sign();
 
     expect(signedJwt).toBe(
       'eyJ0eXAiOiJqd3QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJkZW1vIiwic3ViIjoiZGVtbyIsImlhdCI6MTY3NTIwNjAwMCwiZXhwIjoxNzA2NzQyMDAwfQ.6wA0M6rNYNSFN_EylzMA6ElAibW7FVSZyoLNEkHU5c_RKuiNenT08YIMvbysYautLZotUedEMP5xCyNpY34x6Q'
@@ -47,10 +47,10 @@ describe('JWT', function () {
   });
 
   it('it should ignore a passed alg', async () => {
-    const signed = await new JWT(pk0)
+    const signed = await new JWT({ publicKey: pk0, sign: signFn })
       .setPayload(jwtPayload)
       .setProtectedHeader({ alg: 'RS512' /* any alg */ })
-      .sign(signFn);
+      .sign();
 
     const decoded = JWT.decode(signed);
 
@@ -64,10 +64,10 @@ describe('JWT', function () {
   `(
     'it should select the right signing algorithm for the used key ($key.kid)',
     async ({ key, expected }) => {
-      const signed = await new JWT(key)
+      const signed = await new JWT({ publicKey: key, sign: signFn })
         .setPayload(jwtPayload)
         .setProtectedHeader(jwtHeader)
-        .sign(signFn);
+        .sign();
 
       const decoded = JWT.decode(signed);
 
