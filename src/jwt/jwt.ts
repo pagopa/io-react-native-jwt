@@ -1,7 +1,11 @@
 import { JOSENotSupported, JWTInvalid } from '../utils/errors';
 import type { JWK, JWSHeaderParameters, JWTDecodeResult } from '../types';
 import { ProduceJWT } from './produce';
-import { decodeBase64, encodeBase64, removePadding } from '../utils/base64';
+import {
+  decodeBase64Url,
+  encodeBase64Url,
+  base64ToBase64Url,
+} from '../utils/base64';
 import {
   getAlgFromKey,
   isAlgSupported,
@@ -80,7 +84,7 @@ export class JWT extends ProduceJWT {
 
     return [{ ...this._protectedHeader, alg }, this._payload]
       .map((e) => JSON.stringify(e))
-      .map(encodeBase64)
+      .map(encodeBase64Url)
       .join('.');
   }
 
@@ -104,7 +108,7 @@ export class JWT extends ProduceJWT {
 
     const encodedJws = await (kty === 'EC'
       ? derToJose(signature, alg)
-      : removePadding(signature));
+      : base64ToBase64Url(signature));
 
     return `${unsigned}.${encodedJws}`;
   }
@@ -134,7 +138,7 @@ export class JWT extends ProduceJWT {
 
     let protectedHeader: JWSHeaderParameters;
     try {
-      let decoded = decodeBase64(encodedHeader!);
+      let decoded = decodeBase64Url(encodedHeader!);
       protectedHeader = JSON.parse(decoded);
       if (!protectedHeader.alg || !isAlgSupported(protectedHeader.alg)) {
         throw new JOSENotSupported('Unsupported "alg" value');
@@ -147,7 +151,7 @@ export class JWT extends ProduceJWT {
       throw new JWTInvalid('Invalid JWT');
     }
 
-    let decodedPayload = decodeBase64(encodedPayload!);
+    let decodedPayload = decodeBase64Url(encodedPayload!);
     const payload = JSON.parse(decodedPayload);
 
     return {

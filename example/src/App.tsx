@@ -15,7 +15,7 @@ import {
   isSignatureValid,
   JWT,
   thumbprint,
-  sha256ToBase64,
+  sha256ToBase64Url,
   EncryptJwe,
   getRemoteJWKSet,
 } from '@pagopa/io-react-native-jwt';
@@ -199,7 +199,7 @@ export default function App() {
           <Button
             title="SHA256"
             onPress={() =>
-              sha256ToBase64(
+              sha256ToBase64Url(
                 'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
               )
                 .then(setResult)

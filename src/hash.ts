@@ -1,10 +1,10 @@
-import { removePadding } from './utils/base64';
+import { base64ToBase64Url } from './utils/base64';
 import { IoReactNativeJwt } from './utils/proxy';
 
 /**
- * Return base64 encoded SHA256 hash of input string
+ * Return the base64url encoded (unpadded) SHA256 hash of the input string
  */
-export const sha256ToBase64 = async (toHash: string): Promise<string> => {
+export const sha256ToBase64Url = async (toHash: string): Promise<string> => {
   let hash = await IoReactNativeJwt.sha256(toHash);
-  return removePadding(hash);
+  return base64ToBase64Url(hash);
 };

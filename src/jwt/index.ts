@@ -14,8 +14,8 @@ export * from './produce';
 export * from './jwt';
 export * from './unsecured';
 export { derToJose } from '../utils/asn1';
-export { encodeBase64, decodeBase64 } from '../utils/base64';
-export { sha256ToBase64 } from '../hash';
+export { encodeBase64Url, decodeBase64Url } from '../utils/base64';
+export { sha256ToBase64Url } from '../hash';
 /**
  * Decode the JWT without validation.
  *
