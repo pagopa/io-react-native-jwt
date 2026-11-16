@@ -36,7 +36,10 @@ const signFn = jest.fn(
 
 describe('JWT', function () {
   it('it should be signed correctly', async () => {
-    const signedJwt = await new JWT({ publicKey: pk0, sign: signFn })
+    const signedJwt = await new JWT({
+      getPublicKey: async () => pk0,
+      sign: signFn,
+    })
       .setPayload(jwtPayload)
       .setProtectedHeader(jwtHeader)
       .sign();
@@ -47,7 +50,10 @@ describe('JWT', function () {
   });
 
   it('it should ignore a passed alg', async () => {
-    const signed = await new JWT({ publicKey: pk0, sign: signFn })
+    const signed = await new JWT({
+      getPublicKey: async () => pk0,
+      sign: signFn,
+    })
       .setPayload(jwtPayload)
       .setProtectedHeader({ alg: 'RS512' /* any alg */ })
       .sign();
@@ -64,7 +70,10 @@ describe('JWT', function () {
   `(
     'it should select the right signing algorithm for the used key ($key.kid)',
     async ({ key, expected }) => {
-      const signed = await new JWT({ publicKey: key, sign: signFn })
+      const signed = await new JWT({
+        getPublicKey: async () => key,
+        sign: signFn,
+      })
         .setPayload(jwtPayload)
         .setProtectedHeader(jwtHeader)
         .sign();

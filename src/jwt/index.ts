@@ -13,9 +13,6 @@ import { getKtyFromAlg } from '../algorithms';
 export * from './produce';
 export * from './jwt';
 export * from './unsecured';
-export { derToJose } from '../utils/asn1';
-export { encodeBase64Url, decodeBase64Url } from '../utils/base64';
-export { sha256ToBase64Url } from '../hash';
 /**
  * Decode the JWT without validation.
  *

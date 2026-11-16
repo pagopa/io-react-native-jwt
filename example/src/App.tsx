@@ -15,12 +15,11 @@ import {
   isSignatureValid,
   JWT,
   thumbprint,
-  sha256ToBase64Url,
   EncryptJwe,
   getRemoteJWKSet,
 } from '@pagopa/io-react-native-jwt';
 
-import { generate, sign } from '@pagopa/io-react-native-crypto';
+import { generate, getPublicKey, sign } from '@pagopa/io-react-native-crypto';
 import type { JWK } from '../../src/types';
 
 export default function App() {
@@ -59,7 +58,7 @@ export default function App() {
 
     // Create jwt
     const signedJwt = await new JWT({
-      publicKey: pk,
+      getPublicKey: () => getPublicKey(randomKeyTag),
       sign: (value) => sign(value, randomKeyTag),
     })
       .setPayload({
@@ -195,16 +194,6 @@ export default function App() {
           <Button
             title="Generate and sign JWT"
             onPress={() => generateAndSign().catch(showError)}
-          />
-          <Button
-            title="SHA256"
-            onPress={() =>
-              sha256ToBase64Url(
-                'WyJlbHVWNU9nM2dTTklJOEVZbnN4QV9BIiwgInVuaXF1ZV9pZCIsICJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiXQ'
-              )
-                .then(setResult)
-                .catch(showError)
-            }
           />
           <Button
             title="Generate JWE (RSA)"

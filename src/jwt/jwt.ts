@@ -15,17 +15,15 @@ import {
 import { derToJose } from '../utils/asn1';
 
 /**
- * Function that signs the given value with the private key paired with the public key of the {@link Signer}.
- * For EC keys the signature MUST be DER encoded, for RSA keys base64 encoded.
+ * A key pair abstraction: it exposes the public key and signs with the paired private key.
  */
-export type SignFunction = (value: string) => Promise<string>;
-
-/**
- * A public key bound to the function signing with its paired private key.
- */
-export type Signer = {
-  publicKey: JWK;
-  sign: SignFunction;
+export type JWTSigner = {
+  getPublicKey: () => Promise<JWK>;
+  /**
+   * Signs the given value with the private key paired with the public key returned by {@link JWTSigner.getPublicKey}.
+   * For EC keys the signature MUST be DER encoded, for RSA keys base64 encoded.
+   */
+  sign: (value: string) => Promise<string>;
 };
 
 /**
@@ -34,10 +32,10 @@ export type Signer = {
  * @example Usage with a given signature
  *
  * ```js
- * const publicKey: JWK = { public key of the signing key pair }
+ * const getPublicKey = async (): Promise<JWK> => { public key of the signing key pair }
  * const sign = (value: string) => { any implementation signing with the paired private key }
  *
- * const jwt = new JWT({ publicKey, sign })
+ * const jwt = new JWT({ getPublicKey, sign })
  *   .setPayload({ 'urn:example:claim': true })
  *   .setProtectedHeader({ typ })
  *   .setIssuedAt()
@@ -52,13 +50,13 @@ export type Signer = {
 
 export class JWT extends ProduceJWT {
   private _protectedHeader: Omit<JWSHeaderParameters, 'alg'> = {};
-  private signer: Signer;
+  private signer: JWTSigner;
 
   /**
-   * @param signer The public key and the function signing with the paired private key.
+   * @param signer Provides the public key and signs with the paired private key.
    * The public key determines the signing algorithm.
    */
-  constructor(signer: Signer) {
+  constructor(signer: JWTSigner) {
     super();
     this.signer = signer;
   }
@@ -79,34 +77,24 @@ export class JWT extends ProduceJWT {
    * Return a JWT without signature (`header.payload`).
    *
    */
-  private unsigned(): string {
-    const { alg } = this.getSelectedSigningAlgorithm();
-
+  private unsigned(alg: SupportedAlgorithm): string {
     return [{ ...this._protectedHeader, alg }, this._payload]
       .map((e) => JSON.stringify(e))
       .map(encodeBase64Url)
       .join('.');
   }
 
-  private getSelectedSigningAlgorithm(): {
-    kty: string;
-    alg: SupportedAlgorithm;
-  } {
-    const alg = getAlgFromKey(this.signer.publicKey);
-
-    return { kty: this.signer.publicKey.kty, alg };
-  }
-
   /**
    * Return a signed JWT.
    */
   async sign(): Promise<string> {
-    const unsigned = this.unsigned();
+    const publicKey = await this.signer.getPublicKey();
+    const alg = getAlgFromKey(publicKey);
+
+    const unsigned = this.unsigned(alg);
     const signature = await this.signer.sign(unsigned);
 
-    const { kty, alg } = this.getSelectedSigningAlgorithm();
-
-    const encodedJws = await (kty === 'EC'
+    const encodedJws = await (publicKey.kty === 'EC'
       ? derToJose(signature, alg)
       : base64ToBase64Url(signature));
 

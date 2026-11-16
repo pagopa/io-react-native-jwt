@@ -1,5 +1,4 @@
 import JOSESwift
-import CommonCrypto
 import Foundation
 
 
@@ -160,30 +159,6 @@ class IoReactNativeJwt: NSObject {
         }
         catch {
             reject("Error", "\(error)", error);
-        }
-    }
-
-    @objc
-    func sha256(_ toHash: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-        let inputData = toHash.data(using: .utf8)
-        if (inputData != nil){
-            var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-            _ = inputData!.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
-                if let pointer = bytes.baseAddress?.assumingMemoryBound(to: UInt8.self) {
-                    CC_SHA256(pointer, CC_LONG(inputData!.count), &digest)
-                }
-            }
-            var sha256String = ""
-            for byte in digest {
-                sha256String += String(format: "%02x", byte)
-            }
-            resolve(String(
-                decoding: Data(digest).base64EncodedData(),
-                as: UTF8.self
-              ))
-            //resolve(sha256String)
-        } else {
-            reject("Error", "Unable to parse string to hash", nil);
         }
     }
 
