@@ -91,11 +91,12 @@ if isValid {
 ### Create and sign a JWT with a JWS
 
 ```js
-// Define a cryptographic context suitable for the application needs
-const crypto: CryptoContext = userDefinedCryptoContext();
+// Public key of the signing key pair, and a function signing with the paired private key
+const getPublicKey = async (): Promise<JWK> => userDefinedPublicKey();
+const sign = (value: string) => userDefinedSign(value);
 
 // Create jwt
-const jwt = new SignJWT(crypto)
+const jwt = new JWT({ getPublicKey, sign })
   .setPayload({ metadata: 'demo' })
   .setProtectedHeader({ typ: 'JWT' })
   .setAudience('demo')
@@ -103,7 +104,7 @@ const jwt = new SignJWT(crypto)
   .setIssuedAt();
 
 // get signed jwt
-const signedJwt = jwt.sign();
+const signedJwt = await jwt.sign();
 ```
 
 ### JWK thumbprint
@@ -126,14 +127,7 @@ console.log(thumbprint);
 
 For an ECDSA signature it is required that this is in ASN.1/DER encoded format.
 The same format supported by Secure Enclave (TEE).
-Transcoding is done automatically via the following function:
-
-```js
-derToJose = async (
-  asn1Signature: string,
-  alg: string
-): Promise<string>
-```
+Transcoding to the JOSE format is done automatically.
 
 Refs: [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-A.3.1)
 

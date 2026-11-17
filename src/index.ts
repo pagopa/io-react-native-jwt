@@ -7,16 +7,6 @@ export {
 } from './jwt/index';
 export { thumbprint, getRemoteJWKSet } from './jwk/index';
 export { ProduceJWT } from './jwt/produce';
-export { SignJWT } from './jwt/sign';
+export { JWT, type JWTSigner } from './jwt/jwt';
 export { UnsecuredJWT } from './jwt/unsecured';
 export type { UnsecuredResult } from './jwt/unsecured';
-
-export { derToJose } from './utils/asn1';
-export {
-  encodeBase64,
-  decodeBase64,
-  removePadding,
-  addPadding,
-} from './utils/base64';
-export { sha256ToBase64 } from './hash';
-export { type CryptoContext } from './utils/crypto';

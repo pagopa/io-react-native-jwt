@@ -4,7 +4,7 @@ import {
   type SupportedAlgorithm,
 } from '../algorithms';
 import { IoReactNativeJwt } from './proxy';
-import { removePadding } from './base64';
+import { base64ToBase64Url } from './base64';
 import { JOSENotSupported } from './errors';
 
 /*
@@ -32,7 +32,7 @@ export const derToJose = async (
       asn1Signature,
       getCoordinateOctetLength(alg)
     );
-    const encodedJws = removePadding(unpackedJws).replace(
+    const encodedJws = base64ToBase64Url(unpackedJws).replace(
       /(?:\r\n|\r|\n)/g,
       ''
     );

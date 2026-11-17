@@ -25,7 +25,6 @@ import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.util.JSONObjectUtils
 import com.nimbusds.jose.util.StandardCharset
 import org.json.JSONObject
-import java.security.MessageDigest
 import java.text.ParseException
 
 
@@ -113,19 +112,6 @@ class IoReactNativeJwtModule(reactContext: ReactApplicationContext) :
       promise.reject(ex)
     }
   }
-
-  @ReactMethod
-  fun sha256(toHash: String, promise: Promise) {
-    try {
-      val digest = MessageDigest.getInstance("SHA-256")
-      val hashBytes = digest.digest(toHash.toByteArray(Charsets.UTF_8))
-      val base64String = Base64.encodeToString(hashBytes, Base64.NO_WRAP)
-      promise.resolve(base64String)
-    } catch (ex: Exception) {
-      promise.reject(ex)
-    }
-  }
-
 
   @ReactMethod
   fun enc(token: String, header: ReadableMap, jwk: ReadableMap, promise: Promise) {
